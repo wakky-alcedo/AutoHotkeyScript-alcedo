@@ -3,7 +3,8 @@
 GroupAdd high_freq_app, ahk_exe Code.exe
 GroupAdd high_freq_app, ahk_exe WINWORD.EXE
 GroupAdd high_freq_app, ahk_exe EXCEL.EXE
-GroupAdd high_freq_app, ahk_exe POWERPNT.EXE
+GroupAdd high_freq_app, ahk_class PPTFrameClass ; パワポ編集画面
+;GroupAdd high_freq_app, ahk_exe POWERPNT.EXE
 GroupAdd  low_freq_app, ahk_exe Inventor.exe
 GroupAdd high_freq_app, ahk_exe Jw_win.exe
 
