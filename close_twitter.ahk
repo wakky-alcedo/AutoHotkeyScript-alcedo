@@ -1,4 +1,5 @@
 ;#Requires AutoHotkey v2.0
+; ‚Ç‚¤‚â‚çCAHK‚Í Shift JIS‚Å“®‚¢‚Ä‚¢‚é‚æ‚¤‚¾
 
 colose_tab()
 {
@@ -8,18 +9,18 @@ colose_tab()
     send, ^w
 }
 
-; åˆæœŸå‡¦ç†
+; ‰Šúˆ—
 #Persistent
 SetTimer,OnTimer,-10000 ; 10sec
 twitter_count := 0
 Return
 
-; ã‚¿ã‚¤ãƒãƒ¼å†…
+; ƒ^ƒCƒ}[“à
 OnTimer:
 
-WinGetTitle, title, A ; ã‚¿ã‚¤ãƒˆãƒ«ã‚’å–å¾—ï¼ˆAãŒãªã‚“ã®æ„å‘³ãªã®ã‹ã¯ã‚ã‹ã‚‰ãªã„ï¼‰
-is_twitter := RegExMatch(title,"X - Opera") or RegExMatch(title,"X - Google Chrome") 
-is_tweeting := RegExMatch(title,"æ–°ã—ã„ãƒã‚¹ãƒˆã‚’ä½œæˆ") != 0
+WinGetTitle, title, A ; ƒ^ƒCƒgƒ‹‚ğæ“¾iA‚ª‚È‚ñ‚ÌˆÓ–¡‚È‚Ì‚©‚Í‚í‚©‚ç‚È‚¢j
+is_twitter := InStr(title,"X - Opera") or InStr(title,"X - Google Chrome") 
+is_tweeting := InStr(title,"ì¬") != 0
 
 ToolTip , %title% %is_twitter% %is_tweeting%
 Sleep 3000
