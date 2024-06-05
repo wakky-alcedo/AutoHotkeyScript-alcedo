@@ -6,7 +6,6 @@ colose_tab()
     Sleep 1000
     ToolTip
     send, ^w
-    SetTimer,OnTimer,-30000 ; 30sec
 }
 
 ; 初期処理
@@ -20,19 +19,28 @@ OnTimer:
 
 WinGetTitle, title, A ; タイトルを取得（Aがなんの意味なのかはわからない）
 is_twitter := RegExMatch(title,"X - Opera") or RegExMatch(title,"X - Google Chrome") 
-is_tweeting := RegExMatch(title,"新しいポストを作成")
+is_tweeting := RegExMatch(title,"新しいポストを作成") != 0
 
-if is_twitter = 1 and is_tweeting = 0
+ToolTip , %title% %is_twitter% %is_tweeting%
+Sleep 3000
+ToolTip
+
+if (is_twitter = 1 and is_tweeting = 0)
 {
-    if(was_twitter = 1) {
+    ToolTip , I just noticed you looking at Twitter!!! %twitter_count%
+    Sleep 1000
+    ToolTip
+
+    if (was_twitter = 1 or twitter_count > 0) {
         colose_tab()
-        twitter_count := 360
-    }
-    if(twitter_count > 0) {
-        colose_tab()
+        if (was_twitter = 1) {
+            twitter_count := 360
+        }
+        SetTimer,OnTimer,-10000 ; 10sec
+    } else {
+        SetTimer,OnTimer,-300000 ; 5min
     }
     was_twitter := 1
-    SetTimer,OnTimer,-300000 ; 5min
 }
 else
 {
