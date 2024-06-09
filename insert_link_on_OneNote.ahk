@@ -58,20 +58,27 @@ IME_SET(SetSts, WinTitle="A") {
         IME_SET(0) ; 半角に
     }
     Sleep 100
+    
+    ; リンクの挿入を開く
     Send,^k
     Sleep 200
+    ; リンクを貼り付け
     Send,#v
     Sleep 200
     Send,{Down}
     Send,{Enter}
-    Sleep 100
+    Sleep 400
+    ; カーソルの移動
     Send,+{Tab}
     Sleep 200
+    ; タイトルを貼り付け
     Send,#v
     Sleep 200
     Send,{Enter}
-    Sleep 500
-    Send,{Enter}
+    ;Sleep 500
+    ; 確定
+    ;Send,{Enter}
+
     if (is_IME = 1) {
         IME_SET(1) ; 全角に
     }
