@@ -52,6 +52,7 @@ IME_SET(SetSts, WinTitle="A") {
 +^v::
     ;MsgBox, Hello AutoHotkey world
     ;SetKeyDelay[, 300, 2]
+    BlockInput, on
     SendMode Input
     is_IME := IME_GET()
     if (is_IME = 1) {
@@ -82,6 +83,7 @@ IME_SET(SetSts, WinTitle="A") {
     if (is_IME = 1) {
         IME_SET(1) ; 全角に
     }
+    BlockInput, off
     return
 
 #IfWinActive
