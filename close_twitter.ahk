@@ -1,5 +1,5 @@
 ;#Requires AutoHotkey v2.0
-; ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½CAHKï¿½ï¿½ Shift JISï¿½Å“ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½æ‚¤ï¿½ï¿½
+; ‚Ç‚¤‚â‚çCAHK‚Í Shift JIS‚Å“®‚¢‚Ä‚¢‚é‚æ‚¤‚¾
 
 colose_tab()
 {
@@ -9,18 +9,18 @@ colose_tab()
     send, ^w
 }
 
-; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+; ‰Šúˆ—
 #Persistent
 SetTimer,OnTimer,-10000 ; 10sec
 twitter_count := 0
 Return
 
-; ï¿½^ï¿½Cï¿½}ï¿½[ï¿½ï¿½
+; ƒ^ƒCƒ}[“à
 OnTimer:
 
-WinGetTitle, title, A ; ï¿½^ï¿½Cï¿½gï¿½ï¿½ï¿½ï¿½ï¿½æ“¾ï¿½iAï¿½ï¿½ï¿½È‚ï¿½ÌˆÓ–ï¿½ï¿½È‚Ì‚ï¿½ï¿½Í‚í‚©ï¿½ï¿½È‚ï¿½ï¿½j
+WinGetTitle, title, A ; ƒ^ƒCƒgƒ‹‚ðŽæ“¾iA‚ª‚È‚ñ‚ÌˆÓ–¡‚È‚Ì‚©‚Í‚í‚©‚ç‚È‚¢j
 is_twitter := InStr(title,"X - ", CaseSensitive=ture) != 0
-is_tweeting := InStr(title,"ï¿½ì¬", CaseSensitive=ture) != 0
+is_tweeting := InStr(title,"ì¬", CaseSensitive=ture) != 0
 
 ;ToolTip , %title% %is_twitter% %is_tweeting%
 ;Sleep 3000
@@ -28,10 +28,6 @@ is_tweeting := InStr(title,"ï¿½ì¬", CaseSensitive=ture) != 0
 
 if (is_twitter = 1 and is_tweeting = 0)
 {
-    ToolTip , I just noticed you looking at Twitter!!! %twitter_count%
-    Sleep 1000
-    ToolTip
-
     if (was_twitter = 1 or twitter_count > 0) {
         colose_tab()
         if (was_twitter = 1) {
@@ -42,6 +38,10 @@ if (is_twitter = 1 and is_tweeting = 0)
         SetTimer,OnTimer,-300000 ; 5min
     }
     was_twitter := 1
+
+    ToolTip , I just noticed you looking at Twitter!!! %twitter_count%
+    Sleep 5000
+    ToolTip
 }
 else
 {
