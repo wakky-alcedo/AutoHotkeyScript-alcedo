@@ -19,8 +19,8 @@ Return
 OnTimer:
 
 WinGetTitle, title, A ; タイトルを取得（Aがなんの意味なのかはわからない）
-is_twitter := InStr(title,"X - ", CaseSensitive=ture) != 0
-is_tweeting := InStr(title,"作成", CaseSensitive=ture) != 0
+is_twitter := InStr(title,"X - ", CaseSensitive=ture) != 0 AND InStr(title,"ホーム", CaseSensitive=ture) != 0
+is_tweeting := InStr(title,"新しいポストを作成", CaseSensitive=ture) != 0 OR InStr(title,"@wakky_robocon", CaseSensitive=ture) OR InStr(title," - 検索", CaseSensitive=ture)
 
 ;ToolTip , %title% %is_twitter% %is_tweeting%
 ;Sleep 3000
