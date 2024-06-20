@@ -1,12 +1,12 @@
 ;#Requires AutoHotkey v2.0
 ; どうやら，AHKは Shift JISで動いているようだ
 
-colose_tab()
+colose_window()
 {
     ToolTip , Close Tab!!!
     Sleep 1000
     ToolTip
-    send, ^w
+    send, !{F4}
 }
 
 ; 初期処理
@@ -34,7 +34,7 @@ if (is_browser = 1 and is_private = 1)
         ToolTip , last 5 min!!! %private_count%
     }
     if (private_count > 360) {
-        colose_tab()
+        colose_window()
 ;        private_count := 360
         ToolTip , I just noticed you looking at privatewindow!!! %private_count%
         Sleep 5000
