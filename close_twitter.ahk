@@ -21,14 +21,16 @@ OnTimer:
 WinGetTitle, title, A ; タイトルを取得（Aがなんの意味なのかはわからない）
 is_twitter := InStr(title,"X - ", CaseSensitive=ture) != 0 AND InStr(title,"ホーム", CaseSensitive=ture) != 0
 is_tweeting := InStr(title,"新しいポストを作成", CaseSensitive=ture) != 0 OR InStr(title,"@wakky_robocon", CaseSensitive=ture) OR InStr(title," - 検索", CaseSensitive=ture)
+FormatTime,now_time,,HHmm
+is_deep_night := now_time < 0500
 
-;ToolTip , %title% %is_twitter% %is_tweeting%
+;ToolTip , %title% %is_twitter% %is_tweeting% %now_time% %is_deep_night%
 ;Sleep 3000
 ;ToolTip
 
-if (is_twitter = 1 and is_tweeting = 0)
+if (is_twitter = 1 and (is_tweeting = 0 or is_deep_night = 1))
 {
-    if (was_twitter = 1 or twitter_count > 0) {
+    if (was_twitter = 1 or twitter_count > 0 or is_deep_night = 1) {
         colose_tab()
         if (was_twitter = 1) {
             twitter_count := 360
