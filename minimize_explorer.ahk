@@ -1,0 +1,35 @@
+#Persistent  ; スクリプトが常駐するように設定
+#SingleInstance Force  ; スクリプトの重複実行を防ぐ
+
+; ウィンドウの監視を100ミリ秒ごとに開始
+SetTimer, CheckCursor, 100
+Return
+
+CheckCursor:
+    ; アクティブウィンドウを取得
+    WinGet, active_id, ID, A
+
+    ; ウィンドウのクラス名を取得
+    WinGetClass, class, ahk_id %active_id%
+    
+    ; クラス名がエクスプローラやFilesの場合のみ処理
+    if (class = "CabinetWClass" || class = "WinUIDesktopWin32WindowClass") ; Filesの実際のクラス名に置き換えてください
+    {
+        ; ウィンドウの位置とサイズを取得
+        WinGetPos, X, Y, Width, Height, ahk_id %active_id%
+        
+        ; マウスカーソルの位置を取得
+        MouseGetPos, mouseX, mouseY, mouseWin
+
+        ; カーソルがウィンドウ内にあるか確認
+        if (mouseX < X || mouseX > (X + Width) || mouseY < Y || mouseY > (Y + Height))
+        {
+            ; アクティブウィンドウがドラッグされているか確認
+            if (GetKeyState("LButton", "P"))
+            {
+                ; アクティブウィンドウを最小化
+                WinMinimize, ahk_id %active_id%
+            }
+        }
+    }
+Return
