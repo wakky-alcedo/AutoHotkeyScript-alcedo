@@ -19,7 +19,12 @@ CheckCursor:
         WinGetPos, X, Y, Width, Height, ahk_id %active_id%
         
         ; マウスカーソルの位置を取得
+        CoordMode, Mouse, Screen
         MouseGetPos, mouseX, mouseY, mouseWin
+
+        ; デバッグ情報を表示
+        ;ToolTip Class %class% WinPos %X% %Y% Size %Width% x %Height% MousePos %mouseX% %mouseY%
+        ;ToolTip "Class: %class%`nWinPos: (X: %X%, Y: %Y%) Size: (W: %Width%, H: %Height%)`nMousePos: (X: %mouseX%, Y: %mouseY%)"
 
         ; カーソルがウィンドウ内にあるか確認
         if (mouseX < X || mouseX > (X + Width) || mouseY < Y || mouseY > (Y + Height))
