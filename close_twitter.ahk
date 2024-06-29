@@ -22,15 +22,22 @@ WinGetTitle, title, A ; タイトルを取得（Aがなんの意味なのかはわからない）
 is_twitter := InStr(title,"X - ", CaseSensitive=ture) != 0 AND InStr(title,"ホーム", CaseSensitive=ture) != 0
 is_tweeting := InStr(title,"新しいポストを作成", CaseSensitive=ture) != 0 OR InStr(title,"@wakky_robocon", CaseSensitive=ture) OR InStr(title," - 検索", CaseSensitive=ture)
 is_temptation := InStr(title,"Prime Video", CaseSensitive=ture) OR InStr(title,"DMM TV", CaseSensitive=ture)
+is_youtube := InStr(title,"YouTube", CaseSensitive=ture)
 
 FormatTime,now_time,,HHmm
-is_deep_night := now_time < 0500
+is_deep_night := 2300 < now_time or now_time < 0500
+is_deep_deep_night := 0200 < now_time and now_time < 0500
 
 ;ToolTip , %title% %is_twitter% %is_tweeting% %now_time% %is_deep_night%
 ;Sleep 3000
 ;ToolTip
 
-if (is_deep_night = 1 and (is_temptation = 1 or is_twitter))
+if (is_deep_night and (is_temptation or is_twitter))
+{
+    colose_tab()
+}
+
+if (is_deep_deep_night and is_youtube)
 {
     colose_tab()
 }
