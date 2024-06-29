@@ -27,7 +27,8 @@ CheckCursor:
         ;ToolTip "Class: %class%`nWinPos: (X: %X%, Y: %Y%) Size: (W: %Width%, H: %Height%)`nMousePos: (X: %mouseX%, Y: %mouseY%)"
 
         ; カーソルがウィンドウ内にあるか確認
-        if (mouseX < X || mouseX > (X + Width) || mouseY < Y || mouseY > (Y + Height))
+        margin := 100
+        if (mouseX+margin < X || mouseX-margin > (X + Width) || mouseY+margin < Y || mouseY-margin > (Y + Height))
         {
             ; アクティブウィンドウがドラッグされているか確認
             if (GetKeyState("LButton", "P"))
