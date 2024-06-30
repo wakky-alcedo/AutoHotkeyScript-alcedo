@@ -30,6 +30,9 @@ Return
 ; タイマー内
 OnTimer:
 
+FormatTime,now_time,,HHmm
+is_deep_night := 2300 < now_time or now_time < 0500
+
 ;ToolTip , %title% %is_browser% %color% is_private == %is_private%
 ;Sleep 3000
 ;ToolTip
@@ -41,11 +44,10 @@ if (is_private())
     if (private_count == 150) {
         ToolTip , last 5 min!!! %private_count%
     }
-    if (private_count > 180) {
+    if (private_count > 180 or is_deep_night) {
         colose_window()
         private_count := 720
         is_privateing := false
-        ToolTip , I just noticed you looking at privatewindow!!! %private_count%
         Sleep 5000
         ToolTip
         SetTimer,OnTimer,-10000 ; 10sec
