@@ -30,12 +30,12 @@ is_private := color == 0x764040 ? true : false
 
 if (is_browser == 1 and is_private == 1)
 {
-    private_count := private_count + 2
+    private_count := private_count + 1
     is_privateing := true
-    if (private_count == 330) {
+    if (private_count == 150) {
         ToolTip , last 5 min!!! %private_count%
     }
-    if (private_count > 360) {
+    if (private_count > 180) {
         colose_window()
         private_count := 720
         is_privateing := false
@@ -51,8 +51,12 @@ if (is_browser == 1 and is_private == 1)
 }
 else
 {
-    if(private_count > 0 and is_privateing == false){
-        private_count := private_count - 1
+    if(private_count > 0){
+        if(and is_privateing == false){
+            private_count := private_count - 1
+        }else{
+            private_count := private_count - 0.05
+        }
     }
     SetTimer,OnTimer,-10000 ; 10sec
     ToolTip
