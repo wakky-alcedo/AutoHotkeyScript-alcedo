@@ -22,7 +22,7 @@ WinGetTitle, title, A ; タイトルを取得（Aがなんの意味なのかはわからない）
 is_twitter := InStr(title,"X - ", CaseSensitive=ture) != 0 AND InStr(title,"ホーム", CaseSensitive=ture) != 0
 is_tweeting := InStr(title,"新しいポストを作成", CaseSensitive=ture) != 0 OR InStr(title,"@wakky_robocon", CaseSensitive=ture) OR InStr(title," - 検索", CaseSensitive=ture)
 is_temptation := InStr(title,"Prime Video", CaseSensitive=ture) OR InStr(title,"DMM TV", CaseSensitive=ture)
-is_youtube := InStr(title,"YouTube", CaseSensitive=ture)
+is_youtube := InStr(title,"YouTube", CaseSensitive=ture) == 1 AND InStr(title,"YouTube Music", CaseSensitive=ture) != 0
 
 FormatTime,now_time,,HHmm
 is_deep_night := 2300 < now_time or now_time < 0500
