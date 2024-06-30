@@ -3,10 +3,21 @@
 
 colose_window()
 {
-    ToolTip , Close Tab!!!
+    ToolTip , Close Window!!!
     Sleep 1000
     ToolTip
     send, !{F4}
+}
+
+is_private()
+{
+    WinGetTitle, title, A ; タイトルを取得（Aがなんの意味なのかはわからない）
+    ; Vivaldi
+    if (InStr(title,"Vivaldi", CaseSensitive==ture) != 0){
+        PixelGetColor, color, 30, 10
+        Return color == 0x764040 ? true : false
+    }
+    Return false
 }
 
 ; 初期処理
@@ -19,16 +30,11 @@ Return
 ; タイマー内
 OnTimer:
 
-WinGetTitle, title, A ; タイトルを取得（Aがなんの意味なのかはわからない）
-is_browser := InStr(title,"Vivaldi", CaseSensitive==ture) != 0
-PixelGetColor, color, 30, 10
-is_private := color == 0x764040 ? true : false
-
 ;ToolTip , %title% %is_browser% %color% is_private == %is_private%
 ;Sleep 3000
 ;ToolTip
 
-if (is_browser == 1 and is_private == 1)
+if (is_private())
 {
     private_count := private_count + 1
     is_privateing := true
