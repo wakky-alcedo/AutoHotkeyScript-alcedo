@@ -15,7 +15,16 @@ is_private()
     ; Vivaldi
     if (InStr(title,"Vivaldi", CaseSensitive==ture) != 0){
         PixelGetColor, color, 30, 10
-        Return color == 0x764040 ? true : false
+        if(color == 0x764040) {
+            Return true
+        }
+    }
+    ; Chrom
+    if (InStr(title,"Chrom", CaseSensitive==ture) != 0){
+        PixelGetColor, color, 50, 40
+        if(color == 0x3C3C3C) {
+            Return true
+        }
     }
     Return false
 }
