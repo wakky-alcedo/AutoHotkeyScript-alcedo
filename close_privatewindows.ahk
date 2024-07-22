@@ -31,7 +31,7 @@ is_private()
 
 ; 初期処理
 #Persistent
-SetTimer,OnTimer,-10000 ; 10sec
+SetTimer,OnTimer,-5000 ; 5sec
 private_count := 0
 is_privateing := false
 Return
@@ -48,7 +48,7 @@ is_deep_night := 2300 < now_time or now_time < 0500
 
 if (is_private())
 {
-    private_count := private_count + 1
+    private_count := private_count + 0.5
     is_privateing := true
     if (private_count == 150) {
         ToolTip , last 5 min!!! %private_count%
@@ -59,9 +59,9 @@ if (is_private())
         is_privateing := false
         Sleep 5000
         ToolTip
-        SetTimer,OnTimer,-10000 ; 10sec
+        SetTimer,OnTimer,-5000 ; 5sec
     } else {
-        SetTimer,OnTimer,-10000 ; 10sec
+        SetTimer,OnTimer,-5000 ; 5sec
     }
 
     ToolTip , I just noticed you looking at privatewindow!!! %private_count%
@@ -70,12 +70,12 @@ else
 {
     if(private_count > 0){
         if(and is_privateing == false){
-            private_count := private_count - 1
+            private_count := private_count - 0.5
         }else{
-            private_count := private_count - 0.05
+            private_count := private_count - 0.025
         }
     }
-    SetTimer,OnTimer,-10000 ; 10sec
+    SetTimer,OnTimer,-5000 ; 5sec
     ToolTip
 }
 

@@ -49,7 +49,7 @@ if (is_twitter = 1 and is_tweeting = 0)
         if (was_twitter = 1) {
             twitter_count := 360
         }
-        SetTimer,OnTimer,-10000 ; 10sec
+        SetTimer,OnTimer,-5000 ; 5sec
     } else {
         SetTimer,OnTimer,-300000 ; 5min
     }
@@ -62,8 +62,10 @@ if (is_twitter = 1 and is_tweeting = 0)
 else
 {
     was_twitter := 0
-    twitter_count := twitter_count - 1
-    SetTimer,OnTimer,-10000 ; 10sec
+    if(twitter_count > 0){
+        twitter_count := twitter_count - 0.5
+    }
+    SetTimer,OnTimer,-5000 ; 5sec
 }
 
 Return
