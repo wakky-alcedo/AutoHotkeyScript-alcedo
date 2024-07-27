@@ -26,13 +26,12 @@ Overlay() {
 }
 
 ; 終了処理の関数
-ExitScript() {
+ClearOverlay() {
     SysGet, MonitorCount, MonitorCount
     Loop %MonitorCount%
     {
         Gui, Overlay%A_Index%: Destroy
     }
-    ExitApp
     return
 }
 
@@ -56,16 +55,18 @@ SaveActivity() {
         ShowModal() ; モーダルダイアログを再表示
         return
     }
+    ClearOverlay()
     ; MsgBox, 262144, , You entered: %ActivityEdit% ; 入力内容をメッセージボックスで表示
     PostGas(ActivityEdit)
-    ExitScript() ; スクリプトを終了
+    ExitApp
     return
 }
 
 ; キャンセルボタンがクリックされたときに呼ばれる関数
 CancelActivity() {
     Gui, Destroy ; ダイアログを閉じる
-    ExitScript() ; スクリプトを終了
+    ClearOverlay()
+    ExitApp
     return
 }
 
@@ -103,12 +104,13 @@ Overlay()
 ShowModal()
 
 ; スクリプト終了処理
-; OnExit, ExitScript ; スクリプト終了時にExitScriptラベルを呼び出す
+; OnExit, ClearOverlay ; スクリプト終了時にClearOverlayラベルを呼び出す
 return
 
 ; ESCキーでウィンドウを閉じる
 Esc::
-    ExitScript()
+    ClearOverlay()
+    ExitApp
     return
 
 ; Enterキーでアクティビティを保存する
