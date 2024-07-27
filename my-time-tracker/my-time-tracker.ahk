@@ -56,7 +56,8 @@ SaveActivity() {
         ShowModal() ; モーダルダイアログを再表示
         return
     }
-    MsgBox, 262144, , You entered: %ActivityEdit% ; 入力内容をメッセージボックスで表示
+    ; MsgBox, 262144, , You entered: %ActivityEdit% ; 入力内容をメッセージボックスで表示
+    PostGas(ActivityEdit)
     ExitScript() ; スクリプトを終了
     return
 }
@@ -66,6 +67,29 @@ CancelActivity() {
     Gui, Destroy ; ダイアログを閉じる
     ExitScript() ; スクリプトを終了
     return
+}
+
+PostGas(param) {
+    #Include .env.local.ahk
+    url := "https://script.google.com/macros/s/" . DEPLOY_ID . "/exec"
+    QUERY := "param=" . param
+    request := url . "?" . QUERY
+    HttpObj := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+    HttpObj.open("GET", request, false)
+    HttpObj.send()
+    HttpObj.WaitForResponse()
+
+    Status := HttpObj.Status ; なんか一時的に別の変数に入れないとMsgBoxで表示されない
+
+    if (Status == 200)
+    {
+        ResponseText := HttpObj.ResponseText
+        MsgBox, 262144, , %ResponseText%
+    }
+    else
+    {
+        MsgBox, 262144, , Failed to send request. Status: %Status%
+    }
 }
 
 ; グローバル変数を定義
