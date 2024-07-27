@@ -41,7 +41,7 @@ ShowModal() {
     Gui, Add, Text,, Describe your activity: ; テキストラベルを追加
     Gui, Add, Edit, vActivityEdit w300 h30 ; 入力フィールドを追加。vActivityEditは、入力内容を格納する変数
     Gui, Add, Button, gSaveActivity, Save Activity ; 保存ボタンを追加。クリック時にSaveActivityラベルを呼び出す
-    Gui, Add, Button, gCancelActivity, Cancel ; キャンセルボタンを追加。クリック時にCancelActivityラベルを呼び出す
+    ; Gui, Add, Button, gCancelActivity, Cancel ; キャンセルボタンを追加。クリック時にCancelActivityラベルを呼び出す
     Gui, Show, w400 h150, Activity Logger ; ダイアログを表示。w400は幅、h150は高さ、Activity Loggerはウィンドウタイトル
     ; ウィンドウを最前面に設定
     WinSet, AlwaysOnTop, On, Activity Logger ; ダイアログを常に最前面に表示
@@ -108,10 +108,10 @@ ShowModal()
 return
 
 ; ESCキーでウィンドウを閉じる
-Esc::
-    ClearOverlay()
-    ExitApp
-    return
+; Esc::
+;     ClearOverlay()
+;     ExitApp
+;     return
 
 ; Enterキーでアクティビティを保存する
 ^Enter::
