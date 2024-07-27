@@ -32,7 +32,7 @@ ExitScript() {
     {
         Gui, Overlay%A_Index%: Destroy
     }
-    ; ExitApp
+    ExitApp
     return
 }
 
@@ -51,8 +51,12 @@ ShowModal() {
 ; 保存ボタンがクリックされたときに呼ばれる関数
 SaveActivity() {
     Gui, Submit ; ユーザーの入力内容を変数に保存
-    MsgBox, You entered: %ActivityEdit% ; 入力内容をメッセージボックスで表示
     Gui, Destroy ; ダイアログを閉じる
+    if (ActivityEdit = "") {
+        ShowModal() ; モーダルダイアログを再表示
+        return
+    }
+    MsgBox, 262144, , You entered: %ActivityEdit% ; 入力内容をメッセージボックスで表示
     ExitScript() ; スクリプトを終了
     return
 }
