@@ -109,3 +109,9 @@ return
 ; ESCキーでウィンドウを閉じる
 Esc::
     ExitScript()
+    return
+
+; Enterキーでアクティビティを保存する
+^Enter::
+    SaveActivity()
+    return
