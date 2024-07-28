@@ -85,7 +85,7 @@ PostGas(param) {
     if (Status == 200)
     {
         ResponseText := HttpObj.ResponseText
-        MsgBox, 262144, , %ResponseText%
+        ; MsgBox, 262144, , %ResponseText%
     }
     else
     {
