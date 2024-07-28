@@ -8,6 +8,9 @@
  * 種類：ウェブアプリ，実行可能APIの2つを選択
  * 次のユーザーとして実行：自分
  * アクセスできるユーザー：全員
+ * 
+ * 注意
+ * ・最初の1回は自分で実行して，権限の承認をしないといけないかも
  **/
 
 function debug() {
@@ -31,6 +34,7 @@ function mainProcess(param) {
 
   // 新しい行にデータを追加
   sheet.appendRow([new Date(), param]);
+  sheet.getRange("A:A").setNumberFormat("yyyy/mm/dd(ddd) hh:mm");
   // sheet.getRange(1, 1).setValue(param);
   
   return ContentService.createTextOutput("Received parameter: " + param);
