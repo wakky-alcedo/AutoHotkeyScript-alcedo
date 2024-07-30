@@ -13,29 +13,41 @@
  * ・最初の1回は自分で実行して，権限の承認をしないといけないかも
  **/
 
+/**
+ * デバッグ用
+ * @param {string} param
+ **/
 function debug() {
-  mainProcess("テスト");
+  Logger.log(mainProcess("テスト"));
 }
 
+/**
+ * doGet
+ * @param {Object} e
+ * @return {Object}
+ **/
 function doGet(e) {
   return mainProcess(e.parameter.param);
 }
 
-function mainProcess(param) {
-  // スプレッドシートのIDとシート名を指定
-  // var spreadsheetId = 'YOUR_SPREADSHEET_ID';
-  // var sheetName = 'Sheet1';
-  
+/**
+ * mainProcess
+ * @param {string} param
+ **/
+function mainProcess(param) {  
   // スプレッドシートにアクセス
-  // var sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetName);
-  const sheet = SpreadsheetApp.getActiveSheet();
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const rawSheet = spreadsheet.getSheetByName('RawSheet');
+  const organizedSheet = spreadsheet.getSheetByName('OrganizedSheat');
 
-  Logger.log(param);
-
+  // RawSheet
   // 新しい行にデータを追加
-  sheet.appendRow([new Date(), param]);
-  sheet.getRange("A:A").setNumberFormat("yyyy/mm/dd(ddd) hh:mm");
-  // sheet.getRange(1, 1).setValue(param);
-  
+  rawSheet.appendRow([new Date(), param]);
+  rawSheet.getRange("A:A").setNumberFormat("yyyy/mm/dd(ddd) hh:mm");
+
+  // OrganizedSheet
+  // 今日の日付がシート上になかったら，30分おきの1日分の時間を追加
+  // 今の時間が入る行に内容を追加
+
   return ContentService.createTextOutput("Received parameter: " + param);
 }
