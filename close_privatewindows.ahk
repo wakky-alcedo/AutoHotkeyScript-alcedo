@@ -3,10 +3,10 @@
 
 colose_window()
 {
+    send, !{F4}
     ToolTip , Close Window!!!
     Sleep 1000
     ToolTip
-    send, !{F4}
 }
 
 is_private()

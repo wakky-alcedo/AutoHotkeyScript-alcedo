@@ -3,10 +3,10 @@
 
 colose_tab()
 {
+    send, ^w
     ToolTip , Close Tab!!!
     Sleep 1000
     ToolTip
-    send, ^w
 }
 
 ; ‰Šúˆ—
