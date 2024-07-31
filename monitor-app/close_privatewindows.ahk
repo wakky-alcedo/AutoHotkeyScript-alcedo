@@ -9,7 +9,7 @@ colose_window()
     ToolTip
 }
 
-is_private()
+is_private(title)
 {
     WinGetTitle, title, A ; タイトルを取得（Aがなんの意味なのかはわからない）
     ; Vivaldi
@@ -46,37 +46,53 @@ is_deep_night := 2300 < now_time or now_time < 0500
 ;Sleep 3000
 ;ToolTip
 
-if (is_private())
-{
-    private_count := private_count + 0.5
-    is_privateing := true
-    if (private_count == 150) {
-        ToolTip , last 5 min!!! %private_count%
-    }
-    if (private_count > 180 or is_deep_night) {
-        colose_window()
-        private_count := 720
-        is_privateing := false
-        Sleep 5000
-        ToolTip
-        SetTimer,OnTimer,-5000 ; 5sec
-    } else {
-        SetTimer,OnTimer,-5000 ; 5sec
+; ウィンドウリストを取得
+WinGet, id, list
+
+Loop % id {
+    this_id := id%A_Index%
+    
+    ; ウィンドウタイトルを取得し，変なやつを除去
+    WinGetTitle, title, ahk_id %this_id%
+    if (title = "" or title = "PopupHost" or title = "Program Manager" or InStr(title,"OCRMODE", CaseSensitive=ture) or InStr(title,"MainWnd", CaseSensitive=ture) or InStr(title,"PfuSsMon", CaseSensitive=ture)) {
+        continue
     }
 
-    ToolTip , I just noticed you looking at privatewindow!!! %private_count%
-}
-else
-{
-    if(private_count > 0){
-        if(and is_privateing == false){
-            private_count := private_count - 0.5
-        }else{
-            private_count := private_count - 0.025
+    ; ここで操作を実行
+    if (is_private(title))
+    {
+        private_count := private_count + 0.5
+        is_privateing := true
+        if (private_count == 150) {
+            ToolTip , last 5 min!!! %private_count%
         }
+        if (private_count > 180 or is_deep_night) {
+            WinActivate, ahk_id %this_id%
+            colose_window()
+            private_count := 720
+            is_privateing := false
+            Sleep 5000
+            ToolTip
+            SetTimer,OnTimer,-5000 ; 5sec
+        } else {
+            SetTimer,OnTimer,-5000 ; 5sec
+        }
+    
+        ToolTip , I just noticed you looking at privatewindow!!! %private_count%
+        break
     }
-    SetTimer,OnTimer,-5000 ; 5sec
-    ToolTip
+    else
+    {
+        if(private_count > 0){
+            if(and is_privateing == false){
+                private_count := private_count - 0.5
+            }else{
+                private_count := private_count - 0.025
+            }
+        }
+        SetTimer,OnTimer,-5000 ; 5sec
+        ToolTip
+    }
 }
 
 Return
