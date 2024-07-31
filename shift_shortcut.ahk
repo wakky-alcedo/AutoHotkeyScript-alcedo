@@ -9,8 +9,8 @@
 +WheelUp::WheelLeft ;マウスホイール上回転で、左側に移動
 
 ; backspace
-+Backspace::
-    Send, {Delete}
+;+Backspace::
+;    Send, {Delete}
 
 ;+Enter::
 ;    Send, {Delete}
