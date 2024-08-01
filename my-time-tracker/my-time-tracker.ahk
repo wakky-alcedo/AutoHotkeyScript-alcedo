@@ -97,21 +97,9 @@ PostGas(param) {
 ; URLエンコードする関数
 URLEncode(str)
 {
-    static chars := { " " : "%20", "!" : "%21", """": "%22", "#" : "%23", "$" : "%24", "%" : "%25", "&" : "%26", "'" : "%27", "(" : "%28", ")" : "%29", "*" : "%2A", "+" : "%2B", "," : "%2C", "-" : "%2D", "." : "%2E", "/" : "%2F", ":" : "%3A", ";" : "%3B", "<" : "%3C", "=" : "%3D", ">" : "%3E", "?" : "%3F", "@" : "%40", "[" : "%5B", "\" : "%5C", "]" : "%5D", "^" : "%5E", "_" : "%5F", "`" : "%60", "{" : "%7B", "|" : "%7C", "}" : "%7D", "~" : "%7E", "　" : "%E3%80%80" }
-    chars_list := " !""#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
-    newStr := ""
-    Loop, Parse, str
-    {
-        ; If (A_LoopField in chars_list) {
-        IfInString, chars_list, %A_LoopField%, {
-            newStr .= chars[A_LoopField]
-        } Else {
-            newStr .= A_LoopField
-        }
-        ; 全角スペースを半角スペースに変換（うまくいかなかったのでこれで妥協）
-        StringReplace, newStr, newStr, % Chr(0x3000), % Chr(0x20), All
-    }
-    Return newStr
+    ; 全角スペースを半角スペースに変換（うまくいかなかったのでこれで妥協）
+    StringReplace, str, str, % Chr(0x3000), % Chr(0x20), All
+    Return str
 }
 
 ; グローバル変数を定義
