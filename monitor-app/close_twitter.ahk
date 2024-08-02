@@ -28,12 +28,12 @@ Loop % id {
 
     is_twitter := InStr(title,"X - ", CaseSensitive=ture) != 0 AND InStr(title,"ホーム", CaseSensitive=ture) != 0
     is_tweeting := InStr(title,"新しいポストを作成", CaseSensitive=ture) != 0 OR InStr(title,"@wakky_robocon", CaseSensitive=ture) OR InStr(title," - 検索", CaseSensitive=ture)
-    is_temptation := InStr(title,"Prime Video", CaseSensitive=ture) OR InStr(title,"DMM TV", CaseSensitive=ture)
+    is_temptation := InStr(title,"Prime Video", CaseSensitive=ture) OR InStr(title,"DMM TV", CaseSensitive=ture) OR title = "YouTube"
     is_youtube := InStr(title,"YouTube", CaseSensitive=ture) AND (InStr(title,"YouTube Music", CaseSensitive=ture) == 0)
 
     FormatTime,now_time,,HHmm
-    is_deep_night := 2300 < now_time or now_time < 0500
-    is_deep_deep_night := 0100 < now_time and now_time < 0500
+    is_deep_night := 2300 < now_time or now_time < 0700
+    is_deep_deep_night := 0000 < now_time and now_time < 0700
 
     ;ToolTip , %title% %is_twitter% %is_tweeting% %now_time% %is_deep_night%
     ;Sleep 3000
