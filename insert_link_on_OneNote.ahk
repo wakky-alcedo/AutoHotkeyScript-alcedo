@@ -47,8 +47,21 @@ IME_SET(SetSts, WinTitle="A") {
         ,  Int, SetSts) ;lParam  : 0 or 1
 }
 
+; タイトルを貼り付け
+paste_title() {
+    Send,#v
+    Sleep 400
+    Send,{Enter}
+}
 
-#IfWinActive ahk_exe ApplicationFrameHost.exe ;実行ファイル名
+; リンクを貼り付け
+paset_link() {
+    Send,#v
+    Sleep 400
+    Send,{Down}
+    Send,{Enter}
+} 
+
 +^v::
     ;MsgBox, Hello AutoHotkey world
     ;SetKeyDelay[, 300, 2]
@@ -59,34 +72,30 @@ IME_SET(SetSts, WinTitle="A") {
         IME_SET(0) ; 半角に
     }
     Sleep 100
-    
-    ; リンクの挿入を開く
-    Send,^k
-    Sleep 200
-    ; リンクを貼り付け
-    Send,#v
-    Sleep 200
-    Send,{Down}
-    Send,{Enter}
-    Sleep 400
-    ; カーソルの移動
-    Send,+{Tab}
-    Sleep 200
-    ; タイトルを貼り付け
-    Send,#v
-    Sleep 200
-    Send,{Enter}
-    ;Sleep 500
-    ; 確定
-    ;Send,{Enter}
+
+    IfWinActive ahk_exe ApplicationFrameHost.exe ;実行ファイル名
+    {
+        ; リンクの挿入を開く
+        Send,^k
+        Sleep 200
+        ; リンクを貼り付け
+        paset_link()
+        Sleep 500
+        ; カーソルの移動
+        Send,+{Tab}
+        Sleep 200
+        ; タイトルを貼り付け
+        paste_title()
+        ;Sleep 500
+        ; 確定
+        ;Send,{Enter}
+    }
 
     if (is_IME = 1) {
         IME_SET(1) ; 全角に
     }
     BlockInput, off
     return
-
-#IfWinActive
 
 
 ; 保存したら自動で再実行するらしい？
