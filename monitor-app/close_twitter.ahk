@@ -18,22 +18,24 @@ Return
 ; タイマー内
 OnTimer:
 
+; 現在時刻を取得
+FormatTime,now_time,,HHmm
+is_deep_night := 2300 < now_time or now_time < 0700
+is_deep_deep_night := 0000 < now_time and now_time < 0700
+
+is_closed_tab := 0
+
 ; ウィンドウリストを取得
 WinGet, id, list
 
 Loop % id {
     this_id := id%A_Index%
-    ; ウィンドウタイトルを取得し，変なやつを除去
     WinGetTitle, title, ahk_id %this_id%
 
     is_twitter := InStr(title,"X - ", CaseSensitive=ture) != 0 AND InStr(title,"ホーム", CaseSensitive=ture) != 0
     is_tweeting := InStr(title,"新しいポストを作成", CaseSensitive=ture) != 0 OR InStr(title,"@wakky_robocon", CaseSensitive=ture) OR InStr(title," - 検索", CaseSensitive=ture)
     is_temptation := InStr(title,"Prime Video", CaseSensitive=ture) OR InStr(title,"DMM TV", CaseSensitive=ture) OR title = "YouTube"
     is_youtube := InStr(title,"YouTube", CaseSensitive=ture) AND (InStr(title,"YouTube Music", CaseSensitive=ture) == 0)
-
-    FormatTime,now_time,,HHmm
-    is_deep_night := 2300 < now_time or now_time < 0700
-    is_deep_deep_night := 0000 < now_time and now_time < 0700
 
     ;ToolTip , %title% %is_twitter% %is_tweeting% %now_time% %is_deep_night%
     ;Sleep 3000
@@ -43,12 +45,14 @@ Loop % id {
     {
         WinActivate, ahk_id %this_id%
         colose_tab()
+        continue
     }
 
     if (is_deep_deep_night and is_youtube)
     {
         WinActivate, ahk_id %this_id%
         colose_tab()
+        continue
     }
 
     if (is_twitter = 1 and is_tweeting = 0)
@@ -64,6 +68,7 @@ Loop % id {
             SetTimer,OnTimer,-300000 ; 5min
         }
         was_twitter := 1
+        is_closed_tab := 1
 
         ToolTip , I just noticed you looking at Twitter!!! %twitter_count%
         Sleep 5000
@@ -72,12 +77,13 @@ Loop % id {
     else
     {
         was_twitter := 0
-        if(twitter_count > 0){
-            twitter_count := twitter_count - 0.5
-        }
         SetTimer,OnTimer,-5000 ; 5sec
     }
 
+}
+
+if(twitter_count > 0 and is_closed_tab = 0){
+    twitter_count := twitter_count - 0.5
 }
 
 Return
