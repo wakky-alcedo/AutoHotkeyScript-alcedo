@@ -73,7 +73,10 @@ paset_link() {
     }
     Sleep 100
 
-    IfWinActive ahk_exe ApplicationFrameHost.exe ;実行ファイル名
+    ; アクティブウィンドウの実行ファイルを取得
+    WinGet, active_exe, ProcessName, A
+
+    If(active_exe = "ApplicationFrameHost.exe") ; OneNote
     {
         ; リンクの挿入を開く
         Send,^k
