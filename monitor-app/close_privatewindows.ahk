@@ -61,12 +61,15 @@ Loop % id {
     ; ここで操作を実行
     if (is_private(title))
     {
+        is_youtube_home := InStr(title,"YouTube", CaseSensitive=ture) AND (InStr(title,"- YouTube -", CaseSensitive=ture) == 0)
+
+        ; ToolTip , %title% %is_youtube_home%
         private_count := private_count + 0.5
         is_privateing := true
         if (private_count == 150) {
             ToolTip , last 5 min!!! %private_count%
         }
-        if (private_count > 180 or is_deep_night) {
+        if (private_count > 180 or is_deep_night or is_youtube_home) {
             WinActivate, ahk_id %this_id%
             colose_window()
             private_count := 720
