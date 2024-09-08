@@ -36,6 +36,7 @@ Loop % id {
     ; is_tweeting := InStr(title,"新しいポストを作成", CaseSensitive=ture) != 0 OR InStr(title,"@wakky_robocon", CaseSensitive=ture) OR InStr(title," - 検索", CaseSensitive=ture)
     is_temptation := InStr(title,"Prime Video", CaseSensitive=ture) OR InStr(title,"DMM TV", CaseSensitive=ture) OR title = "YouTube"
     is_youtube := InStr(title,"YouTube", CaseSensitive=ture) AND (InStr(title,"YouTube Music", CaseSensitive=ture) == 0)
+    is_youtube_home := InStr(title,"YouTube", CaseSensitive=ture) AND (InStr(title,"- YouTube -", CaseSensitive=ture) == 0)
 
     is_twitter_in_window := is_twitter_in_window OR is_twitter
 
@@ -61,7 +62,7 @@ Loop % id {
 if (is_twitter_in_window = 1)
 {
     if (was_twitter = 1 or twitter_count > 0) {
-        WinActivate, ahk_id %this_id%
+        ; WinActivate, ahk_id %this_id%
         colose_tab()
         if (was_twitter = 1) {
             twitter_count := 360
