@@ -6,6 +6,10 @@ SetTimer, CheckCursor, 100
 Return
 
 CheckCursor:
+    ; Ctrlキーが押されているか確認
+    if !GetKeyState("Ctrl", "P")
+        Return  ; 押されていなければ何もしない
+
     ; アクティブウィンドウを取得
     WinGet, active_id, ID, A
 
