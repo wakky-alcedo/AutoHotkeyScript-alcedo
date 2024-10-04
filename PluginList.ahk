@@ -1,4 +1,5 @@
 ﻿#Include *i %A_ScriptDir%\Plugins\brackets.ahk
+#Include *i %A_ScriptDir%\Plugins\common_functions.ahk
 #Include *i %A_ScriptDir%\Plugins\edit.ahk
 #Include *i %A_ScriptDir%\Plugins\fn.ahk
 #Include *i %A_ScriptDir%\Plugins\git_alias.ahk
