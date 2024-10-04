@@ -146,7 +146,11 @@ return
 ;     ExitApp
 ;     return
 
-; Enterキーでアクティビティを保存する
+; ctrl+Enterキーでアクティビティを保存する
 ^Enter::
+    SaveActivity()
+    return
+
+!Enter::
     SaveActivity()
     return
