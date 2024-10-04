@@ -1,43 +1,43 @@
-﻿; 英数キー無効
-vkF0::Return
+﻿; 英数キー(CapsLock)を無効化（無反応にする）
+; vkF0::Return
 
-;デスクトップフォルダを開く
+; Win + Eでデスクトップフォルダを開く（通常はエクスプローラーが開く）
 #e::Run, %A_Desktop%
 
-; 音量変更
-; 単体押下の動作指定
+; 音量関連の設定
+; アプリケーションキーを単独で押した場合は通常の動作を維持
 AppsKey::Send,{AppsKey}
 
-; ボリュームを上げる
+; アプリケーションキーと矢印上キーを同時に押して音量を1つ上げる
 AppsKey & Up::Send,{Volume_Up 1}
 
-; ボリュームを下げる
+; アプリケーションキーと矢印下キーを同時に押して音量を1つ下げる
 AppsKey & Down::Send,{Volume_Down 1}
 
-; ミュート
+; アプリケーションキーと矢印左キーを同時に押して音量をミュートにする
 AppsKey & Left::Send,{Volume_Mute}
 
-; コピーしたらツールチップを表示
+; クリップボードの内容が変更された時に「コピー」と表示するツールチップを300ミリ秒間表示
 OnClipboardChange:
   my_tooltip_function("コピー", 300)
 Return
 
-; 上書き保存したらツールチップ表示
+; Ctrl + Sを押した時、ファイルを上書き保存し、「上書き保存」と表示するツールチップを300ミリ秒間表示
 ^s::
   Send, ^s
   my_tooltip_function("上書き保存", 300)
 Return
 
-; タイムシフト録画したら保存フォルダを開く
+; Alt + F10でタイムシフト録画を行った時、録画保存フォルダを開く
 ~!F10::Goto, ^!F10
 
-; 録画の保存フォルダを開く
+; Ctrl + Alt + F10で手動で録画の保存フォルダを開く
 ^!F10::Run, D:\Videos\GeforceExperience
 
-; カレントディレクトリのパスを取得
+; Ctrl + Shift + Alt + Pで現在のディレクトリのパスをクリップボードにコピー
 ^+!p::Clipboard := get_current_dir()
 
-; 日付入力
+; Ctrl + 「`」キーを押して現在の日付を「yyyyMMdd」の形式で入力
 ^vkBB::
   FormatTime, dateStr, , yyyyMMdd
   Send, {vkF2}{vkF3}%dateStr%
