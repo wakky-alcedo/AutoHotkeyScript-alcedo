@@ -4,7 +4,7 @@
 ; 2. OneNote上で，shift+ctrl+vを押す 
 
 ; #Include, %A_ScriptDir%\..\PluginList.ahk  ; プラグインをインクルード
-#Include, %A_ScriptDir%\..\Plugins\IME.ahk
+; #Include, %A_ScriptDir%\..\Plugins\IME.ahk
 
 ; タイトルを貼り付け
 paste_title() {

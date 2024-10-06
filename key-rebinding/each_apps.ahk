@@ -1,6 +1,6 @@
 ; #Include, %A_ScriptDir%\..\Plugins\IME.ahk
-#Include, %A_ScriptDir%\..\PluginList.ahk  ; プラグインをインクルード
-#Include, %A_ScriptDir%\..\Plugins\common_functions.ahk
+; #Include, %A_ScriptDir%\..\PluginList.ahk  ; プラグインをインクルード
+; #Include, %A_ScriptDir%\..\Plugins\common_functions.ahk
 
 
 ; discord

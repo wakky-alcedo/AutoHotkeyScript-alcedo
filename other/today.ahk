@@ -1,6 +1,6 @@
 ; ショーとカットで今日の日付を代入するようにした
 
-#Include, %A_ScriptDir%\..\Plugins\IME.ahk
+; #Include, %A_ScriptDir%\..\Plugins\IME.ahk
 ; #Include, %A_ScriptDir%\..\PluginList.ahk  ; プラグインをインクルード
 
 ; ctrl+;

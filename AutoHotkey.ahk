@@ -1,5 +1,5 @@
 ﻿#Persistent                  ; スクリプトを常駐させる
-#SingleInstance, Force       ; 同じスクリプトが実行中の場合、再実行時にリロードする
+#SingleInstance, Force       ; 多重起動不可
 #NoEnv                       ; 環境変数の検索を無効化してパフォーマンスを向上
 #UseHook                     ; ホットキーの定義にフックを使用（パフォーマンス向上）
 #InstallKeybdHook            ; キーボードフックをインストール
@@ -22,8 +22,6 @@ SetTitleMatchMode, 2         ; ウィンドウタイトルの部分一致を許�
 If (search_plugins()) {      ; プラグインが検出されたらスクリプトをリロード
   Reload
 }
-
-
 
 
 
@@ -71,3 +69,4 @@ Return
 
 #Include, %A_ScriptDir%\PluginList.ahk  ; プラグインをインクルード
 
+#Include, %A_ScriptDir%\start_list.ahk  ; スタートアップスクリプトをインクルード

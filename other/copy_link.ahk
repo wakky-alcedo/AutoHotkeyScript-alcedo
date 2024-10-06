@@ -1,5 +1,5 @@
 ﻿; #Include, %A_ScriptDir%\..\PluginList.ahk  ; プラグインをインクルード
-#Include, %A_ScriptDir%\..\Plugins\common_functions.ahk  ; プラグインをインクルード
+; #Include, %A_ScriptDir%\..\Plugins\common_functions.ahk  ; プラグインをインクルード
 
 ; Ctrl + Shift + C で実行
 ^+c::
