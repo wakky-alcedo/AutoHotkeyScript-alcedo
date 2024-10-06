@@ -2,10 +2,11 @@
 ; vkF0::Return
 
 ; Win + Eでデスクトップフォルダを開く（通常はエクスプローラーが開く）
-#e::Run, %A_Desktop%
+; #e::Run, %A_Desktop%
 
 ; 音量関連の設定
 ; アプリケーションキーを単独で押した場合は通常の動作を維持
+; アプリケーションキー＝windowsキーのこと
 AppsKey::Send,{AppsKey}
 
 ; アプリケーションキーと矢印上キーを同時に押して音量を1つ上げる
@@ -38,7 +39,8 @@ Return
 ^+!p::Clipboard := get_current_dir()
 
 ; Ctrl + 「`」キーを押して現在の日付を「yyyyMMdd」の形式で入力
-^vkBB::
-  FormatTime, dateStr, , yyyyMMdd
-  Send, {vkF2}{vkF3}%dateStr%
-Return
+; ^vkBB::
+;   FormatTime, dateStr, , yyyyMMdd
+;   Send, {vkF2}{vkF3}%dateStr%
+; Return
+
