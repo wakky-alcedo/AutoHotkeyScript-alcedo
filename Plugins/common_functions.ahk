@@ -6,19 +6,19 @@ my_tooltip_function(str, delay, WhichToolTip := 1) {
     ; SetTimer, remove_tooltip, -%delay%     ; 指定時間後にツールチップを消すタイマーを設定
     sleep, %delay%
     ToolTip,,,,%WhichToolTip%  
-  }
+}
   
-  ; ツールチップ消去用関数
-  ; remove_tooltip:
-  ;   ToolTip,,,,%WhichToolTip%                            ; ツールチップを消す
-  ; Return
+; ; ツールチップ消去用関数
+; remove_tooltip(WhichToolTip){
+;     ToolTip,,,,%WhichToolTip%                            ; ツールチップを消す
+; }
   
-  ; 全ツールチップ消去用関数
-  remove_tooltip_all:
-    SetTimer, remove_tooltip, Off          ; 全ツールチップを削除するためのサブルーチン
-    Loop, 20
-    ToolTip, , , , % A_Index               ; ツールチップをすべて消す
-  Return
+; ; 全ツールチップ消去用関数
+; remove_tooltip_all:
+;     SetTimer, remove_tooltip, Off          ; 全ツールチップを削除するためのサブルーチン
+;     Loop, 20
+;     ToolTip, , , , % A_Index               ; ツールチップをすべて消す
+; Return
   
   ; カレントディレクトリ取得
   ; エクスプローラのカレントディレクトリを取得し，テキストを返す
