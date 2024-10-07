@@ -1,15 +1,17 @@
 ; 共通関数
 
 ; ツールチップ表示用関数
-my_tooltip_function(str, delay) {
-    ToolTip, %str%                         ; 指定されたメッセージを表示
-    SetTimer, remove_tooltip, -%delay%     ; 指定時間後にツールチップを消すタイマーを設定
+my_tooltip_function(str, delay, WhichToolTip := 1) {
+    ToolTip, %str% ,,, %WhichToolTip%                        ; 指定されたメッセージを表示
+    ; SetTimer, remove_tooltip, -%delay%     ; 指定時間後にツールチップを消すタイマーを設定
+    sleep, %delay%
+    ToolTip,,,,%WhichToolTip%  
   }
   
   ; ツールチップ消去用関数
-  remove_tooltip:
-    ToolTip                                ; ツールチップを消す
-  Return
+  ; remove_tooltip:
+  ;   ToolTip,,,,%WhichToolTip%                            ; ツールチップを消す
+  ; Return
   
   ; 全ツールチップ消去用関数
   remove_tooltip_all:

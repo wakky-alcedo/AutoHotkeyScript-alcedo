@@ -20,7 +20,7 @@ AppsKey & Left::Send,{Volume_Mute}
 
 ; クリップボードの内容が変更された時に「コピー」と表示するツールチップを300ミリ秒間表示
 OnClipboardChange:
-  my_tooltip_function("コピー", 300)
+  my_tooltip_function("コピー", 300, 20)
 Return
 
 ; Ctrl + Sを押した時、ファイルを上書き保存し、「上書き保存」と表示するツールチップを300ミリ秒間表示
