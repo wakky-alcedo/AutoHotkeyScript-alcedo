@@ -51,3 +51,16 @@ rm_crlf(str) {
   str := RegExReplace(str, "`r", "")      ; キャリッジリターン（\r）を除去
   Return str
 }
+
+; 半角入力
+send_text(str) {
+  conv_mode := IME_GetConvMode()                ; IMEの状態を取得
+  state := IME_GET()                            ; IMEの状態を取得
+  IME_SetConvMode(0)                           ; IMEを半角入力に設定
+  IME_SET(0)                                   ; 半角入力に設定
+  ; Sleep 10
+  Send(str)
+  Sleep 100
+  IME_SetConvMode(conv_mode)                    ; IMEの状態を元に戻す
+  IME_SET(state)                                ; IMEの状態を元に戻す
+}
