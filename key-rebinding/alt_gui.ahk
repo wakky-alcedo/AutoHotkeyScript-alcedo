@@ -3,9 +3,6 @@
 Alt & Ctrl:: {
     SetTimer(GuiClose, -5000)  ; 5秒後にGuiCloseを呼び出す
     global MyGui  ; 関数内でMyGuiをグローバルに宣言
-    if (MyGui) { 
-        return
-    }
 
     activeWindowProcess := WinGetProcessName("A")  ; 現在アクティブなウィンドウのプロセス名を取得
     activeWindowTitle := WinGetTitle("A")  ; 現在アクティブなウィンドウのタイトルを取得
