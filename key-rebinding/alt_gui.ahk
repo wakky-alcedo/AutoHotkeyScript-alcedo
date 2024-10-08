@@ -1,125 +1,111 @@
-﻿; !CapsLock::  ; ^はCtrl、!はAltの意味
-Alt & Ctrl::
-    ; ToolTip, Ctrl + Altが押されました
-    SetTimer, GuiClose, -5000 ; 5秒後にToolTipを消す
-    Gui, Destroy  ; 既存のGUIを破棄
+﻿global MyGui := "" ; MyGuiをグローバルに宣言
 
-    WinGet, activeWindowProcess, ProcessName, A ; 現在アクティブなウィンドウのプロセス名を取得
-    ; MsgBox, %activeWindowProcess%
-    WinGetTitle, activeWindowTitle, A ; 現在アクティブなウィンドウのタイトルを取得
-    ; MsgBox, %activeWindowTitle%
+Alt & Ctrl:: {
+    SetTimer(GuiClose, -5000)  ; 5秒後にGuiCloseを呼び出す
+    global MyGui  ; 関数内でMyGuiをグローバルに宣言
+    if (MyGui) { 
+        return
+    }
+
+    activeWindowProcess := WinGetProcessName("A")  ; 現在アクティブなウィンドウのプロセス名を取得
+    activeWindowTitle := WinGetTitle("A")  ; 現在アクティブなウィンドウのタイトルを取得
+
+    if (MyGui) { 
+        MyGui.Destroy()  ; 既存のGUIを破棄
+    }
+    MyGui := Gui()
 
     ; アクティブウィンドウがVSCodeの場合
     if (activeWindowProcess = "Code.exe") {
-        if (InStr(activeWindowTitle, ".md")) {
-            Gui, Destroy ; 既存のGUIを破棄
-            Gui, Add, Text, , VSCode Markdown
-            Gui, Add, Button, gBold, 強調 (&b)
-            Gui, Add, Button, gItalic, 斜体 (&i)
-            Gui, Add, Button, gStrikethrough, 打ち消し線 (&s)
-            Gui, Add, Button, gCheckboxs, チェックボックス (&c)
-            Gui, Add, Button, gCitations, 引用 (&q)
-            Gui, Add, Button, gInlineCode, インラインコード (&`)
-            Gui, Add, Button, gCodeBlock, コードブロック (&k)
-            Gui, Add, Button, gBulletPoints, 箇条書き (&.)
-            Gui, Add, Button, gTable, テーブル (&t)
+        if InStr(activeWindowTitle, ".md") {
+            MyGui.Add("Text", , "VSCode Markdown")
+            MyGui.Add("Button", "", "強調 (&b)").OnEvent("Click", Bold)
+            MyGui.Add("Button", "", "斜体 (&i)").OnEvent("Click", Italic)
+            MyGui.Add("Button", "", "打ち消し線 (&s)").OnEvent("Click", Strikethrough)
+            MyGui.Add("Button", "", "チェックボックス (&c)").OnEvent("Click", Checkboxs)
+            MyGui.Add("Button", "", "引用 (&q)").OnEvent("Click", Citations)
+            MyGui.Add("Button", "", "インラインコード (&`)").OnEvent("Click", InlineCode)
+            MyGui.Add("Button", "", "コードブロック (&k)").OnEvent("Click", CodeBlock)
+            MyGui.Add("Button", "", "箇条書き (&.)").OnEvent("Click", BulletPoints)
+            MyGui.Add("Button", "", "テーブル (&t)").OnEvent("Click", Table)
         }
     }
-    Gui, Add, Text, , default
-    Gui, Add, Button, gGoogle, Google検索 (&g)
-    Gui, Add, Button, , Google検索 (&n)
-    ; Gui, Add, Button, a, Notepad起動 (n)
-    Gui, Show
-Return
+
+    ; MyGui := Gui.new()
+    MyGui.Add("Text", , "default")
+    MyGui.Add("Button", "", "Google検索 (&g)").OnEvent("Click", Google)
+    MyGui.Add("Button", "", "Notepad起動 (&n)").OnEvent("Click", NotepadStart)
+    MyGui.Show()
+}
 
 ; VSCode用のアクション
-
 SendCmd(cmd) {
-    Send, ^m
-    Send, ^m
-    Sleep, 100
-    Send, %cmd%
-    Sleep, 100
-    Send, {Enter}
+    GuiClose()
+    Send("^m")
+    Send("^m")
+    Sleep(100)
+    Send(cmd)
+    Sleep(100)
+    Send("{Enter}")
 }
 
-Bold:
-    Gui, Destroy
-    ; Send, ^B
+Bold(*) {
     SendCmd("bold")
-Return
+}
 
-Italic:
-    Gui, Destroy
-    ; Send, ^I 
-    SendCmd("italic")   
-Return
+Italic(*) {
+    SendCmd("italic")
+}
 
-Strikethrough:
-    Gui, Destroy
-    ; Send, ^+s
+Strikethrough(*) {
     SendCmd("strikethrough")
-Return
+}
 
-Checkboxs:
-    Gui, Destroy
-    ; Send, ^+c
+Checkboxs(*) {
     SendCmd("checkboxs")
-Return
+}
 
-Citations:
-    Gui, Destroy
-    ; Send, ^+q
+Citations(*) {
     SendCmd("citations")
-Return
+}
 
-InlineCode:
-    Gui, Destroy
-    ; Send, ^+`
+InlineCode(*) {
     SendCmd("inline code")
-Return
+}
 
-CodeBlock:
-    Gui, Destroy
-    ; Send, ^+k
+CodeBlock(*) {
     SendCmd("code block")
-Return
+}
 
-BulletPoints:
-    Gui, Destroy
-    ; Send, ^+.
+BulletPoints(*) {
     SendCmd("bullet points")
-Return
+}
 
-Table:
-    Gui, Destroy
-    ; Send, ^+t
+Table(*) {
     SendCmd("table")
-Return
+}
 
-; default:
-
-; Google検索が選ばれたときのアクション
-Google:
-    Gui, Destroy
+Google(*) {
     sendText("aaa")
-Return
+}
 
-; Notepad起動が選ばれたときのアクション
-ButtonNotepad起動:
-    Gui, Destroy
-    Run, notepad.exe  ; メモ帳を開く
-Return
+NotepadStart(*) {
+    Run("notepad.exe")  ; メモ帳を開く
+}
 
 sendText(text) {
-    Gui, Destroy
-    Send, %text%
+    GuiClose()
+    Send(text)
 }
 
+GuiEscape() { ; Escキーが押されたときに実行
+    GuiClose()
+}
 
-; GUIを閉じるときのアクション
-GuiEscape: ; Escキーが押されたときに自動的に実行されるラベル
-GuiClose: ; ☓を押したときに自動的に実行されるラベル
-    Gui, Submit
-    Gui, Destroy
-Return
+GuiClose() { ; ☓を押したときに実行
+    ; MyGui.Submit()
+    ; MyGuiが存在するか確認し、存在する場合は破棄
+    if (IsObject(MyGui)) {
+        MyGui.Destroy()  ; 既存のGUIを破棄
+    }
+}

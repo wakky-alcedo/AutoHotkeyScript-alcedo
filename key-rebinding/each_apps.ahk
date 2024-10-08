@@ -1,68 +1,82 @@
-; #Include, %A_ScriptDir%\..\Plugins\IME.ahk
-; #Include, %A_ScriptDir%\..\PluginList.ahk  ; プラグインをインクルード
-; #Include, %A_ScriptDir%\..\Plugins\common_functions.ahk
+; #Include A_ScriptDir '\..\Plugins\IME.ahk'
+; #Include A_ScriptDir '\..\PluginList.ahk'  ; プラグインをインクルード
+; #Include A_ScriptDir '\..\Plugins\common_functions.ahk'
 
+; Discord
+#HotIf WinActive("ahk_exe Discord.exe") ; Discordを開いている時だけ
 
-; discord
-#IfWinActive,ahk_exe Discord.exe        ; Discordを開いている時だけ
+; Discord で送信と改行のキーの設定を変える
+Shift & Enter:: {                       ; Shift & Enter
+    Send("+{Enter}")                    ; Shift + Enter を押したことにする
+}
+Shift & NumpadEnter:: {                 ; Shift & NumpadEnter
+    Send("+{Enter}")                    ; Shift + Enter を押したことにする
+}
 
-; discord で 送信と改行のキーの設定を変える
-Shift & Enter::                         ; Shift & Enter
-Shift & NumpadEnter::                   ; Shift & NumpadEnter を押したら
-    Send, +{Enter}                      ; Ctrl + Enter を押したことにする
-    return
+Enter:: {                               ; Enter
+    Send("^m")                          ; 入力中の文字を確定させる
+}
+NumpadEnter:: {                         ; NumpadEnter
+    Send("^m")                          ; 入力中の文字を確定させる
+}
 
-Enter::                                 ; Enter
-NumpadEnter::                           ; NumpadEnter を押したら
-    Send, ^m                            ; 入力中の文字を確定させる
-    return
+Ctrl & Enter:: {                        ; Ctrl + Enter
+    Send("{Enter}")                     ; Enter を押したことにする
+}
+Ctrl & NumpadEnter:: {                  ; Ctrl + NumpadEnter
+    Send("{Enter}")                     ; Enter を押したことにする
+}
+Alt & Enter:: {                         ; Alt + Enter
+    Send("{Enter}")                     ; Enter を押したことにする
+}
+Alt & NumpadEnter:: {                   ; Alt + NumpadEnter
+    Send("{Enter}")                     ; Enter を押したことにする
+}
 
-Ctrl & Enter::                          ; Ctrl + Enter を押したら
-Ctrl & NumpadEnter::                    ; Ctrl + NumpadEnter を押したら
-Alt & Enter::                           ; Alt + Enter を押したら
-Alt & NumpadEnter::                     ; Alt + NumpadEnter を押したら
-    Send, {Enter}                       ; Enter を押したことにする
-    return
-
-#IfWinActive
-
+#HotIf ; ホットキー条件の終了
 
 ; エクスプローラ
-; 新しいブランクファイルを作成
-#IfWinActive,ahk_class CabinetWClass
-!n::
-    ; 現在表示中のディレクトリ
-    current_dir := get_current_dir()
-    ; ファイルを生成(重複しない名前)
-    Gui, Add, Edit, v_str_filename w380
-    Gui, Add, Button, Default, Append
-    Gui, Show, Center w400, ファイル名
-    Send, {vkF2}{vkF3}
-    Return
-    ButtonAppend:
-    Gui, Submit
-    FileAppend, , %current_dir%\%_str_filename%
-    3GuiEscape:
-    3GuiClose:
-      Gui, Destroy
-Return
-#IfWinActive
+#HotIf WinActive("ahk_class CabinetWClass") ; エクスプローラがアクティブな場合
 
+global MyGui := "" ; MyGuiをグローバルに宣言
+
+!n:: {                                     ; Alt + n で新しいブランクファイルを作成
+    MyGui := Gui("New File")
+    MyGui.Add("Edit", "v_str_filename w380")
+    ; MyGui.Add("Button", "Default", "Append")
+    MyGui.Add("Button", "", "Append").OnEvent("Click", Append)
+    MyGui.Show("Center w400", "ファイル名")
+    Send("{vkF2}{vkF3}")
+}
+Append(*){
+    current_dir := get_current_dir()       ; 現在表示中のディレクトリを取得
+    MyGui.Submit()
+    FileAppend "", current_dir "\" Gui.str_filename ; ファイルを生成
+    MyGui.Destroy()
+}
+
+#HotIf ; ホットキー条件の終了
 
 ; Excel
-; Excelの改行リマップ
-; https://zenn.dev/thinkingsinc/articles/3ee9a6bb35ea55#excel%E3%81%AE%E6%94%B9%E8%A1%8C%E3%83%AA%E3%83%9E%E3%83%83%E3%83%97
-#IfWinActive,ahk_exe EXCEL.exe
-; ※+はShift, !はAltを示す
-+Enter:: !Enter
-+NumpadEnter:: !Enter
-#IfWinActive
+#HotIf WinActive("ahk_exe EXCEL.exe") ; Excelがアクティブな場合
 
++Enter:: {                               ; Shift + Enter -> Alt + Enter
+    Send("!{Enter}")
+}
++NumpadEnter:: {                         ; Shift + NumpadEnter -> Alt + Enter
+    Send("!{Enter}")
+}
+
+#HotIf ; ホットキー条件の終了
 
 ; LINE
-; LINEの送信リマップ
-#IfWinActive,ahk_exe LINE.exe
-^Enter:: !Enter
-^NumpadEnter:: !Enter
-#IfWinActive
+#HotIf WinActive("ahk_exe LINE.exe") ; LINEがアクティブな場合
 
+^Enter:: {                              ; Ctrl + Enter -> Alt + Enter
+    Send("!{Enter}")
+}
+^NumpadEnter:: {                        ; Ctrl + NumpadEnter -> Alt + Enter
+    Send("!{Enter}")
+}
+
+#HotIf ; ホットキー条件の終了

@@ -23,11 +23,11 @@
   ;////////////////////////////////////////////
 
   hotkeys_define(keys_all, "disable_keys", "On")
-  Hotkey, %exit_this%, toggle_keybd_mouse
+  Hotkey(exit_this, toggle_keybd_mouse)
 
-  Gosub, toggle_keybd_mouse
+  toggle_keybd_mouse()
 
-  SetTimer, mouse_button_checker, 100
+  SetTimer(mouse_button_checker,100)
 
   While (toggle_keybd_mouse == true) {
     ; 速度設定///////////////////////////
@@ -53,14 +53,14 @@
     ;////////////////////////////////////
 
     ; 移動///////////////////////////////
-    MouseMove, move_X, -move_Y, 0, R
+    MouseMove(move_X, -move_Y, 0, "R")
     ; ///////////////////////////////////
   }
 
-  SetTimer, mouse_button_checker, Off
+  SetTimer(mouse_button_checker,0)
 
   hotkeys_define(keys_all, "disable_keys", "Off")
-  Hotkey, %exit_this%, toggle_keybd_mouse, Off
+  Hotkey(exit_this, toggle_keybd_mouse, "Off")
 Return
 
 
@@ -69,30 +69,34 @@ Return
 ;////////////////////////////////////////////
 
 ; トグル/////////////////////////////////////
-toggle_keybd_mouse:
+toggle_keybd_mouse(ThisHotkey)
+{ ; V1toV2: Added bracket
+global ; V1toV2: Made function global
   toggle_keybd_mouse := !toggle_keybd_mouse
 
   my_tooltip_function("マウスモード: " . (toggle_keybd_mouse == true ? "ON" : "OFF"), 1000)
 
   ; タスクバーの高さを取得
-  WinGetPos, , , , taskbarHeight, ahk_class Shell_TrayWnd
+  WinGetPos(, , , &taskbarHeight, "ahk_class Shell_TrayWnd")
 
   ; 右下にツールチップ
-  CoordMode, ToolTip, Screen
-  ToolTip, % "マウスモード: " . (toggle_keybd_mouse == true ? "ON" : "OFF")
-      ,A_ScreenWidth, A_ScreenHeight - (taskbarHeight + 21), 2  ; ツールチップの高さ: 20
-  CoordMode, ToolTip, Relative
+  CoordMode("ToolTip", "Screen")
+  ToolTip("マウスモード: " . (toggle_keybd_mouse == true ? "ON" : "OFF")
+, A_ScreenWidth, A_ScreenHeight - (taskbarHeight + 21), 2)
+  CoordMode("ToolTip", "Window")
 
   ; OFFにするならそのツールチップは指定時間後に削除
   If (toggle_keybd_mouse == false)
-    SetTimer, remove_tooltip_all, -500
+    SetTimer(remove_tooltip_all,-500)
 Return
 ;////////////////////////////////////////////
 
 
 ; マウス/////////////////////////////////////
-mouse_button_checker:
+mouse_button_checker()
   ; マウス/////////////////////////////
+{ ; V1toV2: Added bracket
+global ; V1toV2: Made function global
   keybd_mouse_click(mouse_LB, "L")
   keybd_mouse_click(mouse_MB, "M")
   keybd_mouse_click(mouse_RB, "R")
@@ -100,6 +104,8 @@ mouse_button_checker:
   keybd_mouse_scroll(scroll_down, "Down", accel_key, decel_key, accel_vol)
   ;////////////////////////////////////
 Return
+} ; V1toV2: Added bracket before function
+} ; V1toV2: Added bracket before function
 
 
 keybd_mouse_click(key, button) {
@@ -116,16 +122,16 @@ keybd_mouse_click(key, button) {
   ; 押すとき
   If (GetKeyState(key, "P") == true) {
     If (%button%B_down != true) {
-      Send, {Blind}{%button%Button Down}
+      Send("{Blind}{" button "Button Down}")
       %button%B_down := true
 
       ; 押下したら一瞬カーソルを止める
-      Sleep, 150
+      Sleep(150)
     }
   ; 離すとき
   } Else {
     If (%button%B_down == true) {
-      Send, {Blind}{%button%Button Up}
+      Send("{Blind}{" button "Button Up}")
       %button%B_down := false
     }
   }
@@ -137,7 +143,7 @@ keybd_mouse_scroll(key, scroll, accel_key, decel_key, accel_vol) {
   While (GetKeyState(key, "P")) {
     ; スクロール中はカーソルを固定
     If (GetKeyState(key, "P"))
-      Send, {Blind}{Wheel%scroll%}
+      Send("{Blind}{Wheel" scroll "}")
 
     ; スクロール速度の設定
     scroll_wait := 100
@@ -146,7 +152,7 @@ keybd_mouse_scroll(key, scroll, accel_key, decel_key, accel_vol) {
     If (GetKeyState(decel_key, "P"))
       scroll_wait := 200
 
-    Sleep, scroll_wait
+    Sleep(scroll_wait)
   }
 }
 ;////////////////////////////////////////////

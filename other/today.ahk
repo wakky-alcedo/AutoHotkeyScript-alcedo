@@ -1,22 +1,28 @@
 ; ショーとカットで今日の日付を代入するようにした
 
-; #Include, %A_ScriptDir%\..\Plugins\IME.ahk
-; #Include, %A_ScriptDir%\..\PluginList.ahk  ; プラグインをインクルード
+; #Include, %A_ScriptDir%\PluginList.ahk  ; プラグインをインクルード
 
 ; ctrl+;
-^vkBB::
+; ^`;:: {
+; ^vkBB::{ ; ;のこと
+^vkBA::{ ; :のこと（どうやらPowerToysよりこっちが優先されてしまうらしいのでこうした）
     IME_SET(0) ; 半角に
-    FormatTime,TimeString,,yyyy/MM/dd
-    Send,%TimeString%
-    Sleep, 1
+    Sleep 10
+    TimeString := FormatTime(, "yyyy/MM/dd")
+    Send(TimeString)
+    Sleep(1)
     IME_SET(1) ; 全角に
     Return
+}
 
 ; ctrl+:
-^vkBA::
+; ^vkBA::{
+; ^`:::{
+^]::{
     IME_SET(0) ; 半角に
-    FormatTime,TimeString,,hh:mm
-    Send,%TimeString%
-    Sleep, 1
+    TimeString := FormatTime(, "hh:mm")
+    Send(TimeString)
+    Sleep(1)
     IME_SET(1) ; 全角に
     Return
+}
