@@ -11,6 +11,8 @@ Alt & Ctrl:: {
         MyGui.Destroy()  ; 既存のGUIを破棄
     }
     MyGui := Gui()
+    MyGui.OnEvent("Escape", GuiClose) ; [ESC] キーで閉じる
+    MyGui.OnEvent("Close", GuiClose) ; X で閉じる
 
     ; アクティブウィンドウがVSCodeの場合
     if (activeWindowProcess = "Code.exe") {
@@ -46,60 +48,24 @@ SendCmd(cmd) {
     Send("{Enter}")
 }
 
-Bold(*) {
-    SendCmd("bold")
-}
-
-Italic(*) {
-    SendCmd("italic")
-}
-
-Strikethrough(*) {
-    SendCmd("strikethrough")
-}
-
-Checkboxs(*) {
-    SendCmd("checkboxs")
-}
-
-Citations(*) {
-    SendCmd("citations")
-}
-
-InlineCode(*) {
-    SendCmd("inline code")
-}
-
-CodeBlock(*) {
-    SendCmd("code block")
-}
-
-BulletPoints(*) {
-    SendCmd("bullet points")
-}
-
-Table(*) {
-    SendCmd("table")
-}
-
-Google(*) {
-    sendText("aaa")
-}
-
-NotepadStart(*) {
-    Run("notepad.exe")  ; メモ帳を開く
-}
+Bold(*)             => SendCmd("bold")
+Italic(*)           => SendCmd("italic")
+Strikethrough(*)    => SendCmd("strikethrough")
+Checkboxs(*)        => SendCmd("checkboxs")
+Citations(*)        => SendCmd("citations")
+InlineCode(*)       => SendCmd("inline code")
+CodeBlock(*)        => SendCmd("code block")
+BulletPoints(*)     => SendCmd("bullet points")
+Table(*)            => SendCmd("table")
+Google(*)           => sendText("aaa")
+NotepadStart(*)     => Run("notepad.exe")  ; メモ帳を開く
 
 sendText(text) {
     GuiClose()
     Send(text)
 }
 
-GuiEscape() { ; Escキーが押されたときに実行
-    GuiClose()
-}
-
-GuiClose() { ; ☓を押したときに実行
+GuiClose(*) { ; ☓を押したときに実行
     ; MyGui.Submit()
     ; MyGuiが存在するか確認し、存在する場合は破棄
     if (IsObject(MyGui)) {
