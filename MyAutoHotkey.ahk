@@ -28,7 +28,7 @@ if search_plugins()  ; プラグインが検出されたらスクリプトをリ
 search_plugins() {
     plugin_files := ''
     Loop Files, A_ScriptDir '\Plugins\*.ahk' {
-        plugin_files .= '#Include "*i ' A_ScriptDir '\Plugins\' A_LoopFileName '"`n'
+        plugin_files .= '#Include "*i Plugins\' A_LoopFileName '"`n'
     }
     if (plugin_files == '')  ; プラグインがない場合は終了
         return 0
