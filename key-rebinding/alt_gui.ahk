@@ -1,6 +1,8 @@
 ﻿global MyGui := "" ; MyGuiをグローバルに宣言
 
-Alt & Ctrl:: {
+Alt & Ctrl:: 
+Ctrl & Alt::
+{
     SetTimer(GuiClose, -5000)  ; 5秒後にGuiCloseを呼び出す
     global MyGui  ; 関数内でMyGuiをグローバルに宣言
 
@@ -21,13 +23,19 @@ Alt & Ctrl:: {
             MyGui.Add("Button", "", "強調 (&b)").OnEvent("Click", Bold)
             MyGui.Add("Button", "", "斜体 (&i)").OnEvent("Click", Italic)
             MyGui.Add("Button", "", "打ち消し線 (&s)").OnEvent("Click", Strikethrough)
-            MyGui.Add("Button", "", "チェックボックス (&c)").OnEvent("Click", Checkboxs)
+
             MyGui.Add("Button", "", "引用 (&q)").OnEvent("Click", Citations)
+            MyGui.Add("Button", "", "数式 (&m)").OnEvent("Click", Formula)
             MyGui.Add("Button", "", "インラインコード (&`)").OnEvent("Click", InlineCode)
             MyGui.Add("Button", "", "コードブロック (&k)").OnEvent("Click", CodeBlock)
+
             MyGui.Add("Button", "", "箇条書き (&.)").OnEvent("Click", BulletPoints)
+            MyGui.Add("Button", "", "番号付き箇条書き (&,)").OnEvent("Click", NumberedBulletPoints)
+            MyGui.Add("Button", "", "チェックボックス (&h)").OnEvent("Click", Checkboxs)
+            
             MyGui.Add("Button", "", "テーブル (&t)").OnEvent("Click", Table)
         }
+        MyGui.Add("Button", "", "計算機 (&c)").OnEvent("Click", Calculator)
     }
 
     ; MyGui := Gui.new()
@@ -37,28 +45,56 @@ Alt & Ctrl:: {
     MyGui.Show()
 }
 
-; VSCode用のアクション
-SendCmd(cmd) {
+SendTextGUI(text) {
     GuiClose()
-    Send("^m")
-    Send("^m")
+    send_text(text)
+}
+
+SendCmdGUI(cmd) {
+    GuiClose()
+    Send("^+p")
     Sleep(100)
-    Send(cmd)
+    send_text(cmd)
     Sleep(100)
     Send("{Enter}")
 }
 
-Bold(*)             => SendCmd("bold")
-Italic(*)           => SendCmd("italic")
-Strikethrough(*)    => SendCmd("strikethrough")
-Checkboxs(*)        => SendCmd("checkboxs")
-Citations(*)        => SendCmd("citations")
-InlineCode(*)       => SendCmd("inline code")
-CodeBlock(*)        => SendCmd("code block")
-BulletPoints(*)     => SendCmd("bullet points")
-Table(*)            => SendCmd("table")
-Google(*)           => sendText("aaa")
-NotepadStart(*)     => Run("notepad.exe")  ; メモ帳を開く
+; VSCode用のアクション
+; 拡張機能：Markdown Shortcuts
+SendCmdMSGUI(cmd) {
+    GuiClose()
+    Send("^m")
+    Send("^m")
+    Sleep(100)
+    send_text(cmd)
+    Sleep(100)
+    Send("{Enter}")
+}
+Bold(*)                 => SendCmdMSGUI("bold")
+Italic(*)               => SendCmdMSGUI("italic")
+Strikethrough(*)        => SendCmdMSGUI("strikethrough")
+Checkboxs(*)            => SendCmdMSGUI("checkboxes")
+Citations(*)            => SendCmdMSGUI("citations")
+Formula(*)              => Send("$$")
+InlineCode(*)           => SendCmdMSGUI("inline code")
+CodeBlock(*)            => SendCmdMSGUI("code block")
+BulletPoints(*)         => SendCmdMSGUI("bullet points")
+NumberedBulletPoints(*) => SendCmdMSGUI("number list")
+Table(*)                => SendCmdMSGUI("table")
+
+; 拡張機能：Calculator
+Calculator(*) {
+    GuiClose()
+    Send("^l")
+    Send("+{Left}")
+    SendCmdGUI("calculator evaluate")
+    Sleep(200))
+    Send("{Right}")
+}
+
+Google(*)               => sendText("aaa")
+NotepadStart(*)         => Run("notepad.exe")  ; メモ帳を開く
+
 
 sendText(text) {
     GuiClose()
