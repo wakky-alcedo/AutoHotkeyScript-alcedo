@@ -19,6 +19,10 @@ global ; V1toV2: Made function global
 
         ; タイトルの取得 (ウィンドウタイトル)
         title := WinGetTitle("A")
+        position := InStr(title, " - ", , -1)  ; これは左から最初に見つかる位置
+        if (position > 0) {
+            title := SubStr(title, 1, position)
+        }
         A_Clipboard := title
         
 
