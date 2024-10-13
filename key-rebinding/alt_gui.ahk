@@ -88,7 +88,7 @@ Calculator(*) {
     Send("^l")
     Send("+{Left}")
     SendCmdGUI("calculator evaluate")
-    Sleep(200))
+    Sleep(200)
     Send("{Right}")
 }
 
