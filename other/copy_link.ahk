@@ -9,10 +9,11 @@
         ; URLの取得 (アドレスバーにフォーカスしてコピー)
 { ; V1toV2: Added bracket
 global ; V1toV2: Made function global
-        focusCtrl := ControlGetClassNN(ControlGetFocus("A"))
+        ; focusCtrl := ControlGetClassNN(ControlGetFocus("A"))
         Send("^l")       ; アドレスバーに移動
         Sleep(200)
         Send("^c")       ; URLをコピー
+        Sleep(200)
         Errorlevel := !ClipWait(1)    ; クリップボードの内容を待つ
         url := A_Clipboard
 
