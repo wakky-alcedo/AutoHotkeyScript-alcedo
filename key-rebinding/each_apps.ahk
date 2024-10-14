@@ -80,3 +80,33 @@ Append(*){
 }
 
 #HotIf ; ホットキー条件の終了
+
+; Twitter
+#HotIf InStr(WinGetTitle("A"), "/ X") & !InStr(WinGetTitle("A"), "新しいポストを作成 / X") 
+
+Shift & Enter:: {                       ; Shift & Enter
+    Send("+{Enter}")                    ; Shift + Enter を押したことにする
+}
+
+Enter:: {                               ; Enter
+    Send("^m")                          ; 入力中の文字を確定させる
+}
+NumpadEnter:: {                         ; NumpadEnter
+    Send("^m")                          ; 入力中の文字を確定させる
+}
+
+Ctrl & Enter:: {                        ; Ctrl + Enter
+    Send("{Enter}")                     ; Enter を押したことにする
+}
+Ctrl & NumpadEnter:: {                  ; Ctrl + NumpadEnter
+    Send("{Enter}")                     ; Enter を押したことにする
+}
+Alt & Enter:: {                         ; Alt + Enter
+    Send("{Enter}")                     ; Enter を押したことにする
+}
+Alt & NumpadEnter:: {                   ; Alt + NumpadEnter
+    Send("{Enter}")                     ; Enter を押したことにする
+}
+
+#HotIf
+
