@@ -15,7 +15,7 @@
 ; ^vkBA::{
 ; ^`:::{
 ^]::{
-    TimeString := FormatTime(, "hh:mm")
+    TimeString := FormatTime(, "HH:mm")
     send_text(TimeString)
     Return
 }
