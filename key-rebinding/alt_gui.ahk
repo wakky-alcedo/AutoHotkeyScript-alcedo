@@ -1,7 +1,20 @@
 ﻿global MyGui := "" ; MyGuiをグローバルに宣言
 
-Alt & Ctrl:: 
-Ctrl & Alt::
+
+; ^!Shift::
+; +!Ctrl::
+; ^+Alt::
+^#Shift::
++#Ctrl::
+^+LWin::
+; LWin & Ctrl:: 
+; Ctrl & LWin::
+; LWin & Ctrl & Shift:: 
+; Ctrl & LWin & Shift::
+; Shift & LWin & Ctrl:: 
+; Shift & Ctrl & LWin::
+; LWin & Shift & Ctrl:: 
+; Ctrl & Shift & LWin::
 {
     SetTimer(GuiClose, -5000)  ; 5秒後にGuiCloseを呼び出す
     global MyGui  ; 関数内でMyGuiをグローバルに宣言
@@ -16,8 +29,10 @@ Ctrl & Alt::
     MyGui.OnEvent("Escape", GuiClose) ; [ESC] キーで閉じる
     MyGui.OnEvent("Close", GuiClose) ; X で閉じる
 
+    MyGui.Add("Text", , activeWindowTitle)
+
     ; アクティブウィンドウがVSCodeの場合
-    if (activeWindowProcess = "Code.exe") {
+    if InStr(activeWindowTitle, "Visual Studio Code") {
         if InStr(activeWindowTitle, ".md") {
             MyGui.Add("Text", , "VSCode Markdown")
             MyGui.Add("Button", "", "強調 (&b)").OnEvent("Click", Bold)
@@ -82,6 +97,22 @@ BulletPoints(*)         => SendCmdMSGUI("bullet points")
 NumberedBulletPoints(*) => SendCmdMSGUI("number list")
 Table(*)                => SendCmdMSGUI("table")
 
+; 短縮キー
+#HotIf InStr(WinGetTitle("A"), ".md") && InStr(WinGetTitle("A"), "Visual Studio Code")
+^b::Bold()
+^i::Italic()
+; ^s::Strikethrough()
+^q::Citations()
+^m::Formula()
+^`::InlineCode()
+^k::CodeBlock()
+^.::BulletPoints()
+^,::NumberedBulletPoints()
+^h::Checkboxs()
+^t::Table()
+#HotIf
+
+
 ; 拡張機能：Calculator
 Calculator(*) {
     GuiClose()
@@ -96,9 +127,14 @@ Google(*)               => sendText("aaa")
 NotepadStart(*)         => Run("notepad.exe")  ; メモ帳を開く
 
 
-sendText(text) {
+sendKey(text) {
     GuiClose()
     Send(text)
+}
+
+sendText(text) {
+    GuiClose()
+    send_text(text)
 }
 
 GuiClose(*) { ; ☓を押したときに実行
