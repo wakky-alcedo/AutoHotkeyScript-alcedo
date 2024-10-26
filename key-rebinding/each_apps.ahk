@@ -82,6 +82,7 @@ Append(*){
 #HotIf ; ホットキー条件の終了
 
 ; Twitter
+#HotIf WinExist("A")
 #HotIf InStr(WinGetTitle("A"), "/ X") & !InStr(WinGetTitle("A"), "新しいポストを作成 / X") 
 
 Shift & Enter:: {                       ; Shift & Enter
@@ -109,4 +110,4 @@ Alt & NumpadEnter:: {                   ; Alt + NumpadEnter
 }
 
 #HotIf
-
+#HotIf 
