@@ -7,8 +7,12 @@ SetTimer(CheckCursor,100) ; ウィンドウの監視を100ミリ秒ごとに開�
 
 CheckCursor() { ; Ctrlキーが押されているか確認
 global ; V1toV2: Made function global
-    if !GetKeyState("Ctrl", "P")
-        Return  ; 押されていなければ何もしない
+    if !GetKeyState("Ctrl", "P") { ; Ctrlキーが押されていない場合は何もしない
+        Return
+    }
+    if !WinExist("A") { ; アクティブウィンドウが存在しない場合は何もしない
+        Return
+    }
 
     ; アクティブウィンドウを取得
     active_id := WinGetID("A")
