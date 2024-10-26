@@ -53,6 +53,12 @@
         MyGui.Add("Button", "", "計算機 (&c)").OnEvent("Click", Calculator)
     }
 
+    ; アクティブウィンドウがVivaldiの場合
+    if InStr(activeWindowProcess, "vivaldi") {
+        MyGui.Add("Text", , "Vivaldi")
+        MyGui.Add("Button", "", "強制的にダークページを利用").OnEvent("Click", ForceDarkPage)
+    }
+
     ; MyGui := Gui.new()
     MyGui.Add("Text", , "default")
     MyGui.Add("Button", "", "Google検索 (&g)").OnEvent("Click", Google)
@@ -122,6 +128,9 @@ Calculator(*) {
     Sleep(200)
     Send("{Right}")
 }
+
+; vivaldi
+ForceDarkPage(*) => sendKey("^!d") ; "すべてのウェブサイトにダークテーマを強制適用"のショートカットキー
 
 Google(*)               => sendText("aaa")
 NotepadStart(*)         => Run("notepad.exe")  ; メモ帳を開く
