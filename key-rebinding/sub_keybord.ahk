@@ -11,7 +11,6 @@ global keyCount1 := 0
     countTimeout := 300
     SetTimer CheckKeyCount1, -countTimeout
 }
-
 CheckKeyCount1(*) {
     global keyCount1
 
@@ -40,21 +39,17 @@ global keyCount2 := 0
     countTimeout := 300
     SetTimer CheckKeyCount2, -countTimeout
 }
-
 CheckKeyCount2(*) {
     global keyCount2
 
     if keyCount2 = 1 {
         ; 1回押しのアクションをここに記述
-        ; MsgBox("1回押しのアクション")
         Run(".\my-time-tracker\my-time-tracker.exe")  ; TimeTrackerを開く
     } else if keyCount2 = 2 {
         ; 2回押しのアクションをここに記述
-        ; MsgBox("2回押しのアクション")
         Run("calc.exe") ; 電卓を開く
     } else if keyCount2 >= 3 {
         ; 3回押しのアクションをここに記述
-        ; MsgBox("3回押しのアクション")
     }
 
     ; カウントをリセット
@@ -62,10 +57,34 @@ CheckKeyCount2(*) {
 }
 
 ; 3
+global keyCount3 := 0
 ^!+F9::{
-    ; シークレットマイクミュート
-    ; powertoysの機能
-    Send("^+a")
+    global keyCount3
+    keyCount3 += 1
+    countTimeout := 300
+    SetTimer CheckKeyCount3, -countTimeout
+}
+CheckKeyCount3(*) {
+    global keyCount3
+
+    if keyCount3 = 1 {
+        ; 1回押しのアクションをここに記述
+        ; シークレットマイクミュート
+        ; powertoysの機能「ビデオ会議のミュート」
+        Send("^+a")
+    } else if keyCount3 = 2 {
+        ; 2回押しのアクションをここに記述
+        ; Discordのときのみミュート
+        ; Discordのウィンドウがアクティブならミュート
+        if WinActive("ahk_exe Discord.exe") {
+            Send("^+m")
+        }
+    } else if keyCount3 >= 3 {
+        ; 3回押しのアクションをここに記述
+    }
+
+    ; カウントをリセット
+    keyCount3 := 0
 }
 
 ; ノブ左回転
