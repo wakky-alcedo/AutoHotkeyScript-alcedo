@@ -4,22 +4,32 @@
 ; 各キーに ctrl + alt + shift + F7 ～ F12 を割り当てる
 
 ; 1
+global keyCount1 := 0
 ^!+F7::{
-    ; 一定時間内に，3回押すと、スリープ
-    ; 押された時間を取得
-    static time := 0
-    static count := 0
-    if(time + 1000 < A_TickCount) {
-        time := A_TickCount
-        count := 0
-        Send("^+!.") ; vivaldiブレイクモード（setの想定）
-    }
-    count++
-    if (count > 3) {
-        count := 0
-        Send("^+!.") ; vivaldiブレイクモード（resetの想定）
+    global keyCount1
+    keyCount1 += 1
+    countTimeout := 300
+    SetTimer CheckKeyCount1, -countTimeout
+}
+
+CheckKeyCount1(*) {
+    global keyCount1
+
+    if keyCount1 = 1 {
+        ; 1回押しのアクションをここに記述
+        ; MsgBox("1回押しのアクション")
+        Send("^+!.") ; vivaldiブレイクモード
+    } else if keyCount1 = 2 {
+        ; 2回押しのアクションをここに記述
+        ; MsgBox("2回押しのアクション")
+    } else if keyCount1 >= 3 {
+        ; 3回押しのアクションをここに記述
+        ; MsgBox("3回押しのアクション")
         DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
     }
+
+    ; カウントをリセット
+    keyCount1 := 0
 }
 
 ; 2
@@ -28,10 +38,10 @@ global keyCount2 := 0
     global keyCount2
     keyCount2 += 1
     countTimeout := 300
-    SetTimer CheckkeyCount2, -countTimeout
+    SetTimer CheckKeyCount2, -countTimeout
 }
 
-CheckkeyCount2(*) {
+CheckKeyCount2(*) {
     global keyCount2
 
     if keyCount2 = 1 {
@@ -45,7 +55,6 @@ CheckkeyCount2(*) {
     } else if keyCount2 >= 3 {
         ; 3回押しのアクションをここに記述
         ; MsgBox("3回押しのアクション")
-
     }
 
     ; カウントをリセット
