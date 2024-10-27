@@ -33,6 +33,7 @@
 
     ; アクティブウィンドウがVSCodeの場合
     if InStr(activeWindowTitle, "Visual Studio Code") {
+        MyGui.Add("Text", , "VSCode")
         if InStr(activeWindowTitle, ".md") {
             MyGui.Add("Text", , "VSCode Markdown")
             MyGui.Add("Button", "", "強調 (&b)").OnEvent("Click", Bold)
@@ -63,6 +64,9 @@
     MyGui.Add("Text", , "default")
     MyGui.Add("Button", "", "Google検索 (&g)").OnEvent("Click", Google)
     MyGui.Add("Button", "", "Notepad起動 (&n)").OnEvent("Click", NotepadStart)
+    MyGui.Add("Button", "", "スリープ").OnEvent("Click", PCSleep)
+    MyGui.Add("Button", "", "time tracker").OnEvent("Click", RunTimeTracker)
+
     MyGui.Show()
 }
 
@@ -119,6 +123,8 @@ Table(*)                => SendCmdMSGUI("table")
 #HotIf
 
 
+
+
 ; 拡張機能：Calculator
 Calculator(*) {
     GuiClose()
@@ -134,7 +140,8 @@ ForceDarkPage(*) => sendKey("^!d") ; "すべてのウェブサイトにダーク
 
 Google(*)               => sendText("aaa")
 NotepadStart(*)         => Run("notepad.exe")  ; メモ帳を開く
-
+PCSleep(*)              => DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)  ; スリープ
+RunTimeTracker(*)       => Run(".\my-time-tracker\my-time-tracker.exe")  ; TimeTrackerを開く
 
 sendKey(text) {
     GuiClose()
