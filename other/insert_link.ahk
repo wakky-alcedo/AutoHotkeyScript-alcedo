@@ -9,15 +9,17 @@
 ; タイトルを貼り付け
 paste_title() {
     Send("#v")
-    Sleep(400)
+    Sleep(500)
     Send("{Enter}")
 }
 
 ; リンクを貼り付け
 paset_link() {
+    Sleep(100)
     Send("#v")
     Sleep(400)
     Send("{Down}")
+    Sleep(100)
     Send("{Enter}")
 } 
 
@@ -64,20 +66,20 @@ paset_link() {
         Sleep(500)
         ; 確定
         Send("{Enter}")
-    }Else If(active_exe = "Discord.exe") ; Discord
-    {
-        Send("[")
-        ; タイトルを貼り付け
-        Send("^v")
-        Sleep(100)
-        ; カーソルの移動
-        Send("](<")
-        Sleep(100)
-        ; リンクを貼り付け
-        paset_link()
-        Sleep(500)
-        ; 確定
-        Send(">)")
+    ; }Else If(active_exe = "Discord.exe") ; Discord
+    ; {
+    ;     Send("[")
+    ;     ; タイトルを貼り付け
+    ;     Send("^v")
+    ;     Sleep(100)
+    ;     ; カーソルの移動
+    ;     Send("](<")
+    ;     Sleep(100)
+    ;     ; リンクを貼り付け
+    ;     paset_link()
+    ;     Sleep(500)
+    ;     ; 確定
+    ;     Send(">)")
     }Else If(active_exe = "explorer.exe") ; ファイルエクスプローラ
     {
         ; リンクの挿入を開く
@@ -101,8 +103,10 @@ paset_link() {
     }Else{
         Send("[")
         ; タイトルを貼り付け
-        Send("^v")
-        Sleep(100)
+        ; Send("^v")
+        ; Sleep(100)
+        paste_title()
+        Sleep(500)
         ; カーソルの移動
         Send("](")
         Sleep(100)
