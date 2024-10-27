@@ -1,6 +1,7 @@
 #Requires AutoHotkey v2.0
 
 ; サブキーボード
+; 各キーに ctrl + alt + shift + F7 ～ F12 を割り当てる
 
 ; 1
 ^!+F7::{
@@ -22,8 +23,33 @@
 }
 
 ; 2
+global keyCount2 := 0
 ^!+F8::{
-    Run(".\my-time-tracker\my-time-tracker.exe")  ; TimeTrackerを開く
+    global keyCount2
+    keyCount2 += 1
+    countTimeout := 300
+    SetTimer CheckkeyCount2, -countTimeout
+}
+
+CheckkeyCount2(*) {
+    global keyCount2
+
+    if keyCount2 = 1 {
+        ; 1回押しのアクションをここに記述
+        ; MsgBox("1回押しのアクション")
+        Run(".\my-time-tracker\my-time-tracker.exe")  ; TimeTrackerを開く
+    } else if keyCount2 = 2 {
+        ; 2回押しのアクションをここに記述
+        ; MsgBox("2回押しのアクション")
+        Run("calc.exe") ; 電卓を開く
+    } else if keyCount2 >= 3 {
+        ; 3回押しのアクションをここに記述
+        ; MsgBox("3回押しのアクション")
+
+    }
+
+    ; カウントをリセット
+    keyCount2 := 0
 }
 
 ; 3
