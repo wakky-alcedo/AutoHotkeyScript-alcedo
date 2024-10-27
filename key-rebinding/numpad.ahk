@@ -1,15 +1,30 @@
-﻿; ; 出先PCで半角数字を入力する
-1::Send, {Numpad1}
-2::Send, {Numpad2}
-3::Send, {Numpad3}
-4::Send, {Numpad4}
-5::Send, {Numpad5}
-6::Send, {Numpad6}
-7::Send, {Numpad7}
-8::Send, {Numpad8}
-9::Send, {Numpad9}
-0::Send, {Numpad0}
+﻿; 出先PCで半角数字を入力する
+1::Send("{Numpad1}")
+2::Send("{Numpad2}")
+3::Send("{Numpad3}")
+4::Send("{Numpad4}")
+5::Send("{Numpad5}")
+6::Send("{Numpad6}")
+7::Send("{Numpad7}")
+8::Send("{Numpad8}")
+9::Send("{Numpad9}")
+0::Send("{Numpad0}")
 
+; 実質numlockを常にオンにする
+NumpadDel::Send(".")
+NumpadIns::Send("{Numpad0}")
+NumpadEnd::Send("{Numpad1}")
+NumpadDown::Send("{Numpad2}")
+NumpadPgDn::Send("{Numpad3}")
+NumpadLeft::Send("{Numpad4}")
+NumpadClear::Send("{Numpad5}")
+NumpadRight::Send("{Numpad6}")
+NumpadHome::Send("{Numpad7}")
+NumpadUp::Send("{Numpad8}")
+NumpadPgUp::Send("{Numpad9}")
+
+; numlockをbackspaceにする
+NumLock::Send("{Backspace}")
 
 ; 左手テンキー
 ; 修飾キーと無変換の組み合わせのトリガーを有効にする(例: ^{vk1D}r::OneNote赤文字)

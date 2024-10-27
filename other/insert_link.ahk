@@ -8,44 +8,44 @@
 
 ; タイトルを貼り付け
 paste_title() {
-    Send,#v
-    Sleep 400
-    Send,{Enter}
+    Send("#v")
+    Sleep(500)
+    Send("{Enter}")
 }
 
 ; リンクを貼り付け
 paset_link() {
-    Send,#v
-    Sleep 400
-    Send,{Down}
-    Send,{Enter}
+    Sleep(100)
+    Send("#v")
+    Sleep(400)
+    Send("{Down}")
+    Sleep(100)
+    Send("{Enter}")
 } 
 
-+^v::
-    ;MsgBox, Hello AutoHotkey world
-    ;SetKeyDelay[, 300, 2]
-    BlockInput, on
-    SendMode Input
++^v:: {
+    global ; V1toV2: Made function global
+    BlockInput("on")
+    SendMode("Input")
     is_IME := IME_GET()
     if (is_IME = 1) {
         IME_SET(0) ; 半角に
     }
-    Sleep 100
+    Sleep(100)
 
     ; アクティブウィンドウの実行ファイルを取得
-    WinGet, active_exe, ProcessName, A
-
+    active_exe := WinGetProcessName("A")
     If(active_exe = "ApplicationFrameHost.exe") ; OneNote
     {
         ; リンクの挿入を開く
-        Send,^k
-        Sleep 200
+        Send("^k")
+        Sleep(200)
         ; リンクを貼り付け
         paset_link()
-        Sleep 500
+        Sleep(500)
         ; カーソルの移動
-        Send,+{Tab}
-        Sleep 200
+        Send("+{Tab}")
+        Sleep(200)
         ; タイトルを貼り付け
         paste_title()
         ;Sleep 500
@@ -54,72 +54,75 @@ paset_link() {
     }Else If(active_exe = "slack.exe") ; Slack
     {
         ; リンクの挿入を開く
-        Send,^+u
-        Sleep 200
+        Send("^+u")
+        Sleep(200)
         ; タイトルを貼り付け
-        Send,^v
+        Send("^v")
         ; カーソルの移動
-        Send,{Tab}
-        Sleep 200
+        Send("{Tab}")
+        Sleep(200)
         ; リンクを貼り付け
         paset_link()
-        Sleep 500
+        Sleep(500)
         ; 確定
-        Send,{Enter}
-    }Else If(active_exe = "Discord.exe") ; Discord
-    {
-        Send,[
-        ; タイトルを貼り付け
-        Send,^v
-        Sleep 100
-        ; カーソルの移動
-        Send,](<
-        Sleep 100
-        ; リンクを貼り付け
-        paset_link()
-        Sleep 500
-        ; 確定
-        Send,>)
+        Send("{Enter}")
+    ; }Else If(active_exe = "Discord.exe") ; Discord
+    ; {
+    ;     Send("[")
+    ;     ; タイトルを貼り付け
+    ;     Send("^v")
+    ;     Sleep(100)
+    ;     ; カーソルの移動
+    ;     Send("](<")
+    ;     Sleep(100)
+    ;     ; リンクを貼り付け
+    ;     paset_link()
+    ;     Sleep(500)
+    ;     ; 確定
+    ;     Send(">)")
     }Else If(active_exe = "explorer.exe") ; ファイルエクスプローラ
     {
         ; リンクの挿入を開く
         ; 右クリック
-        MouseClick, right
-        Sleep 200
-        Send,w
-        Send,s
-        Sleep 400
+        MouseClick("right")
+        Sleep(200)
+        Send("w")
+        Send("s")
+        Sleep(400)
         ; リンクを貼り付け
         paset_link()
-        Sleep 500
+        Sleep(500)
         ; 次へ
-        Send,{Enter}
-        Sleep 200
+        Send("{Enter}")
+        Sleep(200)
         ; タイトルを貼り付け
         paste_title()
-        Sleep 500
+        Sleep(500)
         ; 確定
-        Send,{Enter}
+        Send("{Enter}")
     }Else{
-        Send,[
+        Send("[")
         ; タイトルを貼り付け
-        Send,^v
-        Sleep 100
+        ; Send("^v")
+        ; Sleep(100)
+        paste_title()
+        Sleep(500)
         ; カーソルの移動
-        Send,](
-        Sleep 100
+        Send("](")
+        Sleep(100)
         ; リンクを貼り付け
         paset_link()
-        Sleep 500
+        Sleep(500)
         ; 確定
-        Send,)
+        Send(")")
     }
 
     if (is_IME = 1) {
         IME_SET(1) ; 全角に
     }
-    BlockInput, off
+    BlockInput("off")
     return
+}
 
 
 ; 保存したら自動で再実行するらしい？

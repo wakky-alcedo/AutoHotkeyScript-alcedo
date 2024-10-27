@@ -1,30 +1,34 @@
-#Persistent  ; スクリプトが常駐するように設定
 #SingleInstance Force  ; スクリプトの重複実行を防ぐ
 
-; ウィンドウの監視を100ミリ秒ごとに開始
-SetTimer, CheckCursor, 100
-Return
+Persistent ; スクリプトが常駐するように設定
+SetTimer(CheckCursor,100) ; ウィンドウの監視を100ミリ秒ごとに開始
 
-CheckCursor:
-    ; Ctrlキーが押されているか確認
-    if !GetKeyState("Ctrl", "P")
-        Return  ; 押されていなければ何もしない
+; Return
+
+CheckCursor() { ; Ctrlキーが押されているか確認
+global ; V1toV2: Made function global
+    if !GetKeyState("Ctrl", "P") { ; Ctrlキーが押されていない場合は何もしない
+        Return
+    }
+    if !WinExist("A") { ; アクティブウィンドウが存在しない場合は何もしない
+        Return
+    }
 
     ; アクティブウィンドウを取得
-    WinGet, active_id, ID, A
+    active_id := WinGetID("A")
 
     ; ウィンドウのクラス名を取得
-    WinGetClass, class, ahk_id %active_id%
+    active_class := WinGetClass("ahk_id " active_id)
     
     ; クラス名がエクスプローラやFilesの場合のみ処理
-    if (class = "CabinetWClass" || class = "WinUIDesktopWin32WindowClass") ; Filesの実際のクラス名に置き換えてください
+    if (active_class = "CabinetWClass" || active_class = "WinUIDesktopWin32WindowClass") ; Filesの実際のクラス名に置き換えてください
     {
         ; ウィンドウの位置とサイズを取得
-        WinGetPos, X, Y, Width, Height, ahk_id %active_id%
+        WinGetPos(&X, &Y, &Width, &Height, "ahk_id " active_id)
         
         ; マウスカーソルの位置を取得
-        CoordMode, Mouse, Screen
-        MouseGetPos, mouseX, mouseY, mouseWin
+        CoordMode("Mouse", "Screen")
+        MouseGetPos(&mouseX, &mouseY, &mouseWin)
 
         ; デバッグ情報を表示
         ;ToolTip Class %class% WinPos %X% %Y% Size %Width% x %Height% MousePos %mouseX% %mouseY%
@@ -38,8 +42,9 @@ CheckCursor:
             if (GetKeyState("LButton", "P"))
             {
                 ; アクティブウィンドウを最小化
-                WinMinimize, ahk_id %active_id%
+                WinMinimize("ahk_id " active_id)
             }
         }
     }
-Return
+    Return
+}

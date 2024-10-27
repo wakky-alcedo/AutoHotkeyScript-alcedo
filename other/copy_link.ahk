@@ -7,16 +7,23 @@
     ; if (WinActive("ahk_class Chrome_WidgetWin_1") or WinActive("ahk_class Chrome_WidgetWin_0"))
     ; {
         ; URLの取得 (アドレスバーにフォーカスしてコピー)
-        ControlGetFocus, focusCtrl, A
-        Send, ^l       ; アドレスバーに移動
-        Sleep, 200
-        Send, ^c       ; URLをコピー
-        ClipWait, 1    ; クリップボードの内容を待つ
-        url := Clipboard
+{ ; V1toV2: Added bracket
+global ; V1toV2: Made function global
+        ; focusCtrl := ControlGetClassNN(ControlGetFocus("A"))
+        Send("^l")       ; アドレスバーに移動
+        Sleep(200)
+        Send("^c")       ; URLをコピー
+        Sleep(200)
+        Errorlevel := !ClipWait(1)    ; クリップボードの内容を待つ
+        url := A_Clipboard
 
         ; タイトルの取得 (ウィンドウタイトル)
-        WinGetTitle, title, A
-        Clipboard := title
+        title := WinGetTitle("A")
+        position := InStr(title, " - ", , -1)  ; これは左から最初に見つかる位置
+        if (position > 0) {
+            title := SubStr(title, 1, position)
+        }
+        A_Clipboard := title
         
 
         ; URLとタイトルをクリップボードにコピー
@@ -32,3 +39,4 @@
     ;     MsgBox, このスクリプトはGoogle ChromeまたはMicrosoft Edgeでのみ動作します。
     ; }
 return
+} ; V1toV2: Added bracket in the end
