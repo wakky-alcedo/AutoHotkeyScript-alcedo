@@ -11,3 +11,4 @@
 ; #Include *i %A_ScriptDir%\key-rebinding\shift_shortcut.ahk
 #Include "*i %A_ScriptDir%\key-rebinding\main.ahk"
 #Include "*i %A_ScriptDir%\key-rebinding\numpad.ahk"
+#Include "*i %A_ScriptDir%\key-rebinding\sub_keybord.ahk"
