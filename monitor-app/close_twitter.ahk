@@ -7,6 +7,13 @@ close_tab() {
     ToolTip("")
 }
 
+close_window() {
+    Send("!{F4}")
+    ToolTip("Close Window!!!")
+    Sleep(1000)
+    ToolTip("")
+}
+
 ; 初期処理
 SetTimer(OnTimer, -10000) ; 10sec
 global twitter_count := 0
@@ -48,6 +55,13 @@ OnTimer(*) {
         if (is_deep_deep_night && is_youtube) {
             WinActivate("ahk_id " id)
             close_tab()
+            continue
+        }
+
+        ; 深夜のタスクスケジューラチェック
+        if (is_deep_night && InStr(title, "タスク スケジューラ", true)) {
+            WinActivate("ahk_id " id)
+            close_window()
             continue
         }
     }
