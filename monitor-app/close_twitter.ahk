@@ -1,89 +1,77 @@
-;#Requires AutoHotkey v2.0
-; ‚Ç‚¤‚â‚çCAHK‚Í Shift JIS‚Å“®‚¢‚Ä‚¢‚é‚æ‚¤‚¾
+#Requires AutoHotkey v2.0
 
-colose_tab()
-{
-    send, ^w
-    ToolTip , Close Tab!!!
-    Sleep 1000
-    ToolTip
+close_tab() {
+    Send("^w")
+    ToolTip("Close Tab!!!")
+    Sleep(1000)
+    ToolTip("")
 }
 
-; ‰Šúˆ—
-#Persistent
-SetTimer,OnTimer,-10000 ; 10sec
-twitter_count := 0
+; åˆæœŸå‡¦ç†
+SetTimer(OnTimer, -10000) ; 10sec
+global twitter_count := 0
+global was_twitter := 0
 Return
 
-; ƒ^ƒCƒ}[“à
-OnTimer:
+; ã‚¿ã‚¤ãƒãƒ¼å†…
+OnTimer(*) {
+    global twitter_count, was_twitter
 
-; Œ»İ‚ğæ“¾
-FormatTime,now_time,,HHmm
-is_deep_night := 2300 < now_time or now_time < 0700
-is_deep_deep_night := 0000 < now_time and now_time < 0700
+    ; ç¾åœ¨æ™‚åˆ»ã‚’å–å¾—
+    now_time := Format("{:04}", A_Hour, A_Min)
+    is_deep_night := (now_time > 2300 or now_time < 700)
+    is_deep_deep_night := (now_time > 0 and now_time < 700)
 
-is_twitter_in_window := 0
+    is_twitter_in_window := false
 
-; ƒEƒBƒ“ƒhƒEƒŠƒXƒg‚ğæ“¾
-WinGet, id, list
+    ; ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒªã‚¹ãƒˆã‚’å–å¾—
+    id_list := WinGetList()
 
-Loop % id {
-    this_id := id%A_Index%
-    WinGetTitle, title, ahk_id %this_id%
+    for id in id_list {
+        title := WinGetTitle("ahk_id " id)
 
-    is_twitter := InStr(title,"X - ", CaseSensitive=ture) != 0 AND InStr(title,"ƒz[ƒ€", CaseSensitive=ture) != 0
-    ; is_tweeting := InStr(title,"V‚µ‚¢ƒ|ƒXƒg‚ğì¬", CaseSensitive=ture) != 0 OR InStr(title,"@wakky_robocon", CaseSensitive=ture) OR InStr(title," - ŒŸõ", CaseSensitive=ture)
-    is_temptation := InStr(title,"Prime Video", CaseSensitive=ture) OR InStr(title,"DMM TV", CaseSensitive=ture) OR title = "YouTube"
-    is_youtube := InStr(title,"YouTube", CaseSensitive=ture) AND (InStr(title,"YouTube Music", CaseSensitive=ture) == 0)
-    is_youtube_home := InStr(title,"YouTube", CaseSensitive=ture) AND (InStr(title,"- YouTube -", CaseSensitive=ture) == 0)
+        is_twitter := (InStr(title, "X - ", true) != 0 && InStr(title, "ãƒ›ãƒ¼ãƒ ", true) != 0)
+        is_temptation := (InStr(title, "Prime Video", true) != 0 || InStr(title, "DMM TV", true) != 0 || title == "YouTube")
+        is_youtube := (InStr(title, "YouTube", true) != 0 && InStr(title, "YouTube Music", true) == 0)
+        is_youtube_home := (InStr(title, "YouTube", true) != 0 && InStr(title, "- YouTube -", true) == 0)
 
-    is_twitter_in_window := is_twitter_in_window OR is_twitter
+        is_twitter_in_window := is_twitter_in_window || is_twitter
 
-    ;ToolTip , %title% %is_twitter% %is_tweeting% %now_time% %is_deep_night%
-    ;Sleep 3000
-    ;ToolTip
-
-    if (is_deep_night and (is_temptation or is_twitter))
-    {
-        WinActivate, ahk_id %this_id%
-        colose_tab()
-        continue
-    }
-
-    if (is_deep_deep_night and is_youtube)
-    {
-        WinActivate, ahk_id %this_id%
-        colose_tab()
-        continue
-    }
-}
-
-if (is_twitter_in_window = 1)
-{
-    if (was_twitter = 1 or twitter_count > 0) {
-        ; WinActivate, ahk_id %this_id%
-        colose_tab()
-        if (was_twitter = 1) {
-            twitter_count := 360
+        ; æ·±å¤œã®èª˜æƒ‘ãƒã‚§ãƒƒã‚¯
+        if (is_deep_night && (is_temptation || is_twitter)) {
+            WinActivate("ahk_id " id)
+            close_tab()
+            continue
         }
-        SetTimer,OnTimer,-5000 ; 5sec
+
+        ; æ·±å¤œã®YouTubeãƒã‚§ãƒƒã‚¯
+        if (is_deep_deep_night && is_youtube) {
+            WinActivate("ahk_id " id)
+            close_tab()
+            continue
+        }
+    }
+
+    if (is_twitter_in_window) {
+        if (was_twitter || twitter_count > 0) {
+            close_tab()
+            if (was_twitter) {
+                twitter_count := 360
+            }
+            SetTimer(OnTimer, -5000) ; 5sec
+        } else {
+            SetTimer(OnTimer, -300000) ; 5min
+        }
+        was_twitter := 1
+
+        ToolTip("I just noticed you looking at Twitter!!! " twitter_count)
+        Sleep(5000)
+        ToolTip("")
     } else {
-        SetTimer,OnTimer,-300000 ; 5min
+        was_twitter := 0
+        if (twitter_count > 0) {
+            twitter_count -= 0.5
+        }
+        SetTimer(OnTimer, -5000) ; 5sec
     }
-    was_twitter := 1
-
-    ToolTip , I just noticed you looking at Twitter!!! %twitter_count%
-    Sleep 5000
-    ToolTip
 }
-else
-{
-    was_twitter := 0
-    if(twitter_count > 0){
-        twitter_count := twitter_count - 0.5
-    }
-    SetTimer,OnTimer,-5000 ; 5sec
-}
-
-Return
