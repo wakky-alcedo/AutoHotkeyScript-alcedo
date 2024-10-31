@@ -9,6 +9,9 @@ close_window() {
 }
 
 is_private(title) {
+    if (!WinExist("A")) { ; アクティブなウィンドウがあるか確認
+        return false
+    }
     title := WinGetTitle("A") ; タイトルを取得
 
     ; Vivaldi
@@ -26,9 +29,9 @@ is_private(title) {
             return true
         }
     }
-    ToolTip(title " " is_privateing " " private_count " " color )
-    Sleep(1000)
-    ToolTip("")
+    ; ToolTip(title " " is_privateing " " private_count " " color )
+    ; Sleep(1000)
+    ; ToolTip("")
     return false
 }
 
@@ -42,7 +45,7 @@ Return
 OnTimer(*) {
     global private_count, is_privateing  ; グローバル変数を宣言
 
-    now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得
+    now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
     is_deep_night := (now_time > 2300 or now_time < 500)
 
     ; ウィンドウリストを取得
@@ -64,6 +67,8 @@ OnTimer(*) {
             if (private_count == 150) {
                 ToolTip("last 5 min!!! " private_count)
             }
+            
+            ; ウィンドウを閉じる処理
             if (private_count > 180 or is_deep_night or is_youtube_home) {
                 WinActivate("ahk_id " id)
                 close_window()

@@ -25,9 +25,13 @@ OnTimer(*) {
     global twitter_count, was_twitter
 
     ; 現在時刻を取得
-    now_time := Format("{:04}", A_Hour, A_Min)
+    ; now_time := Format("{:04}", A_Hour, A_Min)
+    now_time := Format("{:02}{:02}", A_Hour, A_Min)
     is_deep_night := (now_time > 2300 or now_time < 700)
     is_deep_deep_night := (now_time > 0 and now_time < 700)
+    ; ToolTip(now_time " " is_deep_night " " is_deep_deep_night)
+    ; Sleep(1000)
+    ; ToolTip("")
 
     is_twitter_in_window := false
 
