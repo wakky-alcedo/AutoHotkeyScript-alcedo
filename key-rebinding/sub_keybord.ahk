@@ -24,7 +24,8 @@ CheckKeyCount1(*) {
     } else if keyCount1 >= 3 {
         ; 3回押しのアクションをここに記述
         ; MsgBox("3回押しのアクション")
-        DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
+        ; DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0) ; スリープ
+        DllCall("PowrProf\SetSuspendState", "int", 1, "int", 0, "int", 0) ; ハイバネート 休止状態
     }
 
     ; カウントをリセット
