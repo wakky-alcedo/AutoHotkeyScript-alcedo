@@ -57,7 +57,9 @@ paset_link() {
 } 
 
 ^+v:: {
-    global ; V1toV2: Made function global
+    ; global ; V1toV2: Made function global
+    global copyed_link
+    global copyed_title
     BlockInput("on")
     SendMode("Input")
     is_IME := IME_GET()
@@ -74,13 +76,15 @@ paset_link() {
         Send("^k")
         Sleep(200)
         ; リンクを貼り付け
-        paset_link()
+        ; paset_link()
+        send_text(copyed_link)
         Sleep(500)
         ; カーソルの移動
         Send("+{Tab}")
         Sleep(200)
         ; タイトルを貼り付け
-        paste_title()
+        ; paste_title()
+        send_text(copyed_title)
         ;Sleep 500
         ; 確定
         ;Send,{Enter}
@@ -90,12 +94,14 @@ paset_link() {
         Send("^+u")
         Sleep(200)
         ; タイトルを貼り付け
-        Send("^v")
+        ; Send("^v")
+        send_text(copyed_title)
         ; カーソルの移動
         Send("{Tab}")
         Sleep(200)
         ; リンクを貼り付け
-        paset_link()
+        ; paset_link()
+        send_text(copyed_link)
         Sleep(500)
         ; 確定
         Send("{Enter}")
@@ -123,31 +129,34 @@ paset_link() {
         Send("s")
         Sleep(400)
         ; リンクを貼り付け
-        paset_link()
+        ; paset_link()
+        send_text(copyed_link)
         Sleep(500)
         ; 次へ
         Send("{Enter}")
         Sleep(200)
         ; タイトルを貼り付け
-        paste_title()
+        ; paste_title()
+        send_text(copyed_title)
         Sleep(500)
         ; 確定
         Send("{Enter}")
     }Else{
-        Send("[")
-        ; タイトルを貼り付け
-        ; Send("^v")
+        ; Send("[")
+        ; ; タイトルを貼り付け
+        ; ; Send("^v")
+        ; ; Sleep(100)
+        ; paste_title()
+        ; Sleep(500)
+        ; ; カーソルの移動
+        ; Send("](")
         ; Sleep(100)
-        paste_title()
-        Sleep(500)
-        ; カーソルの移動
-        Send("](")
-        Sleep(100)
-        ; リンクを貼り付け
-        paset_link()
-        Sleep(500)
-        ; 確定
-        Send(")")
+        ; ; リンクを貼り付け
+        ; paset_link()
+        ; Sleep(500)
+        ; Send(")")
+        markdown_link := "[" . copyed_title . "](" . copyed_link . ")"
+        send_text(markdown_link)
     }
 
     if (is_IME = 1) {
