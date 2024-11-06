@@ -31,35 +31,36 @@
 
 ; 多重起動防止
 { ; V1toV2: Added bracket
-global ; V1toV2: Made function global
-If (WinExist("ahk_class AutoHotkeyGUI")) {
-  Return
-}
-stash := ClipboardAll()
-A_Clipboard := ""
-Send("^c")
-Errorlevel := !ClipWait(0.05)
-clip := A_Clipboard
-A_Clipboard := stash
-clip := rm_crlf(clip)
-myGui := Gui()
-ogcEdit_str_google := myGui.Add("Edit", "v_str_google w380", clip)
-ogcButtonSearch := myGui.Add("Button", "Default", "Search")
-ogcButtonSearch.OnEvent("Click", ButtonSearch.Bind("Normal"))
-myGui.Title := "Google"
-myGui.Show("Center w400")
-Send("{vkF2}")
-clip := ""
-Return
+    global ; V1toV2: Made function global
+    If (WinExist("ahk_class AutoHotkeyGUI")) {
+        Return
+    }
+    stash := ClipboardAll()
+    A_Clipboard := ""
+    Send("^c")
+    Errorlevel := !ClipWait(0.05)
+    clip := A_Clipboard
+    A_Clipboard := stash
+    clip := rm_crlf(clip)
+    myGui := Gui()
+    ogcEdit_str_google := myGui.Add("Edit", "v_str_google w380", clip)
+    ogcButtonSearch := myGui.Add("Button", "Default", "Search")
+    ogcButtonSearch.OnEvent("Click", ButtonSearch.Bind("Normal"))
+    myGui.Title := "Google"
+    myGui.Show("Center w400")
+    Send("{vkF2}")
+    clip := ""
+    Return
 } ; V1toV2: Added bracket before function
+
 ButtonSearch(A_GuiEvent := "", GuiCtrlObj := "", Info := "", *)
 { ; V1toV2: Added bracket
-global ; V1toV2: Made function global
-  oSaved := myGui.Submit()
-  _str_google := oSaved._str_google
-  Run("https://www.google.co.jp/search?q=" _str_google)
-_2GuiEscape:
-_2GuiClose:
-  myGui.Destroy()
-Return
+    global ; V1toV2: Made function global
+    oSaved := myGui.Submit()
+    _str_google := oSaved._str_google
+    Run("https://www.google.co.jp/search?q=" _str_google)
+    _2GuiEscape:
+    _2GuiClose:
+    myGui.Destroy()
+    Return
 } ; V1toV2: Added bracket in the end
