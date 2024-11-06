@@ -23,6 +23,12 @@
 if search_plugins()  ; プラグインが検出されたらスクリプトをリロード
     Reload
 
+; 練習用キー無効化
+hotkeys_define(keys_practice, 'keys_practice', 'On') ; 無効化するキーを動的に設定
+
+
+; << function define begin >>
+
 ; プラグイン検出関数
 ; プラグインを検出して，pluginList.ahkに書き込む
 search_plugins() {
@@ -47,9 +53,6 @@ search_plugins() {
     return 1
 }
 
-; 練習用キー無効化
-hotkeys_define(keys_practice, 'keys_practice', 'On') ; 無効化するキーを動的に設定
-
 keys_practice(*) {
     static count := 0
     count++
@@ -57,7 +60,7 @@ keys_practice(*) {
         my_tooltip_function('そのキーは禁止です (' . count - 1 . '回目)', 1000) ; キーが禁止された際にツールチップを表示
 }
 
-; (AutoExexuteここまで)
+; << function define end >>
 
 
 #Include "%A_ScriptDir%\start_list.ahk"  ; スタートアップスクリプトをインクルード
