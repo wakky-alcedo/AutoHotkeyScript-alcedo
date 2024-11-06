@@ -26,6 +26,8 @@ if search_plugins()  ; プラグインが検出されたらスクリプトをリ
 ; 練習用キー無効化
 hotkeys_define(keys_practice, 'keys_practice', 'On') ; 無効化するキーを動的に設定
 
+; ボリュームミュート
+volume_mute()  ; ノートPCのときミュートにする
 
 ; << function define begin >>
 
@@ -58,6 +60,17 @@ keys_practice(*) {
     count++
     if (count > 1)
         my_tooltip_function('そのキーは禁止です (' . count - 1 . '回目)', 1000) ; キーが禁止された際にツールチップを表示
+}
+
+volume_mute(*) {
+    ; ノートPCのとき，ミュートにする
+    ; my_tooltip_function(A_ComputerName, 1000)
+    ; A_Clipboard := A_ComputerName
+    if (A_ComputerName == 'HP-ENVY-X360') {
+        Send "{Volume_Mute}"
+        Send "{Volume_Down 100}"
+        return
+    }
 }
 
 ; << function define end >>
