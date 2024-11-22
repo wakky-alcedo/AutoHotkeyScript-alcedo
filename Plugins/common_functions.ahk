@@ -64,3 +64,14 @@ send_text(str) {
   IME_SetConvMode(conv_mode)                    ; IMEの状態を元に戻す
   IME_SET(state)                                ; IMEの状態を元に戻す
 }
+
+; ブラウザであるかどうか確認
+is_browser() {
+  If WinActive("ahk_exe chrome.exe") ; Chrome
+    || WinActive("ahk_exe msedge.exe") ; Edge
+    || WinActive("ahk_exe opera.exe") ; Opera
+    || WinActive("ahk_exe vivaldi.exe") ; Vivaldi
+      Return True
+  Else
+      Return False
+}

@@ -82,8 +82,8 @@ Append(*){
 #HotIf ; ホットキー条件の終了
 
 ; Twitter
-#HotIf WinExist("A")
-#HotIf InStr(WinGetTitle("A"), "/ X") & !InStr(WinGetTitle("A"), "新しいポストを作成 / X") 
+#HotIf is_browser() ; ブラウザがアクティブな場合
+#HotIf InStr(WinGetTitle("A"), "/ X") & !InStr(WinGetTitle("A"), "新しいポストを作成 / X") & !InStr(WinGetTitle("A"), "ホーム / X") 
 
 Shift & Enter:: {                       ; Shift & Enter
     Send("+{Enter}")                    ; Shift + Enter を押したことにする
