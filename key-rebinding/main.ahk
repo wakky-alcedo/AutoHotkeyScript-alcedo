@@ -28,12 +28,12 @@ ClipChanged(Type)
 }
 
 ; Ctrl + Sを押した時、ファイルを上書き保存し、「上書き保存」と表示するツールチップを300ミリ秒間表示
-^s::{
-    global ; V1toV2: Made function global
-    Send("^s")
-    my_tooltip_function("上書き保存", 300)
-    Return
-}
+; ^s::{
+;     global ; V1toV2: Made function global
+;     Send("^s")
+;     my_tooltip_function("上書き保存", 300)
+;     Return
+; }
 
 ; Alt + F10でタイムシフト録画を行った時、録画保存フォルダを開く
 ~!F10::^!F10
