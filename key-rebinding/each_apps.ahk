@@ -81,33 +81,56 @@ Append(*){
 
 #HotIf ; ホットキー条件の終了
 
-; Twitter
+; ブラウザ
 #HotIf is_browser() ; ブラウザがアクティブな場合
-#HotIf InStr(WinGetTitle("A"), "/ X") & !InStr(WinGetTitle("A"), "新しいポストを作成 / X") & !InStr(WinGetTitle("A"), "ホーム / X") 
 
-Shift & Enter:: {                       ; Shift & Enter
-    Send("+{Enter}")                    ; Shift + Enter を押したことにする
+; Twitter
+is_twitter_dm() {
+    return InStr(WinGetTitle("A"), "/ X") & !InStr(WinGetTitle("A"), "新しいポストを作成 / X") & !InStr(WinGetTitle("A"), "ホーム / X") 
 }
 
 Enter:: {                               ; Enter
-    Send("^m")                          ; 入力中の文字を確定させる
+    if (is_twitter_dm()) {
+        Send("^m")                      ; 入力中の文字を確定させる
+    } else {
+        Send("{Enter}")                 ; Enter を押したことにする
+    }
 }
 NumpadEnter:: {                         ; NumpadEnter
-    Send("^m")                          ; 入力中の文字を確定させる
+    if (is_twitter_dm()) {
+        Send("^m")                      ; 入力中の文字を確定させる
+    } else {
+        Send("{Enter}")                 ; Enter を押したことにする
+    }
 }
 
 Ctrl & Enter:: {                        ; Ctrl + Enter
-    Send("{Enter}")                     ; Enter を押したことにする
+    if (is_twitter_dm()) {
+        Send("{Enter}")                 ; Enter を押したことにする
+    } else {
+        Send("^{Enter}")           ; Ctrl + Enter を押したことにする
+    }
 }
 Ctrl & NumpadEnter:: {                  ; Ctrl + NumpadEnter
-    Send("{Enter}")                     ; Enter を押したことにする
+    if (is_twitter_dm()) {
+        Send("{Enter}")                 ; Enter を押したことにする
+    } else {
+        Send("^{Enter}")           ; Ctrl + Enter を押したことにする
+    }
 }
 Alt & Enter:: {                         ; Alt + Enter
-    Send("{Enter}")                     ; Enter を押したことにする
+    if (is_twitter_dm()) {
+        Send("{Enter}")                 ; Enter を押したことにする
+    } else {
+        Send("!{Enter}")            ; Alt + Enter を押したことにする
+    }
 }
 Alt & NumpadEnter:: {                   ; Alt + NumpadEnter
-    Send("{Enter}")                     ; Enter を押したことにする
+    if (is_twitter_dm()) {
+        Send("{Enter}")                 ; Enter を押したことにする
+    } else {
+        Send("!{Enter}")            ; Alt + Enter を押したことにする
+    }
 }
 
-#HotIf
 #HotIf 
