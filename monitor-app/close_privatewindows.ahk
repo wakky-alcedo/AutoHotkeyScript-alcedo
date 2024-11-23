@@ -12,6 +12,8 @@ Return
 
 ; タイマー内
 OnTimer(*) {
+    ToolTip("") ; ツールチップを消す
+
     global private_count, is_privateing  ; グローバル変数を宣言
 
     now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
@@ -41,11 +43,9 @@ OnTimer(*) {
                 close_window()
                 private_count := 720
                 is_privateing := false
-                Sleep(5000)
-                ToolTip("")
             }
 
-            ToolTip("I just noticed you looking at private window!!! " private_count)
+            ; ToolTip("I just noticed you looking at private window!!! " private_count)
             break
         } else {
             if (private_count > 0) {
@@ -55,7 +55,6 @@ OnTimer(*) {
                     private_count -= 0.025
                 }
             }
-            ToolTip("")
         }
     }
 }
