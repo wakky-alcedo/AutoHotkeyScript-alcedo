@@ -1,39 +1,8 @@
 ; どうやら，AHKは Shift JISで動いているようだ
 #Requires AutoHotkey v2.0
 
-close_window() {
-    Send("!{F4}")
-    ToolTip("Close Window!!!")
-    Sleep(1000)
-    ToolTip("")
-}
+#Include monitor_app_func.ahk
 
-is_private(title) {
-    if (!WinExist("A")) { ; アクティブなウィンドウがあるか確認
-        return false
-    }
-    title := WinGetTitle("A") ; タイトルを取得
-
-    ; Vivaldi
-    if (InStr(title, "Vivaldi", true)) {
-        color := PixelGetColor(30, 10)
-        if (color == 0x764040) {
-            return true
-        }
-    }
-
-    ; Chrom
-    if (InStr(title, "Chrom", true)) {
-        color := PixelGetColor(50, 40)
-        if (color == 0x3C3C3C) {
-            return true
-        }
-    }
-    ; ToolTip(title " " is_privateing " " private_count " " color )
-    ; Sleep(1000)
-    ; ToolTip("")
-    return false
-}
 
 ; 初期処理
 SetTimer(OnTimer, -5000) ; 5sec
@@ -60,8 +29,6 @@ OnTimer(*) {
 
         ; ここで操作を実行
         if (is_private(title)) {
-            is_youtube_home := (InStr(title, "YouTube", true) and !InStr(title, "- YouTube -", true))
-
             private_count += 0.5
             is_privateing := true
             if (private_count == 150) {
@@ -69,7 +36,7 @@ OnTimer(*) {
             }
             
             ; ウィンドウを閉じる処理
-            if (private_count > 180 or is_deep_night or is_youtube_home) {
+            if (private_count > 180 or is_deep_night or is_youtube_home(title)) {
                 WinActivate("ahk_id " id)
                 close_window()
                 private_count := 720

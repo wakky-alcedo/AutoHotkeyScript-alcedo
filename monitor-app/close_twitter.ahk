@@ -1,18 +1,6 @@
 #Requires AutoHotkey v2.0
 
-close_tab() {
-    Send("^w")
-    ToolTip("Close Tab!!!")
-    Sleep(1000)
-    ToolTip("")
-}
-
-close_window() {
-    Send("!{F4}")
-    ToolTip("Close Window!!!")
-    Sleep(1000)
-    ToolTip("")
-}
+#Include monitor_app_func.ahk
 
 ; 初期処理
 SetTimer(OnTimer, -10000) ; 10sec
