@@ -7,7 +7,6 @@
 ; 初期処理
 SetTimer(OnTimer, 6000) ; 6sec(0.1min)
 global private_count := 30
-global is_privateing := false
 global twitter_count := 5
 Return
 
@@ -15,7 +14,7 @@ Return
 OnTimer(*) {
     ToolTip("") ; ツールチップを消す
 
-    global private_count, is_privateing, twitter_count  ; グローバル変数を宣言
+    global private_count, twitter_count  ; グローバル変数を宣言
 
     ; now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
     now_time := Format("{:02}{:02}", A_Hour, A_Min)
@@ -71,7 +70,6 @@ OnTimer(*) {
         ; プライベートウィンドウのチェック
         if (is_private(title)) {
             private_count -= 0.1
-            is_privateing := true
             if (private_count == 5) {
                 ToolTip("last 5 min!!! " private_count)
             }
@@ -87,11 +85,7 @@ OnTimer(*) {
             break
         } else {
             if (private_count < 30) {
-                if (!is_privateing) {
-                    private_count += 0.1
-                } else {
-                    private_count += 0.005
-                }
+                private_count += 0.1
             }
         }
     }
