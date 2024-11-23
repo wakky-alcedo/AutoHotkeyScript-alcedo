@@ -6,15 +6,17 @@
 
 ; 初期処理
 SetTimer(OnTimer, 6000) ; 6sec(0.1min)
+; 以下のcountの単位はmin
 global private_count := 30
 global twitter_count := 5
+global youtubehome_count := 5
 Return
 
 ; タイマー内
 OnTimer(*) {
     ToolTip("") ; ツールチップを消す
 
-    global private_count, twitter_count  ; グローバル変数を宣言
+    global private_count, twitter_count, youtubehome_count  ; グローバル変数を宣言
 
     ; now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
     now_time := Format("{:02}{:02}", A_Hour, A_Min)
@@ -40,11 +42,19 @@ OnTimer(*) {
             continue
         }
 
-        ; 深夜のYouTubeチェック
-        if (is_deep_deep_night && is_youtube(title)) {
-            WinActivate("ahk_id " id)
-            close_tab()
+        ; YouTubeチェック
+        if (is_youtube_home(title)) {
+            if (youtubehome_count <= 0 || is_deep_night){
+                WinActivate("ahk_id " id)
+                close_tab()
+            } else {
+                youtubehome_count -= 0.1
+            }
             continue
+        } else {
+            if (youtubehome_count < 5) {
+                youtubehome_count += 0.05
+            }
         }
 
         ; 深夜のタスクスケジューラチェック
@@ -63,7 +73,7 @@ OnTimer(*) {
             ToolTip("I just noticed you looking at Twitter!!! " twitter_count)
         } else {
             if (twitter_count < 5) {
-                twitter_count += 0.1
+                twitter_count += 0.05
             }
         }
 
@@ -85,7 +95,7 @@ OnTimer(*) {
             break
         } else {
             if (private_count < 30) {
-                private_count += 0.1
+                private_count += 0.05
             }
         }
     }
