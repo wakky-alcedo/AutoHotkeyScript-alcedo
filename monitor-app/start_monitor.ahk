@@ -1,5 +1,8 @@
+; 監視用exeが動いているかを監視し，動いていない場合は再起動するスクリプト
+
 ; 監視するアプリケーションのパス
-appPaths := ["close_twitter.exe", "close_privatewindows.exe"]
+; appPaths := ["close_twitter.exe", "close_privatewindows.exe"]
+appPaths := ["monitor_apps.exe"]
 
 ; アプリケーションのプロセス名
 processNames := appPaths
