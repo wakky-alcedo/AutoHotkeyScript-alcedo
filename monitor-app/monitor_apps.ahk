@@ -15,7 +15,7 @@ Return
 OnTimer(*) {
     ToolTip("") ; ツールチップを消す
 
-    global private_count, is_privateing  ; グローバル変数を宣言
+    global private_count, is_privateing, twitter_count  ; グローバル変数を宣言
 
     now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
     ; now_time := Format("{:02}{:02}", A_Hour, A_Min)
@@ -33,20 +33,16 @@ OnTimer(*) {
         }
 
         ; ここで操作を実行
-        is_twitter := (InStr(title, "X - ", true) != 0 && InStr(title, "ホーム", true) != 0)
-        is_temptation := (InStr(title, "Prime Video", true) != 0 || InStr(title, "DMM TV", true) != 0 || title == "YouTube")
-        is_youtube := (InStr(title, "YouTube", true) != 0 && InStr(title, "YouTube Music", true) == 0)
-        is_youtube_home := (InStr(title, "YouTube", true) != 0 && InStr(title, "- YouTube -", true) == 0)
-
+        
         ; 深夜の誘惑チェック
-        if (is_deep_night && (is_temptation || is_twitter)) {
+        if (is_deep_night && (is_temptation(title) || is_twitter(title))) {
             WinActivate("ahk_id " id)
             close_tab()
             continue
         }
 
         ; 深夜のYouTubeチェック
-        if (is_deep_deep_night && is_youtube) {
+        if (is_deep_deep_night && is_youtube(title)) {
             WinActivate("ahk_id " id)
             close_tab()
             continue
