@@ -5,9 +5,10 @@
 
 
 ; 初期処理
-SetTimer(OnTimer, 5000) ; 5sec
-global private_count := 0
+SetTimer(OnTimer, 6000) ; 6sec(0.1min)
+global private_count := 30
 global is_privateing := false
+global twitter_count := 5
 Return
 
 ; タイマー内
@@ -17,7 +18,9 @@ OnTimer(*) {
     global private_count, is_privateing  ; グローバル変数を宣言
 
     now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
-    is_deep_night := (now_time > 2300 or now_time < 500)
+    ; now_time := Format("{:02}{:02}", A_Hour, A_Min)
+    is_deep_night := (now_time > 2300 or now_time < 700)
+    is_deep_deep_night := (now_time > 0 and now_time < 700)
 
     ; ウィンドウリストを取得
     id_list := WinGetList()
@@ -30,29 +33,68 @@ OnTimer(*) {
         }
 
         ; ここで操作を実行
+        is_twitter := (InStr(title, "X - ", true) != 0 && InStr(title, "ホーム", true) != 0)
+        is_temptation := (InStr(title, "Prime Video", true) != 0 || InStr(title, "DMM TV", true) != 0 || title == "YouTube")
+        is_youtube := (InStr(title, "YouTube", true) != 0 && InStr(title, "YouTube Music", true) == 0)
+        is_youtube_home := (InStr(title, "YouTube", true) != 0 && InStr(title, "- YouTube -", true) == 0)
+
+        ; 深夜の誘惑チェック
+        if (is_deep_night && (is_temptation || is_twitter)) {
+            WinActivate("ahk_id " id)
+            close_tab()
+            continue
+        }
+
+        ; 深夜のYouTubeチェック
+        if (is_deep_deep_night && is_youtube) {
+            WinActivate("ahk_id " id)
+            close_tab()
+            continue
+        }
+
+        ; 深夜のタスクスケジューラチェック
+        if (is_deep_night && InStr(title, "タスク スケジューラ", true)) {
+            WinActivate("ahk_id " id)
+            close_window()
+            continue
+        }
+
+        ; Twitterのチェック
+        if (is_twitter) {
+            twitter_count -= 0.1
+            if (twitter_count < 0) {
+                close_tab()
+            }
+            ToolTip("I just noticed you looking at Twitter!!! " twitter_count)
+        } else {
+            if (twitter_count < 5) {
+                twitter_count += 0.1
+            }
+        }
+
+        ; プライベートウィンドウのチェック
         if (is_private(title)) {
-            private_count += 0.5
+            private_count -= 0.1
             is_privateing := true
-            if (private_count == 150) {
+            if (private_count == 5) {
                 ToolTip("last 5 min!!! " private_count)
             }
             
             ; ウィンドウを閉じる処理
-            if (private_count > 180 or is_deep_night or is_youtube_home(title)) {
+            if (private_count < 0 or is_deep_night or is_youtube_home(title)) {
                 WinActivate("ahk_id " id)
                 close_window()
-                private_count := 720
-                is_privateing := false
+                private_count := 0
             }
 
             ; ToolTip("I just noticed you looking at private window!!! " private_count)
             break
         } else {
-            if (private_count > 0) {
+            if (private_count < 30) {
                 if (!is_privateing) {
-                    private_count -= 0.5
+                    private_count += 0.1
                 } else {
-                    private_count -= 0.025
+                    private_count += 0.005
                 }
             }
         }

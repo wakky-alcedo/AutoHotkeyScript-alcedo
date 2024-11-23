@@ -35,27 +35,6 @@ OnTimer(*) {
         is_youtube_home := (InStr(title, "YouTube", true) != 0 && InStr(title, "- YouTube -", true) == 0)
 
         is_twitter_in_window := is_twitter_in_window || is_twitter
-
-        ; 深夜の誘惑チェック
-        if (is_deep_night && (is_temptation || is_twitter)) {
-            WinActivate("ahk_id " id)
-            close_tab()
-            continue
-        }
-
-        ; 深夜のYouTubeチェック
-        if (is_deep_deep_night && is_youtube) {
-            WinActivate("ahk_id " id)
-            close_tab()
-            continue
-        }
-
-        ; 深夜のタスクスケジューラチェック
-        if (is_deep_night && InStr(title, "タスク スケジューラ", true)) {
-            WinActivate("ahk_id " id)
-            close_window()
-            continue
-        }
     }
 
     if (is_twitter_in_window) {
