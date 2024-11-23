@@ -5,7 +5,7 @@
 
 
 ; 初期処理
-SetTimer(OnTimer, -5000) ; 5sec
+SetTimer(OnTimer, 5000) ; 5sec
 global private_count := 0
 global is_privateing := false
 Return
@@ -43,9 +43,6 @@ OnTimer(*) {
                 is_privateing := false
                 Sleep(5000)
                 ToolTip("")
-                SetTimer(OnTimer, -5000) ; 5sec
-            } else {
-                SetTimer(OnTimer, -5000) ; 5sec
             }
 
             ToolTip("I just noticed you looking at private window!!! " private_count)
@@ -58,7 +55,6 @@ OnTimer(*) {
                     private_count -= 0.025
                 }
             }
-            SetTimer(OnTimer, -5000) ; 5sec
             ToolTip("")
         }
     }
