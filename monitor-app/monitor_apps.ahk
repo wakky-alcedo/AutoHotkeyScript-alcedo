@@ -17,8 +17,8 @@ OnTimer(*) {
 
     global private_count, is_privateing, twitter_count  ; グローバル変数を宣言
 
-    now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
-    ; now_time := Format("{:02}{:02}", A_Hour, A_Min)
+    ; now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
+    now_time := Format("{:02}{:02}", A_Hour, A_Min)
     is_deep_night := (now_time > 2300 or now_time < 700)
     is_deep_deep_night := (now_time > 0 and now_time < 700)
 
@@ -33,7 +33,7 @@ OnTimer(*) {
         }
 
         ; ここで操作を実行
-        
+
         ; 深夜の誘惑チェック
         if (is_deep_night && (is_temptation(title) || is_twitter(title))) {
             WinActivate("ahk_id " id)
@@ -56,7 +56,7 @@ OnTimer(*) {
         }
 
         ; Twitterのチェック
-        if (is_twitter) {
+        if (is_twitter(title)) {
             twitter_count -= 0.1
             if (twitter_count < 0) {
                 close_tab()
