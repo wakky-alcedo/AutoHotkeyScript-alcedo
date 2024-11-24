@@ -4,7 +4,7 @@
 #NoTrayIcon ; タスクトレイにアイコンを表示しない
 
 #Include monitor_app_func.ahk
-
+#Include ..\Plugins\common_functions.ahk
 
 ; 初期処理
 SetTimer(OnTimer, 6000) ; 6sec(0.1min)
@@ -16,7 +16,10 @@ Return
 
 ; タイマー内
 OnTimer(*) {
-    ToolTip("") ; ツールチップを消す
+    ; ツールチップの1~4を消す
+    Loop 4 {
+        ToolTip("", , , A_Index)
+    }
 
     global private_count, twitter_count, youtubehome_count  ; グローバル変数を宣言
 
@@ -55,6 +58,8 @@ OnTimer(*) {
                 close_tab()
             } else {
                 youtubehome_count -= 0.1
+                ; my_tooltip_nodelay("youtube home %youtubehome_count%" , 2)
+                ToolTip("youtube home" Round(youtubehome_count,1), , , 2)
             }
             continue
         } else {
@@ -85,6 +90,7 @@ OnTimer(*) {
         ; Twitterのチェック
         if (is_twitter(title)) {
             twitter_count -= 0.1
+            ToolTip("twitter" Round(twitter_count,1), , , 3)
             if (twitter_count < 0) {
                 close_tab()
             }
@@ -98,9 +104,7 @@ OnTimer(*) {
         ; プライベートウィンドウのチェック
         if (is_private(title)) {
             private_count -= 0.1
-            if (private_count == 5) {
-                ToolTip("last 5 min!!! " private_count)
-            }
+            ToolTip("private window" Round(private_count,1), , , 4)
             
             ; ウィンドウを閉じる処理
             if (private_count < 0 or is_deep_night or is_youtube_home(title)) {

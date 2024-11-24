@@ -7,6 +7,10 @@ my_tooltip_function(str, delay, WhichToolTip := 1) {
   ToolTip("", , , WhichToolTip)            ; ツールチップを消す
 }
 
+my_tooltip_nodelay(str, WhichToolTip := 1) {
+  ToolTip(str, , , WhichToolTip)           ; 指定されたメッセージを表示
+}
+
 ; ; ツールチップ消去用関数
 ; remove_tooltip(WhichToolTip) {
 ;     ToolTip("", , , WhichToolTip)            ; ツールチップを消す
