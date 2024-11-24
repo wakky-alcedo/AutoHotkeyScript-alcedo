@@ -47,6 +47,7 @@ OnTimer(*) {
 
         ; ここで操作を実行
 
+        ; 各要素のチェック
         ; 深夜の誘惑チェック
         if (is_deep_night && (is_temptation(title) || is_twitter(title))) {
             WinActivate("ahk_id " id)
@@ -65,25 +66,6 @@ OnTimer(*) {
                 ; my_tooltip_nodelay("youtube home %youtubehome_count%" , 2)
                 ToolTip("youtube home" Round(youtubehome_count,1), , , 2)
             }
-            continue
-        }
-
-        ; 深夜のタスクスケジューラチェック
-        if (is_deep_night && InStr(title, "タスク スケジューラ", true)) {
-            WinActivate("ahk_id " id)
-            close_window()
-            ; ↓これを有効化しておかないと，うまく閉じれない
-            ; https://syunsetsu.hatenablog.com/entry/2022/09/11/113247
-            continue
-        }
-
-        ; タスクマネージャのチェック
-        if (InStr(title, "タスク マネージャ", true) 
-            && (twitter_count < const_twitter_count
-                || private_count < const_private_count
-                || youtubehome_count < const_youtubehome_count)) {
-            WinActivate("ahk_id " id)
-            close_window()
             continue
         }
 
@@ -113,6 +95,27 @@ OnTimer(*) {
 
             ; ToolTip("I just noticed you looking at private window!!! " private_count)
             break
+        }
+
+        
+        ; システム系のチェック
+        ; 深夜のタスクスケジューラチェック
+        if (is_deep_night && InStr(title, "タスク スケジューラ", true)) {
+            WinActivate("ahk_id " id)
+            close_window()
+            ; ↓これを有効化しておかないと，うまく閉じれない
+            ; https://syunsetsu.hatenablog.com/entry/2022/09/11/113247
+            continue
+        }
+
+        ; タスクマネージャのチェック
+        if (InStr(title, "タスク マネージャ", true) 
+            && (twitter_count < const_twitter_count
+                || private_count < const_private_count
+                || youtubehome_count < const_youtubehome_count)) {
+            WinActivate("ahk_id " id)
+            close_window()
+            continue
         }
     }
 
