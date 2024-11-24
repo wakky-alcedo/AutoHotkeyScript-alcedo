@@ -20,6 +20,10 @@ OnTimer(*) {
 
     global private_count, twitter_count, youtubehome_count  ; グローバル変数を宣言
 
+    const_private_count := 30
+    const_twitter_count := 5
+    const_youtubehome_count := 5
+
     ; now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
     now_time := Format("{:02}{:02}", A_Hour, A_Min)
     is_deep_night := (now_time > 2300 or now_time < 700)
@@ -54,7 +58,7 @@ OnTimer(*) {
             }
             continue
         } else {
-            if (youtubehome_count < 5) {
+            if (youtubehome_count < const_youtubehome_count) {
                 youtubehome_count += 0.05
             }
         }
@@ -68,6 +72,16 @@ OnTimer(*) {
             continue
         }
 
+        ; タスクマネージャのチェック
+        if (InStr(title, "タスク マネージャ", true) 
+            && (twitter_count < const_twitter_count
+                || private_count < const_private_count
+                || youtubehome_count < const_youtubehome_count)) {
+            WinActivate("ahk_id " id)
+            close_window()
+            continue
+        }
+
         ; Twitterのチェック
         if (is_twitter(title)) {
             twitter_count -= 0.1
@@ -76,7 +90,7 @@ OnTimer(*) {
             }
             ToolTip("I just noticed you looking at Twitter!!! " twitter_count)
         } else {
-            if (twitter_count < 5) {
+            if (twitter_count < const_twitter_count) {
                 twitter_count += 0.05
             }
         }
@@ -98,7 +112,7 @@ OnTimer(*) {
             ; ToolTip("I just noticed you looking at private window!!! " private_count)
             break
         } else {
-            if (private_count < 30) {
+            if (private_count < const_private_count) {
                 private_count += 0.05
             }
         }
