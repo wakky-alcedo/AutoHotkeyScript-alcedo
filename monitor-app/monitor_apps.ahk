@@ -1,6 +1,8 @@
 ; どうやら，AHKは Shift JISで動いているようだ
 #Requires AutoHotkey v2.0
 
+#NoTrayIcon ; タスクトレイにアイコンを表示しない
+
 #Include monitor_app_func.ahk
 
 
@@ -61,6 +63,8 @@ OnTimer(*) {
         if (is_deep_night && InStr(title, "タスク スケジューラ", true)) {
             WinActivate("ahk_id " id)
             close_window()
+            ; ↓これを有効化しておかないと，うまく閉じれない
+            ; https://syunsetsu.hatenablog.com/entry/2022/09/11/113247
             continue
         }
 
