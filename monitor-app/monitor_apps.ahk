@@ -8,10 +8,6 @@
 
 ; 初期処理
 SetTimer(OnTimer, 6000) ; 6sec(0.1min)
-; 以下のcountの単位はmin
-global private_count := 30
-global twitter_count := 5
-global youtubehome_count := 5
 Return
 
 ; タイマー内
@@ -21,11 +17,18 @@ OnTimer(*) {
         ToolTip("", , , A_Index)
     }
 
-    global private_count, twitter_count, youtubehome_count  ; グローバル変数を宣言
-
+    ; 以下のcountの単位はmin
     const_private_count := 30
     const_twitter_count := 5
     const_youtubehome_count := 5
+
+    static private_count := const_private_count
+    static twitter_count := const_twitter_count
+    static youtubehome_count := const_youtubehome_count
+
+    is_private_buff := false
+    is_twitter_buff := false
+    is_youtubehome_buff := false
 
     ; now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
     now_time := Format("{:02}{:02}", A_Hour, A_Min)
@@ -58,14 +61,11 @@ OnTimer(*) {
                 close_tab()
             } else {
                 youtubehome_count -= 0.1
+                is_youtubehome_buff := true
                 ; my_tooltip_nodelay("youtube home %youtubehome_count%" , 2)
                 ToolTip("youtube home" Round(youtubehome_count,1), , , 2)
             }
             continue
-        } else {
-            if (youtubehome_count < const_youtubehome_count) {
-                youtubehome_count += 0.05
-            }
         }
 
         ; 深夜のタスクスケジューラチェック
@@ -90,20 +90,18 @@ OnTimer(*) {
         ; Twitterのチェック
         if (is_twitter(title)) {
             twitter_count -= 0.1
+            is_twitter_buff := true
             ToolTip("twitter" Round(twitter_count,1), , , 3)
             if (twitter_count < 0) {
                 close_tab()
             }
             ToolTip("I just noticed you looking at Twitter!!! " twitter_count)
-        } else {
-            if (twitter_count < const_twitter_count) {
-                twitter_count += 0.05
-            }
         }
 
         ; プライベートウィンドウのチェック
         if (is_private(title)) {
             private_count -= 0.1
+            is_private_buff := true
             ToolTip("private window" Round(private_count,1), , , 4)
             
             ; ウィンドウを閉じる処理
@@ -115,10 +113,17 @@ OnTimer(*) {
 
             ; ToolTip("I just noticed you looking at private window!!! " private_count)
             break
-        } else {
-            if (private_count < const_private_count) {
-                private_count += 0.05
-            }
         }
+    }
+
+    ; 値を増やす
+    if (!is_private_buff && private_count < const_private_count) {
+        private_count += 0.05
+    }
+    if (!is_twitter_buff && twitter_count < const_twitter_count) {
+        twitter_count += 0.05
+    }
+    if (!is_youtubehome_buff && youtubehome_count < const_youtubehome_count) {
+        youtubehome_count += 0.05
     }
 }
