@@ -29,6 +29,7 @@ OnTimer(*) {
     is_private_buff := false
     is_twitter_buff := false
     is_youtubehome_buff := false
+    is_yotube_buff := false
 
     ; now_time := Format("{:04}", A_Hour, A_Min) ; 現在時刻を "HHmm" の数値形式で取得 :が書式設定の開始，0が0埋め，4が4桁を表す
     now_time := Format("{:02}{:02}", A_Hour, A_Min)
@@ -66,6 +67,10 @@ OnTimer(*) {
                 ; my_tooltip_nodelay("youtube home %youtubehome_count%" , 2)
                 ToolTip("youtube home" Round(youtubehome_count,1), , , 2)
             }
+            continue
+        }
+        if (is_youtube(title)) {
+            is_yotube_buff := true
             continue
         }
 
@@ -126,7 +131,7 @@ OnTimer(*) {
     if (!is_twitter_buff && twitter_count < const_twitter_count) {
         twitter_count += 0.05
     }
-    if (!is_youtubehome_buff && youtubehome_count < const_youtubehome_count) {
+    if (!is_youtubehome_buff && !is_yotube_buff && youtubehome_count < const_youtubehome_count) {
         youtubehome_count += 0.05
     }
 }
