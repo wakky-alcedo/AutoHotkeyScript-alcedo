@@ -4,7 +4,7 @@
 #NoTrayIcon ; タスクトレイにアイコンを表示しない
 
 #Include monitor_app_func.ahk
-#Include ..\Plugins\common_functions.ahk
+; #Include ..\Plugins\common_functions.ahk
 
 ; 初期処理
 SetTimer(OnTimer, 6000) ; 6sec(0.1min)
