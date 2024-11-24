@@ -71,30 +71,30 @@ OnTimer(*) {
 
         ; Twitterのチェック
         if (is_twitter(title)) {
-            twitter_count -= 0.1
-            is_twitter_buff := true
-            ToolTip("twitter" Round(twitter_count,1), , , 3)
-            if (twitter_count < 0) {
+            if (twitter_count <= 0) {
+                WinActivate("ahk_id " id)
                 close_tab()
+            } else {
+                twitter_count -= 0.1
+                is_twitter_buff := true
+                ToolTip("twitter" Round(twitter_count,1), , , 3)
             }
-            ToolTip("I just noticed you looking at Twitter!!! " twitter_count)
+            continue
         }
 
         ; プライベートウィンドウのチェック
         if (is_private(title)) {
-            private_count -= 0.1
-            is_private_buff := true
-            ToolTip("private window" Round(private_count,1), , , 4)
-            
-            ; ウィンドウを閉じる処理
-            if (private_count < 0 or is_deep_night or is_youtube_home(title)) {
+            if (private_count <= 0 or is_deep_night or is_youtube_home(title)) {
+                ; ウィンドウを閉じる処理
                 WinActivate("ahk_id " id)
                 close_window()
                 private_count := 0
+            } else {
+                private_count -= 0.1
+                is_private_buff := true
+                ToolTip("private window" Round(private_count,1), , , 4)
             }
-
-            ; ToolTip("I just noticed you looking at private window!!! " private_count)
-            break
+            continue
         }
 
         
