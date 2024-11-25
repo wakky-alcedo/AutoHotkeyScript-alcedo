@@ -79,3 +79,8 @@ is_browser() {
   Else
       Return False
 }
+
+open_vivaldi(url) {
+  ; Vivaldiを開く
+  Run("C:\Users\KAWASEMI\AppData\Local\Vivaldi\Application\vivaldi.exe --new-window " url)
+}
