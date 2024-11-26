@@ -42,7 +42,7 @@ is_private() {
 }
 
 is_twitter(title) {
-    return (InStr(title, "X - ", true) != 0 && InStr(title, "ホーム", true) != 0)
+    return (InStr(title, "X - ", true) != 0 && (InStr(title, "ホーム", true) != 0 || InStr(title, "Home", true) != 0))
 }
 
 is_temptation(title) {
