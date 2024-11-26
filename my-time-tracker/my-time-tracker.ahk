@@ -1,6 +1,6 @@
 ; 全画面オーバーレイウィンドウを作成するスクリプト
 
-#Include, %A_ScriptDir%\..\PluginList.ahk  ; プラグインをインクルード
+; #Include, %A_ScriptDir%\..\PluginList.ahk  ; プラグインをインクルード
 
 ; オーバーレイウィンドウを作成する関数
 ; 新しいGUIウィンドウを作成し、名前をつける（ここでは "Overlay" とします）
@@ -47,7 +47,7 @@ ShowModal() {
     Gui, Show, w400 h150, Activity Logger ; ダイアログを表示。w400は幅、h150は高さ、Activity Loggerはウィンドウタイトル
     ; ウィンドウを最前面に設定
     WinSet, AlwaysOnTop, On, Activity Logger ; ダイアログを常に最前面に表示
-    IME_SET(1)
+    ; IME_SET(1)
 }
 
 ; 保存ボタンがクリックされたときに呼ばれる関数
