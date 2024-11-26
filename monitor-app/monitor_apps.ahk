@@ -87,22 +87,6 @@ OnTimer(*) {
             continue
         }
 
-        ; プライベートウィンドウのチェック
-        if (is_private(title)) {
-            if (private_count <= 0 or is_deep_night or is_youtube_home(title)) {
-                ; ウィンドウを閉じる処理
-                WinActivate("ahk_id " id)
-                close_window()
-                private_count := 0
-            } else {
-                private_count -= 0.1
-                is_private_buff := true
-                ToolTip("private window" Round(private_count,1), , , 4)
-            }
-            continue
-        }
-
-        
         ; システム系のチェック
         ; 深夜のタスクスケジューラチェック
         if (is_deep_night && InStr(title, "タスク スケジューラ", true)) {
@@ -122,6 +106,23 @@ OnTimer(*) {
             close_window()
             continue
         }
+    }
+
+    ; プライベートウィンドウのチェック
+    if (is_private()) {
+        if (private_count <= 0 or is_deep_night or is_youtube_home(title)) {
+            ; ウィンドウを閉じる処理
+            WinActivate("ahk_id " id)
+            close_window()
+            private_count := 0
+        } else {
+            private_count -= 0.1
+            is_private_buff := true
+            ToolTip("private window" Round(private_count,1), , , 4)
+        }
+        ; continue
+    }else {
+        ; ToolTip("non private window" Round(private_count,1), , , 4)
     }
 
     ; 値を増やす

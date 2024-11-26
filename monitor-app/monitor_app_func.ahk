@@ -14,7 +14,7 @@ close_window() {
     ToolTip("")
 }
 
-is_private(title) {
+is_private() {
     if (!WinExist("A")) { ; アクティブなウィンドウがあるか確認
         return false
     }
@@ -23,7 +23,7 @@ is_private(title) {
     ; Vivaldi
     if (InStr(title, "Vivaldi", true)) {
         color := PixelGetColor(30, 10)
-        if (color == 0x764040) {
+        if (color == 0x404076) {
             return true
         }
     }
@@ -35,8 +35,8 @@ is_private(title) {
             return true
         }
     }
-    ; ToolTip(title " " is_privateing " " private_count " " color )
-    ; Sleep(1000)
+    ; ToolTip(title " " color )
+    ; Sleep(3000)
     ; ToolTip("")
     return false
 }
