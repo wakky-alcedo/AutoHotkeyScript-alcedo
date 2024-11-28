@@ -4,7 +4,6 @@
 
 ; タイマー初期化
 OnMuscleTimer()
-return
 
 ; タイマー内
 OnMuscleTimer(*) {

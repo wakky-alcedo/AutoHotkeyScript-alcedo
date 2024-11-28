@@ -6,7 +6,6 @@
 
 ; タイマー初期化
 OnGreyTimer()
-return
 
 ; タイマー内
 OnGreyTimer(*) {
