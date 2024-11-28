@@ -1,5 +1,7 @@
 #Requires AutoHotkey v2.0
 
+#Include "task_scheduler_common.ahk"
+
 ; タスクスケジューラで起動する際は，「最上位の特権で実行する」を有効にすること
 
 ; タイマー初期化
@@ -46,29 +48,4 @@ OnGreyTimer(*) {
     ; ToolTip("")  ; ツールチップを消去
     SetTimer(OnGreyTimer, -diffTime * 1000)  ; 残り時間を設定
     return
-}
-
-; 時刻の範囲内か，また次に境界をまたぐまでの時間を計算
-TimeBetween(startTime, endTime) { ; HHMM形式
-    currentTime := A_Now
-    ; HHMM形式の数値に今日の日付を複合
-    startTime := A_YYYY . A_MM . A_DD . startTime . "00"
-    startTimeDiff := DateDiff(startTime, currentTime, "Seconds")
-    if(startTimeDiff < 0) {
-        startTime := DateAdd(startTime, 1, "Days")
-        startTimeDiff := DateDiff(startTime, currentTime, "Seconds")
-    }
-    endTime := A_YYYY . A_MM . A_DD . endTime . "00"
-    endTimeDiff := DateDiff(endTime, currentTime, "Seconds")
-    if(endTimeDiff < 0) {
-        endTime := DateAdd(endTime, 1, "Days")
-        endTimeDiff := DateDiff(endTime, currentTime, "Seconds")
-    }
-    ; MsgBox(startTime " " endTime " " currentTime)  ; 現在の時刻を表示
-    ; MsgBox(startTimeDiff/60/60 " " endTimeDiff/60/60)  ; 残り時間を表示
-    if (startTimeDiff < endTimeDiff) {
-        return startTimeDiff ; [sec]
-    } else {
-        return endTimeDiff ; [sec]
-    }
 }
