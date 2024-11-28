@@ -47,5 +47,9 @@
     ; MyGui := Gui.new()
     gui_default()  ; デフォルトのGUIを表示
 
-    MyGui.Show()
+    ; GUIをマウスカーソルのある位置に表示
+    CoordMode "Mouse" , "Screen"
+    MouseGetPos &xpos, &ypos
+    ; MyGui.Show("xCenter x" . xpos . " yCenter y" . ypos)
+    MyGui.Show("x" . xpos-50 . " y" . ypos-200)
 }
