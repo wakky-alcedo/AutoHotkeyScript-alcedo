@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 
 #Include "task_scheduler_common.ahk"
-#Include ..\Plugins\common_functions.ahk
+#Include ..\PluginList.ahk
 
 ; タイマー初期化
 OnMuscleTimer()
