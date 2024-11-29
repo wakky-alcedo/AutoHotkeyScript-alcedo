@@ -1,3 +1,4 @@
 *.lnk
 *.exe
 .env.local.ahk
+*.xml
