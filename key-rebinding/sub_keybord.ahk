@@ -5,7 +5,7 @@
 
 ; 1
 global keyCount1 := 0
-^!+F7::{
+^!+F7 Up::{
     global keyCount1
     keyCount1 += 1
     countTimeout := 300
@@ -34,21 +34,23 @@ CheckKeyCount1(*) {
 
 ; 2
 global keyCount2 := 0
-^!+F8::{
+global keyTime2 := 0
+^!+F8 Up::{
     global keyCount2
     keyCount2 += 1
+    global keyTime2 := A_TickCount
     countTimeout := 300
     SetTimer CheckKeyCount2, -countTimeout
 }
 CheckKeyCount2(*) {
     global keyCount2
-
     if keyCount2 = 1 {
         ; 1回押しのアクションをここに記述
-        Run(".\my-time-tracker\my-time-tracker.exe")  ; TimeTrackerを開く
+        ; Run("calc.exe") ; 電卓を開く
+        Run("..\..\portableApp\qalculate-5.3.0-x64\qalculate\qalculate-qt.exe")  ; Qalculate!電卓を開く
     } else if keyCount2 = 2 {
         ; 2回押しのアクションをここに記述
-        Run("calc.exe") ; 電卓を開く
+        Run(".\my-time-tracker\my-time-tracker.exe")  ; TimeTrackerを開く
     } else if keyCount2 >= 3 {
         ; 3回押しのアクションをここに記述
     }
@@ -59,7 +61,7 @@ CheckKeyCount2(*) {
 
 ; 3
 global keyCount3 := 0
-^!+F9::{
+^!+F9 Up::{
     global keyCount3
     keyCount3 += 1
     countTimeout := 300
@@ -88,16 +90,32 @@ CheckKeyCount3(*) {
     keyCount3 := 0
 }
 
+; ノブ回転
+global timeSame2 := 0
 ; ノブ左回転
 ^!+F10::{
     ; ボリュームダウン
+    global keyTime2
     static time := 0
-    time_diff := (A_TickCount - time + 1) / 1000
-    volume_diff := 0.4 / time_diff + 1
-    volume_diff := 5 * 50**(-time_diff*0.5) + 1
-    ; SoundSetVolume -volume_diff
-    Send "{Volume_Down " volume_diff "}"
-    time := A_TickCount
+    global timeSame2
+    if(keyTime2 + 300 < A_TickCount && timeSame2 + 1000 < A_TickCount) {
+        time_diff := (A_TickCount - time + 1) / 1000
+        ; volume_diff := 0.4 / time_diff + 1
+        volume_diff := 5 * 50**(-time_diff*0.5)
+        ; SoundSetVolume -volume_diff
+        Send "{Volume_Down " volume_diff "}"
+        time := A_TickCount
+    } else {
+        global keyCount2 := 0
+
+        time_diff := (A_TickCount - timeSame2 + 1) / 1000
+        ; volume_diff := (0.4 / time_diff + 1) * 0.01
+        volume_diff := 5 * 50**(-time_diff*0.5) * 0.01
+        RunWait("..\..\portableApp\nircmd-x64\nircmdc.exe changeappvolume Discord.exe -" volume_diff, , "Hide")
+        RunWait("..\..\portableApp\nircmd-x64\nircmdc.exe changeappvolume Zoom.exe -" volume_diff, , "Hide")
+        RunWait("..\..\portableApp\nircmd-x64\nircmdc.exe changeappvolume slack.exe -" volume_diff, , "Hide")    
+        timeSame2 := A_TickCount
+    }
 }
 
 ; ノブ押し込み
@@ -110,10 +128,24 @@ CheckKeyCount3(*) {
 ; ノブ右回転
 ^!+F12::{
     ; ボリュームアップ
+    global keyTime2
     static time := 0
-    time_diff := (A_TickCount - time + 1) / 1000
-    volume_diff := 0.4 / time_diff + 1
-    ; SoundSetVolume -volume_diff
-    Send "{Volume_Up " volume_diff "}"
-    time := A_TickCount
+    global timeSame2
+    if(keyTime2 + 300 < A_TickCount && timeSame2 + 1000 < A_TickCount) {
+        time_diff := (A_TickCount - time + 1) / 1000
+        volume_diff := 0.4 / time_diff + 1
+        ; SoundSetVolume -volume_diff
+        Send "{Volume_Up " volume_diff "}"
+        time := A_TickCount
+    } else {
+        global keyCount2 := 0
+
+        time_diff := (A_TickCount - timeSame2 + 1) / 1000
+        ; volume_diff := (0.4 / time_diff + 1) * 0.01
+        volume_diff := 5 * 50**(-time_diff*0.5) * 0.01
+        RunWait("..\..\portableApp\nircmd-x64\nircmdc.exe changeappvolume Discord.exe " volume_diff, , "Hide")
+        RunWait("..\..\portableApp\nircmd-x64\nircmdc.exe changeappvolume Zoom.exe " volume_diff, , "Hide")
+        RunWait("..\..\portableApp\nircmd-x64\nircmdc.exe changeappvolume slack.exe " volume_diff, , "Hide")    
+        timeSame2 := A_TickCount
+    }
 }
