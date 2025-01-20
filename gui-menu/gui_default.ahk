@@ -12,10 +12,8 @@ gui_default() {
     MyGui.Add("Button", "", "Tweet").OnEvent("Click", Tweet)
     MyGui.Add("Button", "", "Tweet (日記)").OnEvent("Click", TweetDiary)
     MyGui.Add("Button", "", "電卓").OnEvent("Click", RunCalculator)
+    MyGui.Add("Button", "", "スクリーンショット").OnEvent("Click", ScreenShot)
 }
-
-; vivaldi
-ForceDarkPage(*) => sendKey("^!d") ; "すべてのウェブサイトにダークテーマを強制適用"のショートカットキー
 
 Google(*)               => sendText("aaa")
 NotepadStart(*)         => Run("notepad.exe")  ; メモ帳を開く
@@ -26,6 +24,7 @@ Tweet(*)                => tweet_content()  ; Tweetを開く
 TweetDiary(*)           => tweet_content("%23Wakky習慣の記録")  ; Tweetを開く
 ; RunCalculator(*)        => Run("calc.exe")  ; Windous電卓を開く
 RunCalculator(*)        => Run("..\..\portableApp\qalculate-5.3.0-x64\qalculate\qalculate-qt.exe")  ; Qalculate!電卓を開く
+ScreenShot(*)           => Send("#+s")
 
 tweet_content(content := "") {
     ; Vivaldiを開く
