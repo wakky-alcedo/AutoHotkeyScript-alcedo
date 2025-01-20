@@ -54,5 +54,5 @@ is_youtube(title) {
 }
 
 is_youtube_home(title) {
-    return (is_youtube(title) && InStr(title, "- YouTube -", true) == 0)
+    return (is_youtube(title) && InStr(title, "- YouTube -", true) == 0 && InStr(title, "YouTube -", true) == 1)
 }

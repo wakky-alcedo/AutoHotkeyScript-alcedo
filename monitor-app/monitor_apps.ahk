@@ -4,7 +4,7 @@
 #NoTrayIcon ; タスクトレイにアイコンを表示しない
 
 #Include monitor_app_func.ahk
-; #Include ..\Plugins\common_functions.ahk
+#Include ..\PluginList.ahk
 
 ; 初期処理
 SetTimer(OnTimer, 6000) ; 6sec(0.1min)
@@ -41,6 +41,10 @@ OnTimer(*) {
 
     for id in id_list {
         ; ウィンドウタイトルを取得し，変なやつを除去
+        ; idが存在するかどうかのチェック
+        if (!WinExist("ahk_id " id)) {
+            continue
+        }
         title := WinGetTitle("ahk_id " id)
         if (title == "" or title == "PopupHost" or title == "Program Manager" or InStr(title, "OCRMODE", true) or InStr(title, "MainWnd", true) or InStr(title, "PfuSsMon", true)) {
             continue
@@ -58,9 +62,14 @@ OnTimer(*) {
 
         ; YouTubeチェック
         if (is_youtube_home(title)) {
+            ; 深夜の場合もしくは，カウントが0以下の場合は閉じる
             if (youtubehome_count <= 0 || is_deep_night){
                 WinActivate("ahk_id " id)
                 close_tab()
+            } else if (is_window_on_primary_monitor(id) && A_ComputerName != 'HP-ENVY-X360') { ; メインディスプレイだったら，閉じる
+                WinActivate("ahk_id " id)
+                close_tab()
+                MsgBox("Youtubeはサブモニタで開きましょう")
             } else {
                 youtubehome_count -= 0.1
                 is_youtubehome_buff := true
@@ -94,6 +103,7 @@ OnTimer(*) {
             close_window()
             ; ↓これを有効化しておかないと，うまく閉じれない
             ; https://syunsetsu.hatenablog.com/entry/2022/09/11/113247
+            MsgBox("YotubeHome: " youtubehome_count "`nTwitter: " twitter_count "`nPrivate: " private_count)
             continue
         }
 
@@ -104,6 +114,7 @@ OnTimer(*) {
                 || youtubehome_count < const_youtubehome_count)) {
             WinActivate("ahk_id " id)
             close_window()
+            MsgBox("YotubeHome: " youtubehome_count "`nTwitter: " twitter_count "`nPrivate: " private_count)
             continue
         }
     }

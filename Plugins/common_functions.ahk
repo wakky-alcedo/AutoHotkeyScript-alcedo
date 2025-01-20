@@ -84,3 +84,23 @@ open_vivaldi(url) {
   ; Vivaldiを開く
   Run("C:\Users\KAWASEMI\AppData\Local\Vivaldi\Application\vivaldi.exe --new-window " url)
 }
+
+get_time() {
+  ; 現在時刻を取得
+  Return Format("{:02}{:02}", A_Hour, A_Min)
+}
+
+is_window_on_primary_monitor(hwnd) {
+  ; ウィンドウの位置とサイズを取得
+  WinGetPos(&x, &y, &w, &h, hwnd)
+  ; ウィンドウの中央位置を計算
+  centerX := x + w // 2
+  centerY := y + h // 2
+
+  ; プライマリモニターの情報を取得
+  MonitorGet , &Left, &Top, &Right, &Bottom
+
+  ; ウィンドウの中央がプライマリモニターの範囲内にあるかチェック
+  return (centerX >= Left && centerX <= Right
+       && centerY >= Top && centerY <= Bottom)
+}
