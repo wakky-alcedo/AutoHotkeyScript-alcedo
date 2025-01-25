@@ -3,8 +3,8 @@
 
 #NoTrayIcon ; タスクトレイにアイコンを表示しない
 
-#Include monitor_app_func.ahk
 #Include ..\PluginList.ahk
+#Include monitor_app_func.ahk
 
 ; 初期処理
 SetTimer(OnTimer, 6000) ; 6sec(0.1min)
@@ -36,6 +36,16 @@ OnTimer(*) {
     is_deep_night := (now_time > 2300 or now_time < 700)
     is_deep_deep_night := (now_time > 0 and now_time < 700)
 
+    ; 深夜の場合は，ログを取る
+    is_log_time := false
+    ; 今日の日付をマイナス6時間したものを代入
+    log_time := DateAdd(A_Now, -8, "h") ; 現在時刻から8時間を引く
+    if (is_deep_night && !isTextInFile("log.txt", FormatTime(log_time, "yyyy/MM/dd"))) {
+        saveTextToFile("log.txt", FormatTime(log_time, "yyyy/MM/dd"), false)
+        is_log_time := true
+    }
+
+
     ; ウィンドウリストを取得
     id_list := WinGetList()
 
@@ -49,37 +59,79 @@ OnTimer(*) {
         if (title == "" or title == "PopupHost" or title == "Program Manager" or InStr(title, "OCRMODE", true) or InStr(title, "MainWnd", true) or InStr(title, "PfuSsMon", true)) {
             continue
         }
+        title := format_window_title(title) ; フォーマット
 
         ; ここで操作を実行
 
         ; 各要素のチェック
-        ; 深夜の誘惑チェック
-        if (is_deep_night && (is_temptation(title) || is_twitter(title))) {
+        ; Twitterのチェック
+        if (is_deep_night && is_twitter(title)) {
             WinActivate("ahk_id " id)
             close_tab()
             continue
         }
 
-        ; YouTubeチェック
-        if (is_youtube_home(title)) {
-            ; 深夜の場合もしくは，カウントが0以下の場合は閉じる
-            if (youtubehome_count <= 0 || is_deep_night){
-                WinActivate("ahk_id " id)
-                close_tab()
-            } else if (is_window_on_primary_monitor(id) && A_ComputerName != 'HP-ENVY-X360') { ; メインディスプレイだったら，閉じる
-                WinActivate("ahk_id " id)
-                close_tab()
-                MsgBox("Youtubeはサブモニタで開きましょう")
+        ; 深夜の誘惑チェック
+        if (is_deep_night && is_temptation(title)) {
+            if (is_log_time) {
+                saveTextToFile("log.txt", title, true)
             } else {
-                youtubehome_count -= 0.1
-                is_youtubehome_buff := true
-                ; my_tooltip_nodelay("youtube home %youtubehome_count%" , 2)
-                ToolTip("youtube home" Round(youtubehome_count,1), , , 2)
+                if (!isTextInFile("log.txt", title)) {
+                    WinActivate("ahk_id " id)
+                    close_tab()
+                    tooltip_with_timeout("閉じるよ誘惑: " title, 5, 2000)
+                    continue
+                }
             }
-            continue
         }
+
+        ; YouTubeチェック
         if (is_youtube(title)) {
             is_yotube_buff := true
+            ; ホーム画面
+            if (is_youtube_home(title)) {
+                ; 深夜の場合もしくは，カウントが0以下の場合は閉じる
+                if (youtubehome_count <= 0 || is_deep_night){
+                    WinActivate("ahk_id " id)
+                    close_tab()
+                } else if (is_window_on_primary_monitor(id) && A_ComputerName != 'HP-ENVY-X360') { ; メインディスプレイだったら，閉じる
+                    WinActivate("ahk_id " id)
+                    close_tab()
+                    msgBox_with_timeout("Youtubeはサブモニタで開きましょう", "5", 2000)
+                    ; tooltip_with_timeout("Youtubeはサブモニタで開きましょう", 5, 2000)
+                } else {
+                    youtubehome_count -= 0.1
+                    ; my_tooltip_nodelay("youtube home %youtubehome_count%" , 2)
+                    ToolTip("youtube home" Round(youtubehome_count,1), , , 2)
+                }
+                continue
+            }
+            ; 登録チャンネル
+            if (InStr(title, "登録チャンネル - YouTube", true) != 0) {
+                if (is_deep_night) {
+                    WinActivate("ahk_id " id)
+                    close_tab()
+                    continue
+                } else if (youtubehome_count <= 0 || (is_window_on_primary_monitor(id) && A_ComputerName != 'HP-ENVY-X360')) { ; メインディスプレイだったら，閉じる
+                    WinActivate("ahk_id " id)
+                    close_tab()
+                    msgBox_with_timeout("Youtubeはサブモニタで開きましょう", "警告", 2000)
+                    ; tooltip_with_timeout("Youtubeはサブモニタで開きましょう", 5, 2000)
+                    continue
+                }
+            }
+            ; それ以外
+
+            if (is_log_time) {
+                saveTextToFile("log.txt", title, true)
+            } else if (is_deep_night) {
+                if (!isTextInFile("log.txt", title)) {
+                    WinActivate("ahk_id " id)
+                    close_tab()
+                    tooltip_with_timeout("閉じるよYoutube: " title, 5, 2000)
+                    continue
+                }
+            }
             continue
         }
 

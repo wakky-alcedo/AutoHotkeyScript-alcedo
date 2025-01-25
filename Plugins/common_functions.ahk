@@ -7,6 +7,16 @@ my_tooltip_function(str, delay, WhichToolTip := 1) {
   ToolTip("", , , WhichToolTip)            ; ツールチップを消す
 }
 
+tooltip_with_timeout(msg, whichToolTip := 1, timeout := 2000, x := 0, y := 0) {
+  SetTimer(() => Tooltip("", x, y, whichToolTip), -timeout) ; 指定時間後にTooltipを非表示にする
+  Tooltip(msg, x, y, whichToolTip) ; Tooltipを表示
+}
+
+msgBox_with_timeout(msg, title := "MyTitle", timeout := 2000) {
+  SetTimer(() => WinClose(title), -timeout) ; 指定時間後にMsgBoxを閉じる
+  MsgBox(msg, title)
+}
+
 my_tooltip_nodelay(str, WhichToolTip := 1) {
   ToolTip(str, , , WhichToolTip)           ; 指定されたメッセージを表示
 }
@@ -88,6 +98,20 @@ open_vivaldi(url) {
 get_time() {
   ; 現在時刻を取得
   Return Format("{:02}{:02}", A_Hour, A_Min)
+}
+
+get_date() {
+  ; 現在日付を取得
+  Return Format("{:04}{:02}{:02}", A_Year, A_MM, A_DD)
+}
+
+format_window_title(title) {
+  position := InStr(title, " - ", , -1)  ; 最右の「 - 」の位置を取得
+  if (position > 0) {
+      title := SubStr(title, 1, position-1) ; 最も左から「 - 」の手前までを取得 
+  }
+  title := RegExReplace(title, "\(\d+\) ")
+  return title
 }
 
 is_window_on_primary_monitor(hwnd) {

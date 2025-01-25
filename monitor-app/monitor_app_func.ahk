@@ -46,7 +46,7 @@ is_twitter(title) {
 }
 
 is_temptation(title) {
-    return (InStr(title, "Prime Video", true) != 0 || InStr(title, "DMM TV", true) != 0 || title == "YouTube")
+    return (InStr(title, "Prime Video", true) != 0 || InStr(title, "DMM TV", true) != 0)
 }
 
 is_youtube(title) {
@@ -55,4 +55,38 @@ is_youtube(title) {
 
 is_youtube_home(title) {
     return (is_youtube(title) && InStr(title, "- YouTube -", true) == 0 && InStr(title, "YouTube -", true) == 1)
+}
+
+
+saveTextToFile(filePath, text, append := false) {
+    mode := append ? "a" : "w" ; 追記モードか書き込みモードを選択
+    file := FileOpen(filePath, mode, "utf-8") ; ファイルを開く
+    if !file {
+        MsgBox("ファイルを開けません: " filePath)
+        return false
+    }
+    file.Write(text "`n") ; テキストを書き込む（改行付き）
+    file.Close()
+    return true
+}
+
+isTextInFile(filePath, searchText) {
+    if !FileExist(filePath) {
+        MsgBox("ファイルが存在しません: " filePath)
+        return false
+    }
+    file := FileOpen(filePath, "r", "utf-8") ; ファイルを読み取りモードで開く
+    if !file {
+        MsgBox("ファイルを開けません: " filePath)
+        return false
+    }
+    while !file.AtEOF {
+        line := file.ReadLine()
+        if InStr(line, searchText, true) {
+            file.Close()
+            return true
+        }
+    }
+    file.Close()
+    return false
 }

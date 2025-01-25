@@ -22,11 +22,7 @@ global copyed_title := ""
 
     ; タイトルの取得 (ウィンドウタイトル)
     copyed_title := WinGetTitle("A")
-    position := InStr(copyed_title, " - ", , -1)  ; 最右の「 - 」の位置を取得
-    if (position > 0) {
-        copyed_title := SubStr(copyed_title, 1, position-1) ; 最も左から「 - 」の手前までを取得 
-    }
-    copyed_title := RegExReplace(copyed_title, "\(\d+\) ") ; 通知の件数を削除
+    copyed_title := format_window_title(copyed_title)
     A_Clipboard := copyed_title
     
 
