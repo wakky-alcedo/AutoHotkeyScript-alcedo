@@ -42,7 +42,10 @@ is_private() {
 }
 
 is_twitter(title) {
-    return (InStr(title, "X - ", true) != 0 && (InStr(title, "ホーム", true) != 0 || InStr(title, "Home", true) != 0))
+    ; return (InStr(title, "X - ", true) != 0 && (InStr(title, "ホーム", true) != 0 || InStr(title, "Home", true) != 0))
+    ; return (InStr(title, "X - ", true))
+    ; return (InStr(title, "ホーム / X", true) != 0 || InStr(title, "Home / X", true) != 0)
+    return (title = "ホーム / X" || title = "Home / X")
 }
 
 is_temptation(title) {
@@ -54,7 +57,8 @@ is_youtube(title) {
 }
 
 is_youtube_home(title) {
-    return (is_youtube(title) && InStr(title, "- YouTube -", true) == 0 && InStr(title, "YouTube -", true) == 1)
+    ; return (is_youtube(title) && InStr(title, "- YouTube", true) == 0)
+    return title = "YouTube"
 }
 
 
