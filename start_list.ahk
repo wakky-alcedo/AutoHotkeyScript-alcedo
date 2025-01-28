@@ -11,5 +11,6 @@
 #Include "*i %A_ScriptDir%\key-rebinding\main.ahk"
 #Include "*i %A_ScriptDir%\key-rebinding\numpad.ahk"
 #Include "*i %A_ScriptDir%\key-rebinding\sub_keybord.ahk"
+#Include "*i %A_ScriptDir%\key-rebinding\navigation_keys.ahk"
 
 #Include "*i %A_ScriptDir%\gui-menu\gui_menu.ahk"

@@ -15,7 +15,7 @@
 ;+Enter::
 ;    Send, {Delete}
 
-; 音声入力
-;+LCtrl::
-+^c::
-    Send, #h
+; ; 音声入力
+; ;+LCtrl::
+; +^c::
+;     Send, #h
