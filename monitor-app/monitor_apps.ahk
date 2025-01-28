@@ -90,8 +90,7 @@ OnTimer(*) {
             is_yotube_buff := true
             ; ホーム画面
             if (is_youtube_home(title)) {
-                ; 深夜の場合もしくは，カウントが0以下の場合は閉じる
-                if (youtubehome_count <= 0 || is_deep_night){
+                if (youtubehome_count <= 0 || is_deep_night || A_ComputerName == 'HP-ENVY-X360'){ ; 深夜の場合もしくは，カウントが0以下の場合は閉じる
                     WinActivate("ahk_id " id)
                     close_tab()
                 } else if (is_window_on_primary_monitor(id) && A_ComputerName != 'HP-ENVY-X360') { ; メインディスプレイだったら，閉じる
