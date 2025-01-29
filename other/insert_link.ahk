@@ -67,8 +67,7 @@ paset_link() {
 
     ; アクティブウィンドウの実行ファイルを取得
     active_exe := WinGetProcessName("A")
-    If(active_exe = "ApplicationFrameHost.exe") ; OneNote
-    {
+    If (active_exe = "ApplicationFrameHost.exe") { ; OneNote
         ; リンクの挿入を開く
         Send("^k")
         Sleep(200)
@@ -85,8 +84,7 @@ paset_link() {
         ;Sleep 500
         ; 確定
         ;Send,{Enter}
-    }Else If(active_exe = "slack.exe") ; Slack
-    {
+    } Else If (active_exe = "slack.exe") { ; Slack
         ; リンクの挿入を開く
         Send("^+u")
         Sleep(200)
@@ -102,8 +100,7 @@ paset_link() {
         Sleep(500)
         ; 確定
         Send("{Enter}")
-    }Else If(active_exe = "explorer.exe") ; ファイルエクスプローラ
-    {
+    } Else If (active_exe = "explorer.exe") { ; エクスプローラ
         ; リンクの挿入を開く
         ; 右クリック
         MouseClick("right")
@@ -124,7 +121,25 @@ paset_link() {
         Sleep(500)
         ; 確定
         Send("{Enter}")
-    }Else{
+    } Else If (active_exe = "WINWORD.exe" || active_exe = "EXCEL.exe" || active_exe = "POWERPNT.exe") { ; Office系
+        Send("^k") ; リンクの挿入を開く
+        Sleep(200)
+        send_text(copyed_link) ; リンクを貼り付け
+        Send("{Tab}") ; カーソルの移動
+        Sleep(200)
+        send_text(copyed_title) ; タイトルを貼り付け
+        Sleep(500)
+        Send("{Enter}") ; 確定
+    } Else if (InStr(WinGetTitle("A"), "- Google ドキュメント", true) != 0 || InStr(WinGetTitle("A"), "- Google スライド", true) != 0 || InStr(WinGetTitle("A"), "- Google スプレッドシート", true) != 0) { ; Google系
+        Send("^k") ; リンクの挿入を開く
+        Sleep(200)
+        send_text(copyed_title) ; タイトルを貼り付け
+        Send("{Tab}") ; カーソルの移動
+        Sleep(200)
+        send_text(copyed_link) ; リンクを貼り付け
+        Sleep(500)
+        Send("{Enter}") ; 確定
+    } Else { ; その他
         ; Send("[")
         ; ; タイトルを貼り付け
         ; ; Send("^v")
