@@ -3,8 +3,10 @@
 
 #NoTrayIcon ; タスクトレイにアイコンを表示しない
 
-#Include ..\PluginList.ahk
+#Include %A_ScriptDir%\..\PluginList.ahk
 #Include monitor_app_func.ahk
+
+#Warn All, Off
 
 ; 初期処理
 SetTimer(OnTimer, 6000) ; 6sec(0.1min)
@@ -59,7 +61,11 @@ OnTimer(*) {
         if (title == "" or title == "PopupHost" or title == "Program Manager" or InStr(title, "OCRMODE", true) or InStr(title, "MainWnd", true) or InStr(title, "PfuSsMon", true)) {
             continue
         }
-        title := format_window_title(title) ; フォーマット
+        try {
+            title := format_window_title(title)
+        } catch Error as e {
+            ; 何もしない（エラーを無視）
+        }
 
         ; ここで操作を実行
 

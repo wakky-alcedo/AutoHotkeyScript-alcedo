@@ -64,13 +64,13 @@ is_youtube_home(title) {
 
 saveTextToFile(filePath, text, append := false) {
     mode := append ? "a" : "w" ; 追記モードか書き込みモードを選択
-    file := FileOpen(filePath, mode, "utf-8") ; ファイルを開く
-    if !file {
+    opened_file := FileOpen(filePath, mode, "utf-8") ; ファイルを開く
+    if !opened_file {
         MsgBox("ファイルを開けません: " filePath)
         return false
     }
-    file.Write(text "`n") ; テキストを書き込む（改行付き）
-    file.Close()
+    opened_file.Write(text "`n") ; テキストを書き込む（改行付き）
+    opened_file.Close()
     return true
 }
 
@@ -79,18 +79,18 @@ isTextInFile(filePath, searchText) {
         MsgBox("ファイルが存在しません: " filePath)
         return false
     }
-    file := FileOpen(filePath, "r", "utf-8") ; ファイルを読み取りモードで開く
-    if !file {
+    opened_file := FileOpen(filePath, "r", "utf-8") ; ファイルを読み取りモードで開く
+    if !opened_file {
         MsgBox("ファイルを開けません: " filePath)
         return false
     }
-    while !file.AtEOF {
-        line := file.ReadLine()
+    while !opened_file.AtEOF {
+        line := opened_file.ReadLine()
         if InStr(line, searchText, true) {
-            file.Close()
+            opened_file.Close()
             return true
         }
     }
-    file.Close()
+    opened_file.Close()
     return false
 }
