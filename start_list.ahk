@@ -4,6 +4,7 @@
 #Include "*i %A_ScriptDir%\other\insert_link.ahk"
 #Include "*i %A_ScriptDir%\other\minimize_explorer.ahk"
 #Include "*i %A_ScriptDir%\other\today.ahk"
+#Include "*i %A_ScriptDir%\other\usb_com_notify.ahk"
 
 #Include "*i %A_ScriptDir%\key-rebinding\brackets.ahk"
 #Include "*i %A_ScriptDir%\key-rebinding\each_apps.ahk"
