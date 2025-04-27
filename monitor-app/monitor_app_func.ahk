@@ -49,7 +49,18 @@ is_twitter(title) {
 }
 
 is_temptation(title) {
-    return (InStr(title, "Prime Video", true) != 0 || InStr(title, "DMM TV", true) != 0)
+    return (InStr(title, "Prime Video", true) != 0
+        || InStr(title, "DMM TV", true) != 0
+        || InStr(title, "Netflix", true) != 0
+        || InStr(title, "Disney+", true) != 0
+        || InStr(title, "Hulu", true) != 0
+        || InStr(title, "U-NEXT", true) != 0
+        || InStr(title, "FOD", true) != 0
+        || InStr(title, "Paravi", true) != 0
+        || InStr(title, "ABEMA", true) != 0
+        || InStr(title, "Rakuten TV", true) != 0
+        || InStr(title, "薬屋のひとりごと", true) != 0
+    )
 }
 
 is_youtube(title) {
