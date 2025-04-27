@@ -25,7 +25,13 @@ CheckKeyCount1(*) {
         ; 3回押しのアクションをここに記述
         ; MsgBox("3回押しのアクション")
         ; DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0) ; スリープ
-        DllCall("PowrProf\SetSuspendState", "int", 1, "int", 0, "int", 0) ; ハイバネート 休止状態
+        ; DllCall("PowrProf\SetSuspendState", "int", 1, "int", 0, "int", 0) ; ハイバネート 休止状態
+        ; スリープショートカット
+        Send("#x")
+        Sleep(100)
+        Send("u")
+        Sleep(100)
+        Send("s")
     }
 
     ; カウントをリセット
@@ -100,8 +106,8 @@ global timeSame2 := 0
     global timeSame2
     if(keyTime2 + 300 < A_TickCount && timeSame2 + 1000 < A_TickCount) {
         time_diff := (A_TickCount - time + 1) / 1000
-        ; volume_diff := 0.4 / time_diff + 1
-        volume_diff := 5 * 50**(-time_diff*0.5)
+        volume_diff := 0.4 / time_diff + 1
+        ; volume_diff := 5 * 50**(-time_diff*0.5)
         ; SoundSetVolume -volume_diff
         Send "{Volume_Down " volume_diff "}"
         time := A_TickCount
