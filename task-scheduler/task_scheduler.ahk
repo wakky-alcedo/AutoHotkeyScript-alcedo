@@ -2,9 +2,10 @@
 
 #SingleInstance Force            ; 多重起動不可
 
-#Include "task_scheduler_common.ahk"
-#Include "grey.ahk"
-#Include "muscle.ahk"
+; #Include task_scheduler_common.ahk
+#Include grey.ahk
+#Include muscle.ahk
+#Include announce.ahk
 
 ; タスクスケジューラで起動する際は，「最上位の特権で実行する」を有効にすること
 
