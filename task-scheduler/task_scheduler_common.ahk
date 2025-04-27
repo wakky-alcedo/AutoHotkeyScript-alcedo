@@ -5,7 +5,7 @@
 ; @param currentTime: 現在時刻 (YYYYMMDDHH24MISS形式）
 TimeToStart(startTime, currentTime := A_Now) {
     ; HHMM形式の数値に今日の日付を複合
-    startTime := A_YYYY . A_MM . A_DD . startTime . "00"
+    startTime := A_YYYY . A_MM . A_DD . StrReplace(startTime, ":", "") . "00"
     startTimeDiff := DateDiff(startTime, currentTime, "Seconds")
     if(startTimeDiff < 0) {
         startTime := DateAdd(startTime, 1, "Days")

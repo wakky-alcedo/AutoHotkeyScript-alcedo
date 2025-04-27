@@ -11,6 +11,9 @@ OnGreyTimer()
 OnGreyTimer(*) {
     ; カラーフィルタの状態を確認
     regKey := "HKEY_CURRENT_USER\SOFTWARE\Microsoft\ColorFiltering"
+    ; If !RegExist(regKey) {
+    ;     return
+    ; }
     regValue := "Active"
     regHotkeyValue := "HotkeyEnabled"
     regState := RegRead(regKey, regValue)  ; 現在の状態を取得
