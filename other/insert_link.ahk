@@ -67,7 +67,7 @@ paset_link() {
 
     ; アクティブウィンドウの実行ファイルを取得
     active_exe := WinGetProcessName("A")
-    If (active_exe = "ApplicationFrameHost.exe") { ; OneNote
+    If (active_exe = "ApplicationFrameHost.exe") { ; OneNote for Windows 10
         ; リンクの挿入を開く
         Send("^k")
         Sleep(200)
@@ -84,6 +84,22 @@ paset_link() {
         ;Sleep 500
         ; 確定
         ;Send,{Enter}
+    } Else If (active_exe = "ONENOTE.EXE") { ; OneNote
+        ; リンクの挿入を開く
+        Send("^k")
+        Sleep(10)
+        ; タイトルを貼り付け
+        Send("!t")
+        Sleep(1)
+        send_text(copyed_title)
+        Sleep(1)
+        ; リンクを貼り付け
+        Send("!e")
+        Sleep(1)
+        send_text(copyed_link)
+        Sleep(10)
+        ; 確定
+        Send("{Enter}")
     } Else If (active_exe = "slack.exe") { ; Slack
         ; リンクの挿入を開く
         Send("^+u")
