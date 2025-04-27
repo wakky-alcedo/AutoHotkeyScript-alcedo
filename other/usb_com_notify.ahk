@@ -87,7 +87,7 @@ CheckCOMPortChanges()
         {
             message .= "`n" . port
         }
-        MsgBox(message)
+        MsgBox(message, ,"T2") ; 2 seconds timeout
     }
 
     ; Save the current list as the previous list for the next check
