@@ -6,6 +6,7 @@ GroupAdd("freq_app", "ahk_exe WINWORD.EXE")
 GroupAdd("freq_app", "ahk_class PPTFrameClass") ; パワポ編集画面
 ;GroupAdd freq_app, ahk_exe POWERPNT.EXE
 GroupAdd("freq_app", "ahk_exe Jw_win.exe")
+GroupAdd("freq_app", "ahk_exe kicad.exe")
 GroupAdd("ask_app", "ahk_exe Inventor.exe")
 GroupAdd("ask_app", "ahk_exe SLDWORKS.exe")
 GroupAdd("ask_app", "ahk_exe Fusion360.exe")
@@ -38,11 +39,13 @@ OnTimer() { ; V1toV2: Added bracket
         If (ask_count > 60) {
             ; msgboxを表示（最前面，非Activeウィンドウ）
             If (MsgBox("Save?",,0x40001) = "OK"){ ; 0x40000: to the top, 0x1: OK,Cancel
+                Sleep(10)
                 if WinActive("ahk_group ask_app") { ; MsgBoxを開いている間にウィンドウが変わる可能性があるので再度確認
                     save()
                     ask_count := 0
                 }
             } else {
+                Sleep(10)
                 if WinActive("ahk_group ask_app") { ; MsgBoxを開いている間にウィンドウが変わる可能性があるので再度確認
                     ask_count := 30
                 }
