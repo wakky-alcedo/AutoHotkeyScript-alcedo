@@ -3,6 +3,18 @@
 ; サブキーボード
 ; 各キーに ctrl + alt + shift + F7 ～ F12 を割り当てる
 
+; 音を鳴らす
+^!+F6::{
+    ; SoundPlay("key-rebinding/yumiya.wav", 0)
+    SoundPlay("key-rebinding/泡03・高音・単音.wav", 0) ; mp3よりwavのほうが起動が早い
+}
+F13::{
+    ; SoundPlay("key-rebinding/yumiya.wav", 0)
+    ; SoundPlay("key-rebinding/泡03・高音・単音.wav", 0) ; mp3よりwavのほうが起動が早い
+    ; ブザーを一瞬鳴らす
+    SoundBeep(600, 5) ; 1kHzの音を100ms鳴らす
+}
+
 ; 1
 global keyCount1 := 0
 ^!+F7 Up::{
