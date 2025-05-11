@@ -160,7 +160,7 @@ OnTimer(*) {
             close_window()
             ; ↓これを有効化しておかないと，うまく閉じれない
             ; https://syunsetsu.hatenablog.com/entry/2022/09/11/113247
-            MsgBox("YotubeHome: " youtubehome_count "`nTwitter: " twitter_count "`nPrivate: " private_count)
+            msgBox_with_timeout("YouTubeHome: " youtubehome_count "`nTwitter: " twitter_count "`nPrivate: " private_count)
             continue
         }
 
@@ -169,9 +169,9 @@ OnTimer(*) {
             && (twitter_count < const_twitter_count
                 || private_count < const_private_count
                 || youtubehome_count < const_youtubehome_count)) {
-            WinActivate("ahk_id " id)
+            WinActivate("ahk_id " id)https://www.youtube.com/
             close_window()
-            MsgBox("YotubeHome: " youtubehome_count "`nTwitter: " twitter_count "`nPrivate: " private_count)
+            msgBox_with_timeout("YouTubeHome: " youtubehome_count "`nTwitter: " twitter_count "`nPrivate: " private_count)
             continue
         }
     }
