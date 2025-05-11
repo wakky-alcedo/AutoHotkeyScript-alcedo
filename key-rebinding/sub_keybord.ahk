@@ -21,6 +21,9 @@ CheckKeyCount1(*) {
     } else if keyCount1 = 2 {
         ; 2回押しのアクションをここに記述
         ; MsgBox("2回押しのアクション")
+        ; ロック
+        ; Send("{LWin}l")
+        DllCall("user32\LockWorkStation") ; ロック
     } else if keyCount1 >= 3 {
         ; 3回押しのアクションをここに記述
         ; MsgBox("3回押しのアクション")
