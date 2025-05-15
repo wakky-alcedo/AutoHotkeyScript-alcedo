@@ -91,8 +91,16 @@ is_browser() {
 }
 
 open_vivaldi(url) {
+  ; [common] fix: vivaldiのフォルダはPCによって違うので，修正
   ; Vivaldiを開く
-  Run("C:\Users\KAWASEMI\AppData\Local\Vivaldi\Application\vivaldi.exe --new-window " url)
+  If A_ComputerName == 'HP-ENVY-X360' {
+    ; ノートPCの場合は、Vivaldiを開く
+    Run("C:\Users\takuj\AppData\Local\Vivaldi\Application\vivaldi.exe --new-window " url)
+  } Else {
+    ; デスクトップの場合は、Vivaldiを開く
+    ; Run("C:\Program Files\Vivaldi\Application\vivaldi.exe --new-window " url)
+    ; Run("C:\Users\KAWASEMI\AppData\Local\Vivaldi\Application\vivaldi.exe --new-window " url)
+  }
 }
 
 get_time() {
