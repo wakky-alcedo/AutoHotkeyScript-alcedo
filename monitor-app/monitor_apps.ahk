@@ -21,8 +21,8 @@ OnTimer(*) {
 
     ; 以下のcountの単位はmin
     const_private_count := 30
-    const_twitter_count := 5
-    const_youtubehome_count := 5
+    const_twitter_count := 3
+    const_youtubehome_count := 3
 
     static private_count := const_private_count
     static twitter_count := const_twitter_count
@@ -169,7 +169,7 @@ OnTimer(*) {
             && (twitter_count < const_twitter_count
                 || private_count < const_private_count
                 || youtubehome_count < const_youtubehome_count)) {
-            WinActivate("ahk_id " id)https://www.youtube.com/
+            WinActivate("ahk_id " id)
             close_window()
             msgBox_with_timeout("YouTubeHome: " youtubehome_count "`nTwitter: " twitter_count "`nPrivate: " private_count)
             continue
@@ -198,9 +198,9 @@ OnTimer(*) {
         private_count += 0.05
     }
     if (!is_twitter_buff && twitter_count < const_twitter_count) {
-        twitter_count += 0.05
+        twitter_count += 0.03
     }
     if (!is_youtubehome_buff && !is_yotube_buff && youtubehome_count < const_youtubehome_count) {
-        youtubehome_count += 0.05
+        youtubehome_count += 0.03
     }
 }
