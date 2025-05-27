@@ -35,6 +35,12 @@ is_private() {
             return true
         }
     }
+
+    ; Edge
+    if (InStr(title, "Microsoft Edge", true) && InStr(title, "InPrivate", true)) {
+        return true
+    }
+
     ; ToolTip(title " " color )
     ; Sleep(3000)
     ; ToolTip("")
@@ -45,7 +51,7 @@ is_twitter(title) {
     ; return (InStr(title, "X - ", true) != 0 && (InStr(title, "ホーム", true) != 0 || InStr(title, "Home", true) != 0))
     ; return (InStr(title, "X - ", true))
     ; return (InStr(title, "ホーム / X", true) != 0 || InStr(title, "Home / X", true) != 0)
-    return (title = "ホーム / X" || title = "Home / X")
+    return (title = "ホーム / X" || title = "Home / X" || title = "X" || title = "話題を検索 / X")
 }
 
 is_temptation(title) {

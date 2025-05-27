@@ -22,7 +22,7 @@ OnTimer(*) {
     ; 以下のcountの単位はmin
     const_private_count := 30
     const_twitter_count := 3
-    const_youtubehome_count := 3
+    const_youtubehome_count := 1
 
     static private_count := const_private_count
     static twitter_count := const_twitter_count
@@ -78,6 +78,12 @@ OnTimer(*) {
         }
 
         ; 深夜の誘惑チェック
+        if (is_deep_night && title == "Prime Video for Windows") {
+            WinActivate("ahk_id " id)
+            close_window()
+            tooltip_with_timeout("閉じるよ誘惑: " title, 5, 2000)
+            continue
+        }
         if (is_deep_night && is_temptation(title)) {
             if (is_log_time) {
                 saveTextToFile("log.txt", title, true)
@@ -198,9 +204,9 @@ OnTimer(*) {
         private_count += 0.05
     }
     if (!is_twitter_buff && twitter_count < const_twitter_count) {
-        twitter_count += 0.03
+        twitter_count += 0.005
     }
     if (!is_youtubehome_buff && !is_yotube_buff && youtubehome_count < const_youtubehome_count) {
-        youtubehome_count += 0.03
+        youtubehome_count += 0.005
     }
 }
