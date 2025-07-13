@@ -4,7 +4,6 @@
 overlayGuis := []
 buttonGui := ""
 isPressed := false
-pressTimer := ""
 maskHeight := 0
 debugTimer := ""
 
@@ -23,13 +22,15 @@ Overlay() {
         MonitorWidth := MonitorRight - MonitorLeft
         MonitorHeight := MonitorBottom - MonitorTop
         
-        ; オーバーレイGUIを作成（+LastFoundを削除してZ-orderを制御）
+        ; オーバーレイGUIを作成（AlwaysOnTopを削除してボタンより下に配置）
         overlayGui := Gui("+AlwaysOnTop +ToolWindow -Caption", "Overlay" . A_Index)
         overlayGui.BackColor := "0x354e94"
         overlayGui.Show("x" . MonitorLeft . " y" . MonitorTop . " w" . MonitorWidth . " h" . MonitorHeight)
         WinSetTransparent(200, overlayGui.Hwnd)
         
         overlayGuis.Push(overlayGui)
+
+        ; WinSetAlwaysOnTop(true, overlayGui.Hwnd) ; オーバーレイはボタンより下に配置
     }
     
     ; オーバーレイの後にボタンを作成（確実に最前面に表示）
@@ -70,34 +71,14 @@ CreateCenterButton() {
 
 ; ボタンが押された時の処理
 OnButtonPress(*) {
-    global isPressed, pressTimer
+    global isPressed
     if (!isPressed) { ; ボタンがまだ押されていない状態で押された時
         isPressed := true
         StartMaskAnimation()
-        ; ボタンを押し続けているかチェック
-        pressTimer := SetTimer(CheckButtonRelease, 50)
     }
 }
 
-; ボタンが離されたかチェック
-CheckButtonRelease() {
-    global isPressed, pressTimer, maskHeight
-    
-    ; マウス左ボタンが押されていない場合
-    if (!GetKeyState("LButton", "P")) {
-        ; 押下状態を解除
-        isPressed := false
-        
-        ; プレスタイマーを停止
-        if (pressTimer) {
-            SetTimer(pressTimer, 0)  ; タイマーを停止
-            pressTimer := ""         ; タイマー変数をクリア
-        }
-        
-        ; マスクを元に戻す（オーバーレイを復元）
-        ResetMask()
-    }
-}
+
 
 ; マスクアニメーション開始
 StartMaskAnimation() {
@@ -109,8 +90,11 @@ AnimateMask() {
     global overlayGuis, maskHeight, isPressed
     
     ; ボタンが離されている場合はアニメーション停止
-    if (!isPressed) {
+    ; if (!isPressed) {
+    if (!GetKeyState("LButton", "P")) {
         SetTimer(AnimateMask, 0)  ; タイマーを停止
+        ResetMask()
+        isPressed := false  ; ボタンの押下状態をリセット
         return
     }
     
@@ -162,7 +146,7 @@ UpdateMask() {
                 ; オーバーレイのサイズを変更（上部のみ表示）
                 gui.Show("x" . MonitorLeft . " y" . MonitorTop . " w" . MonitorWidth . " h" . newHeight)
             } else {
-                ; 完全に透明にする場合はGUIを非表示
+                ; 完全に透明にする場合はGU, isPressedIを非表示
                 gui.Hide()
             }
         }
@@ -171,7 +155,7 @@ UpdateMask() {
 
 ; マスクをリセット
 ResetMask() {
-    global overlayGuis, maskHeight, buttonGui, isPressed
+    global overlayGuis, maskHeight, buttonGui
     
     ; マスクの高さを0にリセット
     maskHeight := 0
@@ -190,13 +174,12 @@ ResetMask() {
         gui.Show("x" . MonitorLeft . " y" . MonitorTop . " w" . MonitorWidth . " h" . MonitorHeight)
     }
     
-    ; シンプルなボタン表示維持（チカチカ防止）
-    ; ボタンは+AlwaysOnTopで作成されているため、自動的に最前面を維持
+    ; ボタンを確実に最前面に移動（オーバーレイ復元後）
     if (buttonGui) {
-        buttonGui.Show()  ; ボタンGUIを表示
+        WinSetAlwaysOnTop(true, buttonGui.Hwnd)
     }
 
-    isPressed := false  ; ボタンの押下状態をリセット
+    ; isPressed := false  ; ボタンの押下状態をリセット
 }
 
 ; デバッグ用：自動終了
@@ -212,12 +195,9 @@ AutoClose() {
 
 ; 終了処理の関数
 ClearOverlay() {
-    global overlayGuis, buttonGui, pressTimer, debugTimer
+    global overlayGuis, buttonGui, debugTimer
     
     ; タイマーを停止
-    if (pressTimer) {
-        SetTimer(pressTimer, 0)
-    }
     if (debugTimer) {
         SetTimer(debugTimer, 0)
     }
