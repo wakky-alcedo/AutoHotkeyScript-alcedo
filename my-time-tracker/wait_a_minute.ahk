@@ -6,9 +6,21 @@ buttonGui := ""
 isPressed := false
 maskHeight := 0
 debugTimer := ""
+DEBUG_MODE := true  ; デバッグフラグ（true: デバッグ有効, false: デバッグ無効）
+
+; デバッグ情報表示関数
+DebugLog(message) {
+    global DEBUG_MODE
+    if (DEBUG_MODE) {
+        ; デバッグメッセージをツールチップで表示
+        ToolTip("[DEBUG] " . message, 10, 10)
+        SetTimer(() => ToolTip(), -2000)  ; 2秒後に自動で消去
+    }
+}
 
 Overlay() {
-    global overlayGuis, buttonGui, debugTimer
+    global overlayGuis, buttonGui, debugTimer, DEBUG_MODE
+    DebugLog("Overlay開始 - モニター数: " . SysGet(80))
     MonitorCount := SysGet(80) ; SM_CMONITORS
     
     ; 各モニターにオーバーレイを作成
@@ -35,9 +47,13 @@ Overlay() {
     
     ; オーバーレイの後にボタンを作成（確実に最前面に表示）
     CreateCenterButton()
+    DebugLog("ボタン作成完了")
     
     ; デバッグ用：20秒後に自動終了
-    debugTimer := SetTimer(AutoClose, 20000)
+    if (DEBUG_MODE) {
+        debugTimer := SetTimer(AutoClose, 20000)
+        DebugLog("デバッグタイマー開始: 20秒後に自動終了")
+    }
 }
 
 ; 中央ボタンを作成
@@ -72,8 +88,10 @@ CreateCenterButton() {
 ; ボタンが押された時の処理
 OnButtonPress(*) {
     global isPressed
+    DebugLog("ボタンが押されました")
     if (!isPressed) { ; ボタンがまだ押されていない状態で押された時
         isPressed := true
+        DebugLog("アニメーション開始")
         StartMaskAnimation()
     }
 }
@@ -92,6 +110,7 @@ AnimateMask() {
     ; ボタンが離されている場合はアニメーション停止
     ; if (!isPressed) {
     if (!GetKeyState("LButton", "P")) {
+        DebugLog("ボタンが離されました - アニメーション停止")
         SetTimer(AnimateMask, 0)  ; タイマーを停止
         ResetMask()
         isPressed := false  ; ボタンの押下状態をリセット
@@ -106,9 +125,16 @@ AnimateMask() {
     ; マスクの高さを段階的に増加（8ピクセルずつ）
     maskHeight += 8
     
+    ; デバッグ情報：進行状況
+    if (DEBUG_MODE && Mod(maskHeight, 40) == 0) {  ; 5フレームごとに表示
+        progress := Round((maskHeight / MonitorHeight) * 100)
+        DebugLog("アニメーション進行: " . progress . "% (高さ: " . maskHeight . ")")
+    }
+    
     ; アニメーション完了判定
     if (maskHeight >= MonitorHeight) {
         ; アニメーション完了時の処理
+        DebugLog("アニメーション完了 - 終了処理開始")
         SetTimer(AnimateMask, 0)  ; タイマーを停止
         Sleep(500) ; 少し待って視覚的効果を演出
         ClearOverlay()  ; 全てのGUIを閉じる
@@ -157,6 +183,7 @@ UpdateMask() {
 ResetMask() {
     global overlayGuis, maskHeight, buttonGui
     
+    DebugLog("マスクリセット開始")
     ; マスクの高さを0にリセット
     maskHeight := 0
     
@@ -177,6 +204,7 @@ ResetMask() {
     ; ボタンを確実に最前面に移動（オーバーレイ復元後）
     if (buttonGui) {
         WinSetAlwaysOnTop(true, buttonGui.Hwnd)
+        DebugLog("ボタンを最前面に移動")
     }
 
     ; isPressed := false  ; ボタンの押下状態をリセット
@@ -197,11 +225,14 @@ AutoClose() {
 ClearOverlay() {
     global overlayGuis, buttonGui, debugTimer
     
+    DebugLog("終了処理開始")
     ; タイマーを停止
     if (debugTimer) {
         SetTimer(debugTimer, 0)
+        DebugLog("デバッグタイマー停止")
     }
     SetTimer(AnimateMask, 0)
+    DebugLog("アニメーションタイマー停止")
     
     ; すべてのGUIを閉じる
     for gui in overlayGuis {
