@@ -1,5 +1,8 @@
 #Requires AutoHotkey v2.0
 
+; UIAライブラリを読み込む
+#Include "UIA.ahk"
+
 close_tab() {
     Send("^w")
     ToolTip("Close Tab!!!")
@@ -30,10 +33,24 @@ is_private() {
 
     ; Chrom
     if (InStr(title, "Chrom", true)) {
-        color := PixelGetColor(50, 40)
-        if (color == 0x3C3C3C) {
-            return true
+        try {
+            ; UIAライブラリを使用してウィンドウの要素を取得
+            windowElement := UIA.ElementFromHandle(WinExist("A"))
+            ; ウィンドウの直下にある全ての子要素を取得
+            childElements := windowElement.FindAll()
+            ; 各要素の情報をリストに追加
+            for element in childElements {
+                ; "シークレット" という文字が含まれていないか
+                if InStr(element.Name, "シークレット") {
+                    return true
+                }
+            }
+        } catch Error as e {
+            ToolTip("UIAエラー: " e.Message, , , 1)
+            SetTimer(() => ToolTip("", , , 1), -2000)
+            return false
         }
+
     }
 
     ; Edge
@@ -55,6 +72,7 @@ is_twitter(title) {
 }
 
 is_temptation(title) {
+        ; 動画系
     return (InStr(title, "Prime Video", true) != 0
         || InStr(title, "DMM TV", true) != 0
         || InStr(title, "Netflix", true) != 0
@@ -65,7 +83,24 @@ is_temptation(title) {
         || InStr(title, "Paravi", true) != 0
         || InStr(title, "ABEMA", true) != 0
         || InStr(title, "Rakuten TV", true) != 0
+        ; 漫画系
+        || InStr(title, "少年ジャンプ", true) != 0
+        || InStr(title, "マンガUP!", true) != 0
+        || InStr(title, "LINEマンガ", true) != 0
+        || InStr(title, "ピッコマ", true) != 0
+        || InStr(title, "Kindle", true) != 0
+        || InStr(title, "BookLive", true) != 0
+        || InStr(title, "コミックシーモア", true) != 0
+        || InStr(title, "マンガBANG!", true) != 0
+        || InStr(title, "マンガPark", true) != 0
+        || InStr(title, "マンガボックス", true) != 0
+        || InStr(title, "マンガZERO", true) != 0
+        ; なろう系
         || InStr(title, "薬屋のひとりごと", true) != 0
+        || InStr(title, "日本国召喚", true) != 0
+        || InStr(title, "転校先の清楚可憐な美少女が、", true) != 0
+        || InStr(title, "お隣の天使様にいつの間にか駄目人間にされていた件", true)
+        || InStr(title, "転生したらスライムだった件", true) != 0
     )
 }
 
