@@ -12,8 +12,17 @@ tooltip_with_timeout(msg, whichToolTip := 1, timeout := 2000, x := 0, y := 0) {
   Tooltip(msg, x, y, whichToolTip) ; Tooltipを表示
 }
 
+msgBox_close(title) {
+  try {
+    WinClose(title)
+  } catch {
+    ; エラーハンドリング
+  }
+}
+
 msgBox_with_timeout(msg, title := "MyTitle", timeout := 2000) {
-  SetTimer(() => WinClose(title), -timeout) ; 指定時間後にMsgBoxを閉じる
+  ; WinClose(title)はtry-catchで囲む
+  SetTimer(() => msgBox_close(title), -timeout) ; 指定時間後にMsgBoxを閉じる
   MsgBox(msg, title)
 }
 
