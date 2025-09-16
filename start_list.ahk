@@ -6,6 +6,7 @@
 #Include "*i %A_ScriptDir%\other\today.ahk"
 #Include "*i %A_ScriptDir%\other\usb_com_notify.ahk"
 #Include "*i %A_ScriptDir%\other\wheel_accel.ahk"
+#Include "*i %A_ScriptDir%\other\timer.ahk"
 
 #Include "*i %A_ScriptDir%\key-rebinding\brackets.ahk"
 #Include "*i %A_ScriptDir%\key-rebinding\each_apps.ahk"
