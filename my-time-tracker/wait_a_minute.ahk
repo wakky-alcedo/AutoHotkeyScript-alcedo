@@ -6,7 +6,7 @@ buttonGui := ""
 isPressed := false
 maskHeight := 0
 debugTimer := ""
-DEBUG_MODE := true  ; デバッグフラグ（true: デバッグ有効, false: デバッグ無効）
+DEBUG_MODE := false  ; デバッグフラグ（true: デバッグ有効, false: デバッグ無効）
 
 ; デバッグ情報表示関数
 DebugLog(message) {
@@ -37,6 +37,11 @@ Overlay() {
         ; オーバーレイGUIを作成（AlwaysOnTopを削除してボタンより下に配置）
         overlayGui := Gui("+AlwaysOnTop +ToolWindow -Caption", "Overlay" . A_Index)
         overlayGui.BackColor := "0x354e94"
+        
+        ; 透明なテキストコントロールを全面に配置してクリックイベントを捕捉
+        overlayText := overlayGui.Add("Text", "x0 y0 w" . MonitorWidth . " h" . MonitorHeight . " Background" . overlayGui.BackColor)
+        overlayText.OnEvent("Click", OnOverlayClick)
+        
         overlayGui.Show("x" . MonitorLeft . " y" . MonitorTop . " w" . MonitorWidth . " h" . MonitorHeight)
         WinSetTransparent(200, overlayGui.Hwnd)
         
@@ -83,6 +88,31 @@ CreateCenterButton() {
     
     buttonGui.Show("x" . buttonX . " y" . buttonY . " w" . buttonSize . " h" . buttonSize)
     WinSetTransparent(220, buttonGui.Hwnd)
+}
+
+; オーバーレイがクリックされた時の処理（PCスリープ）
+OnOverlayClick(*) {
+    DebugLog("オーバーレイがクリックされました - PCをスリープ状態にします")
+    
+    ; 確認ダイアログを表示（デバッグモード時のみ）
+    if (DEBUG_MODE) {
+        result := MsgBox("PCをスリープ状態にしますか？", "スリープ確認", "YesNo Icon?")
+        if (result == "No") {
+            DebugLog("スリープがキャンセルされました")
+            return
+        }
+    }
+
+    ; ExitAPPのためのタイマーを設定
+    SetTimer(ExitAppFunc, -1000)  ; 1秒後にExitAppFuncを呼び出す
+    
+    ; PCをスリープ状態にする
+    DebugLog("PCをスリープ状態にします")
+    DllCall("PowrProf.dll\SetSuspendState", "Int", 0, "Int", 0, "Int", 0)
+}
+
+ExitAppFunc() {
+    ExitApp
 }
 
 ; ボタンが押された時の処理
