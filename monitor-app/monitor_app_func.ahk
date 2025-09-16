@@ -111,3 +111,19 @@ isTextInFile(filePath, searchText) {
     opened_file.Close()
     return false
 }
+
+/**
+ * ウィンドウをアクティブ化する
+ * @param {String} title ウィンドウのタイトルまたは "ahk_id <ウィンドウID>"
+ * @returns {Integer} 成功したら true、失敗したら false
+ */
+activateWindow(title) {
+    try {
+        WinActivate(title)
+        return true
+    } catch Error as e {
+        ToolTip("WinActivateエラー: " e.Message, , , 1)
+        SetTimer(() => ToolTip("", , , 1), -2000)
+        return false
+    }
+}

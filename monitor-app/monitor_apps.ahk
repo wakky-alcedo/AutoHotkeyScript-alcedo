@@ -72,14 +72,14 @@ OnTimer(*) {
         ; 各要素のチェック
         ; Twitterのチェック
         if (is_deep_night && is_twitter(title)) {
-            WinActivate("ahk_id " id)
+            activateWindow("ahk_id " id)
             close_tab()
             continue
         }
 
         ; 深夜の誘惑チェック
         if (is_deep_night && title == "Prime Video for Windows") {
-            WinActivate("ahk_id " id)
+            activateWindow("ahk_id " id)
             close_window()
             tooltip_with_timeout("閉じるよ誘惑: " title, 5, 2000)
             continue
@@ -89,7 +89,7 @@ OnTimer(*) {
                 saveTextToFile("log.txt", title, true)
             } else {
                 if (!isTextInFile("log.txt", title)) {
-                    WinActivate("ahk_id " id)
+                    activateWindow("ahk_id " id)
                     close_tab()
                     tooltip_with_timeout("閉じるよ誘惑: " title, 5, 2000)
                     continue
@@ -103,10 +103,10 @@ OnTimer(*) {
             ; ホーム画面
             if (is_youtube_home(title)) {
                 if (youtubehome_count <= 0 || is_deep_night || A_ComputerName == 'HP-ENVY-X360'){ ; 深夜の場合もしくは，カウントが0以下の場合は閉じる
-                    WinActivate("ahk_id " id)
+                    activateWindow("ahk_id " id)
                     close_tab()
                 } else if (is_window_on_primary_monitor(id)) { ; メインディスプレイだったら，閉じる & ノートPCでも，容赦しない
-                    WinActivate("ahk_id " id)
+                    activateWindow("ahk_id " id)
                     close_tab()
                     msgBox_with_timeout("Youtubeはサブモニタで開きましょう", "5", 2000)
                     ; tooltip_with_timeout("Youtubeはサブモニタで開きましょう", 5, 2000)
@@ -120,11 +120,11 @@ OnTimer(*) {
             ; 登録チャンネル
             if (InStr(title, "登録チャンネル - YouTube", true) != 0) {
                 if (is_deep_night) {
-                    WinActivate("ahk_id " id)
+                    activateWindow("ahk_id " id)
                     close_tab()
                     continue
                 } else if (youtubehome_count <= 0 || (is_window_on_primary_monitor(id) && A_ComputerName != 'HP-ENVY-X360')) { ; メインディスプレイだったら，閉じる
-                    WinActivate("ahk_id " id)
+                    activateWindow("ahk_id " id)
                     close_tab()
                     msgBox_with_timeout("Youtubeはサブモニタで開きましょう", "警告", 2000)
                     ; tooltip_with_timeout("Youtubeはサブモニタで開きましょう", 5, 2000)
@@ -137,7 +137,7 @@ OnTimer(*) {
                 saveTextToFile("log.txt", title, true)
             } else if (is_deep_night) {
                 if (!isTextInFile("log.txt", title)) {
-                    WinActivate("ahk_id " id)
+                    activateWindow("ahk_id " id)
                     close_tab()
                     tooltip_with_timeout("閉じるよYoutube: " title, 5, 2000)
                     continue
@@ -149,7 +149,7 @@ OnTimer(*) {
         ; Twitterのチェック
         if (is_twitter(title)) {
             if (twitter_count <= 0) {
-                WinActivate("ahk_id " id)
+                activateWindow("ahk_id " id)
                 close_tab()
             } else {
                 twitter_count -= 0.1
@@ -162,7 +162,7 @@ OnTimer(*) {
         ; システム系のチェック
         ; 深夜のタスクスケジューラチェック
         if (is_deep_night && InStr(title, "タスク スケジューラ", true)) {
-            WinActivate("ahk_id " id)
+            activateWindow("ahk_id " id)
             close_window()
             ; ↓これを有効化しておかないと，うまく閉じれない
             ; https://syunsetsu.hatenablog.com/entry/2022/09/11/113247
@@ -175,7 +175,7 @@ OnTimer(*) {
             && (twitter_count < const_twitter_count
                 || private_count < const_private_count
                 || youtubehome_count < const_youtubehome_count)) {
-            WinActivate("ahk_id " id)
+            activateWindow("ahk_id " id)
             close_window()
             msgBox_with_timeout("YouTubeHome: " youtubehome_count "`nTwitter: " twitter_count "`nPrivate: " private_count)
             continue
@@ -186,7 +186,7 @@ OnTimer(*) {
     if (is_private()) {
         if (private_count <= 0 or is_deep_night or is_youtube_home(title)) {
             ; ウィンドウを閉じる処理
-            WinActivate("ahk_id " id)
+            activateWindow("ahk_id " id)
             close_window()
             private_count := 0
         } else {
