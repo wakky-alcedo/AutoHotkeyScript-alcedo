@@ -16,7 +16,9 @@ F5::
         MyGui.Destroy()
     Send "{F5}" ; スライドショーを開始
     ; ★修正点1: スライドショーへの移行を安定させるため、わずかに待機
+    Send "^l" ; レーザーポインタモードに切り替え
     Sleep 200
+
     MyGui := Gui()
     MyGui.Opt("+AlwaysOnTop -Caption +ToolWindow")
     MyGui.BackColor := "000000"
@@ -34,22 +36,36 @@ F5::
 
 #HotIf WinActive("ahk_class screenClass") OR WinActive("ahk_class PodiumParent") ; スライドショーがアクティブな場合のみ有効
 ; ラップタイム記録用のホットキー
-LButton::
+; LButton::
 Right::
 Left::
 Up::
 Down::
-Space::
-Enter::
+; Space::
+; Enter::
 {
     RecordLapTime()
     Send "{" A_ThisHotkey "}"  ; 元のキーを送信
 }
 
+; スクロール
+WheelUp::
+{
+    RecordLapTime()
+    Send "{Left}"
+}
+
+WheelDown::
+MButton::
+{
+    RecordLapTime()
+    Send "{Right}"
+}
+
 Esc::
 {
-    Global MyGui
     Send "{Esc}"
+    Global MyGui
     SetTimer(UpdateTimer, 0) ; タイマーを停止
     if IsSet(MyGui)
         MyGui.Destroy()
