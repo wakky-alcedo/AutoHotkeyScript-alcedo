@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 
 ; UIAライブラリを読み込む
-#Include "UIA.ahk"
+#Include "../UIA.ahk"
 
 close_tab() {
     Send("^w")
@@ -50,7 +50,6 @@ is_private() {
             SetTimer(() => ToolTip("", , , 1), -2000)
             return false
         }
-
     }
 
     ; Edge
