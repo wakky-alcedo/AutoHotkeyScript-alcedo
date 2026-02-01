@@ -25,6 +25,8 @@ if search_plugins()  ; プラグインが検出されたらスクリプトをリ
 
 ; 練習用キー無効化
 hotkeys_define(keys_practice, 'keys_practice', 'On') ; 無効化するキーを動的に設定
+; NumLock有効で固定する
+SetNumLockState "AlwaysOn"
 
 ; ボリュームミュート
 volume_mute()  ; ノートPCのときミュートにする
