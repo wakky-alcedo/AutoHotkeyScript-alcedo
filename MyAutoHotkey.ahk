@@ -23,8 +23,6 @@
 if search_plugins()  ; プラグインが検出されたらスクリプトをリロード
     Reload
 
-; 練習用キー無効化
-hotkeys_define(keys_practice, 'keys_practice', 'On') ; 無効化するキーを動的に設定
 ; NumLock有効で固定する
 SetNumLockState "AlwaysOn"
 
@@ -55,13 +53,6 @@ search_plugins() {
     file.Write(plugin_files) ; プラグインリストを書き込む
     file.Close()
     return 1
-}
-
-keys_practice(*) {
-    static count := 0
-    count++
-    if (count > 1)
-        my_tooltip_function('そのキーは禁止です (' . count - 1 . '回目)', 1000) ; キーが禁止された際にツールチップを表示
 }
 
 volume_mute(*) {
