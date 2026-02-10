@@ -23,31 +23,17 @@ F5::
     MyGui.Opt("+AlwaysOnTop -Caption +ToolWindow")
     MyGui.BackColor := "000000"
     MyGui.SetFont("s40", "Arial")
-    TimerText := MyGui.Add("Text", "cFFFFFF x0 y0 w180 h70 Center", "00:00")
+    TimerText := MyGui.Add("Text", "cFFFFFF x0 y0 w180 h70 Center", "--:--")
     MyGui.Show("NA w180 h70 x" (A_ScreenWidth - 220) " y" (A_ScreenHeight - 70))
-    StartTime := A_TickCount
-    ; ToolTip "タイマー設定前"
-    SetTimer(UpdateTimer, 500) ; タイマーを開始
-    ; ToolTip "タイマー設定後"
-    UpdateTimer() ; 初回実行
-    ; ToolTip "開始"
+    ; StartTime は最初のキー押下時に設定される
+    SetTimer(UpdateTimer, 500) ; 表示更新タイマーを開始（最初のキー押下を待つ）
 }
 #HotIf
 
 #HotIf WinActive("ahk_class screenClass") OR WinActive("ahk_class PodiumParent") ; スライドショーがアクティブな場合のみ有効
-; ラップタイム記録用のホットキー
-; LButton::
+; ページ戻り
 Right::
-Left::
 Up::
-Down::
-; Space::
-; Enter::
-{
-    RecordLapTime()
-    Send "{" A_ThisHotkey "}"  ; 元のキーを送信
-}
-
 ; WheelUp::
 PgUp::
 Ctrl::
@@ -56,13 +42,19 @@ Ctrl::
     Send "{PgUp}"
 }
 
+; ページ送り（ラップタイム記録）
+Left::
+Down::
 ; WheelDown::
+; LButton::
 ; MButton::
+; Space::
+; Enter::
 PgDn::
 Shift::
 {
-    RecordLapTime()
-    Send "{PgDn}"
+    if !RecordLapTime()  ; タイマー開始時以外のみキーを送信
+        Send "{PgDn}"
 }
 
 Esc::
@@ -88,6 +80,11 @@ UpdateTimer()
     {
         ; if not IsSet(MyGui)
         ;     return
+        if !IsSet(StartTime)
+        {
+            TimerText.Text := "--:--"
+            return
+        }
         ElapsedTime := (A_TickCount - StartTime) // 1000
         Minutes := Format("{:02d}", ElapsedTime // 60)
         Seconds := Format("{:02d}", Mod(ElapsedTime, 60))
@@ -114,6 +111,15 @@ RecordLapTime()
     Global StartTime
     Global LapTimes
     
+    ; タイマーが未開始の場合、この時点で開始
+    if !IsSet(StartTime)
+    {
+        StartTime := A_TickCount
+        ToolTip "タイマー開始"
+        SetTimer(() => ToolTip(), -800)  ; 0.8秒後にToolTipを消去
+        return true  ; 最初のキー押下はラップタイムとして記録せず、キー送信もスキップ
+    }
+    
     ElapsedTime := (A_TickCount - StartTime) // 1000
     Minutes := Format("{:02d}", ElapsedTime // 60)
     Seconds := Format("{:02d}", Mod(ElapsedTime, 60))
@@ -121,8 +127,9 @@ RecordLapTime()
     LapTimes.Push(Minutes ":" Seconds)
     
     ; 短時間ラップタイムを表示
-    ToolTip "Lap " LapTimes.Length ": " Minutes ":" Seconds
-    SetTimer(() => ToolTip(), -1500)  ; 1.5秒後にToolTipを消去
+    ; ToolTip "Lap " LapTimes.Length ": " Minutes ":" Seconds
+    ; SetTimer(() => ToolTip(), -1500)  ; 1.5秒後にToolTipを消去
+    return false  ; ラップタイム記録時はキーを送信
 }
 
 ShowLapTimes()
@@ -144,10 +151,14 @@ ShowLapTimes()
 StopTimerAndCleanup()
 {
     Global MyGui
+    Global StartTime
     SetTimer(UpdateTimer, 0) ; タイマーを停止
     try
         if IsSet(MyGui)
-        MyGui.Destroy()
+            MyGui.Destroy()
+    ; StartTime をリセット
+    if IsSet(StartTime)
+        Unset(&StartTime)
     ShowLapTimes()  ; ラップタイムを表示
     ; ToolTip "終了"
 }
