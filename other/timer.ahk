@@ -48,29 +48,31 @@ Down::
     Send "{" A_ThisHotkey "}"  ; 元のキーを送信
 }
 
-; スクロール
-WheelUp::
+; WheelUp::
+PgUp::
+Ctrl::
 {
-    RecordLapTime()
-    Send "{Left}"
+    ; RecordLapTime()
+    Send "{PgUp}"
 }
 
-WheelDown::
-MButton::
+; WheelDown::
+; MButton::
+PgDn::
+Shift::
 {
     RecordLapTime()
-    Send "{Right}"
+    Send "{PgDn}"
 }
 
 Esc::
 {
     Send "{Esc}"
-    Global MyGui
-    SetTimer(UpdateTimer, 0) ; タイマーを停止
-    if IsSet(MyGui)
-        MyGui.Destroy()
-    ShowLapTimes()  ; ラップタイムを表示
-    ; ToolTip "終了"
+    Sleep 200
+    Send "{Esc}"  ; スライドショーを終了するためにもう一度Escを送信
+    Sleep 200
+    StopTimerAndCleanup()
+    ; Send "{Esc}"  ; スライドショーを終了
 }
 #HotIf
 ; ====================================================================================
@@ -98,6 +100,12 @@ UpdateTimer()
     {
         ; エラーが発生した場合の処理
         ToolTip "タイマーエラー: " e.Message
+    }
+
+    ; 画面を確認し，スライドショーモードではなくなったら自動終了
+    if !WinActive("ahk_class screenClass") AND !WinActive("ahk_class PodiumParent")
+    {
+        StopTimerAndCleanup()
     }
 }
 
@@ -131,4 +139,15 @@ ShowLapTimes()
     }
     
     MsgBox LapText, "Lap Times", "OK"
+}
+
+StopTimerAndCleanup()
+{
+    Global MyGui
+    SetTimer(UpdateTimer, 0) ; タイマーを停止
+    try
+        if IsSet(MyGui)
+        MyGui.Destroy()
+    ShowLapTimes()  ; ラップタイムを表示
+    ; ToolTip "終了"
 }
