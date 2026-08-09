@@ -9,7 +9,7 @@ Ins & Left::Send("{WheelUp}")
 ; ins+→　で　スクロール
 Ins & Right::Send("{WheelDown}")
 
-
-
-
 Home::Send("{Tab}")
+
+; 左上の電卓マークのキー
+Launch_App2::Send("{Esc}")

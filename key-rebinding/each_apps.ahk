@@ -2,6 +2,7 @@
 ; #Include A_ScriptDir '\..\PluginList.ahk'  ; プラグインをインクルード
 ; #Include A_ScriptDir '\..\Plugins\common_functions.ahk'
 
+; -----------------------------------------------------------------------
 ; Discord
 #HotIf WinActive("ahk_exe Discord.exe") ; Discordを開いている時だけ
 
@@ -35,6 +36,7 @@ Alt & NumpadEnter:: {                   ; Alt + NumpadEnter
 
 #HotIf ; ホットキー条件の終了
 
+; -----------------------------------------------------------------------
 ; エクスプローラ
 #HotIf WinActive("ahk_class CabinetWClass") ; エクスプローラがアクティブな場合
 
@@ -57,6 +59,7 @@ Append(*){
 
 #HotIf ; ホットキー条件の終了
 
+; -----------------------------------------------------------------------
 ; Excel
 #HotIf WinActive("ahk_exe EXCEL.exe") ; Excelがアクティブな場合
 
@@ -69,6 +72,7 @@ Append(*){
 
 #HotIf ; ホットキー条件の終了
 
+; -----------------------------------------------------------------------
 ; LINE
 #HotIf WinActive("ahk_exe LINE.exe") ; LINEがアクティブな場合
 
@@ -81,6 +85,7 @@ Append(*){
 
 #HotIf ; ホットキー条件の終了
 
+; -----------------------------------------------------------------------
 ; ブラウザ
 #HotIf is_browser() ; ブラウザがアクティブな場合
 
@@ -133,4 +138,59 @@ Alt & NumpadEnter:: {                   ; Alt + NumpadEnter
     }
 }
 
-#HotIf 
+; -----------------------------------------------------------------------
+; Vivaldi
+#HotIf WinActive("ahk_exe Vivaldi.exe") ; Vivaldiがアクティブな場合
+^k::{ ; Open search bar 
+    Send("^c") ; Copy
+    Send("^k") ; Open search bar
+    Sleep(50) ; Wait for the search bar to open
+    Send("^v") ; Paste
+    Send("^a") ; Select all
+}
+
+; ^j::{ ; Open Transfer panel
+;     Send("^c") ; Copy
+;     Send("^j") ; Open downloads
+;     Sleep(100) ; Wait for the panel to open
+;     Send("^v") ; Paste
+;     Send("{Enter}") ; Confirm the search
+; }
+
+#Hotif ; Vivaldi
+#HotIf ; ブラウザがアクティブな場合
+
+; -----------------------------------------------------------------------
+#HotIf WinActive("ahk_exe Notion.exe") ; Notionがアクティブな場合
+
+^f::Send("^k") ; 検索
+^WheelUp::Send("^+{vkBBsc027}") ; 拡大
+^WheelDown::Send("^-") ; 縮小
+^.::Send("^+5") ; リスト
+^/::Send("^+6") ; 番号付きリスト
+#HotIf ; Notion
+
+; -----------------------------------------------------------------------
+; TeraTerm
+#HotIf WinActive("ahk_exe ttermpro.exe") ; TeraTermがアクティブ場合
+; スペースキーを押されたときに，alt+Iとalt+nを交互に送信する
+Space:: {
+    static toggle := false
+    if (toggle) {
+        Send("!i") ; alt + i
+    } else {
+        Send("!n") ; alt + n
+        Send("{Enter}")
+    }
+    toggle := !toggle
+}
+#HotIf ; TeraTerm
+
+; -----------------------------------------------------------------------
+; Inventor
+#HotIf WinActive("ahk_exe Inventor.exe") ; Inventorがアクティブな場合
+Ins::Send("!v")     ; 表示設定
+Home::Send("{F7}")   ; スケッチのとき断面表示
+PgUp::Send("!E")   ; スケッチのときスケッチ終了
+End::Shift
+#HotIf ; Inventor
