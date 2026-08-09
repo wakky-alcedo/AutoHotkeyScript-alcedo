@@ -22,7 +22,7 @@ WheelDown::Scroll(A_EventInfo, "Down")
 Scroll(eventInfo, direction)
 {
     local scrollAmount
-    local timeSince := A_TimeSincePriorHotkey ?? 9999  ; 初回実行時や変数が空の場合のエラーを防止
+    local timeSince := IsNumber(A_TimeSincePriorHotkey) ? A_TimeSincePriorHotkey : 9999
 
     ; eventInfoを表示
     ; ToolTip("eventInfo: " . eventInfo, 10, 10)
