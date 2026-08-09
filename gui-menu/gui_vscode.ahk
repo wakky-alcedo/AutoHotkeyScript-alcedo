@@ -47,17 +47,17 @@ Table(*)                => SendCmdMSGUI("table")
 
 ; 短縮キー
 #HotIf InStr(WinGetTitle("A"), ".md") && InStr(WinGetTitle("A"), "Visual Studio Code")
-^b::Bold()
-^i::Italic()
-; ^s::Strikethrough()
-^q::Citations()
-^m::Formula()
-^`::InlineCode()
-^k::CodeBlock()
-^.::BulletPoints()
-^,::NumberedBulletPoints()
-^h::Checkboxs()
-^t::Table()
+; ^b::Bold()
+; ^i::Italic()
+; ; ^s::Strikethrough()
+; ^q::Citations()
+; ^m::Formula()
+; ^`::InlineCode()
+; ^k::CodeBlock()
+; ^.::BulletPoints()
+; ^,::NumberedBulletPoints()
+; ^h::Checkboxs()
+; ^t::Table()
 #HotIf
 
 ; 拡張機能：Calculator
