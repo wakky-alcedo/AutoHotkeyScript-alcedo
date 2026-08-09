@@ -40,13 +40,14 @@ CheckKeyCount1(*) {
         ; 3回押しのアクションをここに記述
         ; MsgBox("3回押しのアクション")
         ; DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0) ; スリープ
+        DllCall("PowrProf.dll\SetSuspendState", "Int", 0, "Int", 0, "Int", 0)
         ; DllCall("PowrProf\SetSuspendState", "int", 1, "int", 0, "int", 0) ; ハイバネート 休止状態
         ; スリープショートカット
-        Send("#x")
-        Sleep(100)
-        Send("u")
-        Sleep(100)
-        Send("s")
+        ; Send("#x")
+        ; Sleep(100)
+        ; Send("u")
+        ; Sleep(100)
+        ; Send("s")
     }
 
     ; カウントをリセット

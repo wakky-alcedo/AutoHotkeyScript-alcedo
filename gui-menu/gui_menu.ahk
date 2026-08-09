@@ -19,6 +19,9 @@
 ; LWin & Shift & Ctrl:: 
 ; Ctrl & Shift & LWin::
 {
+    ; ctrl shift alt を上げる
+    Send("{Ctrl Up}{Shift Up}{Alt Up}{LWin Up}")
+
     SetTimer(GuiClose, -5000)  ; 5秒後にGuiCloseを呼び出す
     global MyGui  ; 関数内でMyGuiをグローバルに宣言
 
