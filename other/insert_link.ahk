@@ -155,6 +155,8 @@ paset_link() {
         send_text(copyed_link) ; リンクを貼り付け
         Sleep(500)
         Send("{Enter}") ; 確定
+    } Else if (active_exe = "WindowsTerminal.exe" || active_exe = "Code.exe" || active_exe = "Cursor.exe" || active_exe = "ahk_exe Code.exe") { ; ターミナル, VSCode, Cursor
+        Send("^+v") ; そのまま送る
     } Else { ; その他
         ; Send("[")
         ; ; タイトルを貼り付け
