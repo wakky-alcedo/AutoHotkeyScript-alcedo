@@ -4,8 +4,8 @@
 
 ; ctrl+;
 ; ^`;:: {
-; ^vkBB::{ ; ;のこと
-^vkBA::{ ; :のこと（どうやらPowerToysよりこっちが優先されてしまうらしいのでこうした）
+; ^vkBA::{ ; :のこと
+^vkBB::{ ; ;のこと（どうやらPowerToysよりこっちが優先されてしまうらしいのでこうした）
     TimeString := FormatTime(, "yyyy/MM/dd")
     send_text(TimeString)
     Return
@@ -14,7 +14,7 @@
 ; ctrl+:
 ; ^vkBA::{
 ; ^`:::{
-^]::{
+^]::{ ; （どうやらPowerToysよりこっちが優先されてしまうらしいのでこうした）
     TimeString := FormatTime(, "HH:mm")
     send_text(TimeString)
     Return
