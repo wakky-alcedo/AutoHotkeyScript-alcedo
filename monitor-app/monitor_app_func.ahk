@@ -70,6 +70,49 @@ is_twitter(title) {
     return (title = "ホーム / X" || title = "Home / X" || title = "X" || title = "話題を検索 / X")
 }
 
+is_facebook_reel(title, id := 0) {
+    ; タイトルに "Reels"/"リール" が含まれる場合（Reels一覧ページなど）
+    if ((InStr(title, "Reels", true) != 0 || InStr(title, "リール", true) != 0) && InStr(title, "Facebook", true) != 0) {
+        return true
+    }
+    ; 個別のリール（/reel/<数字>）はタイトルにReelsを含まないため，アドレスバーのURLで判定
+    if (id && is_chromium_browser(id)) {
+        url := get_address_bar_url(id)
+        if (InStr(url, "facebook.com/reel", true) != 0) {
+            return true
+        }
+    }
+    return false
+}
+
+; Chromium系ブラウザ（Vivaldi/Chrome/Edge）のウィンドウかどうか
+is_chromium_browser(id) {
+    try {
+        exe := WinGetProcessName("ahk_id " id)
+        return (exe = "vivaldi.exe" || exe = "chrome.exe" || exe = "msedge.exe")
+    } catch {
+        return false
+    }
+}
+
+; ブラウザのアドレスバーからURLを取得する（Chromium系）
+get_address_bar_url(id) {
+    try {
+        windowElement := UIA.ElementFromHandle(id)
+        for element in windowElement.FindAll({Type: "Edit"}) {
+            try {
+                value := element.Value
+                if (value && (InStr(value, "http", true) == 1 || InStr(value, ".", true))) {
+                    return value
+                }
+            }
+        }
+    } catch Error as e {
+        return ""
+    }
+    return ""
+}
+
 is_temptation(title) {
         ; 動画系
     return (InStr(title, "Prime Video", true) != 0

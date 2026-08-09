@@ -26,10 +26,12 @@ OnTimer(*) {
 
     static private_count := const_private_count
     static twitter_count := const_twitter_count
+    static facebook_reel_count := const_twitter_count
     static youtubehome_count := const_youtubehome_count
 
     is_private_buff := false
     is_twitter_buff := false
+    is_facebook_reel_buff := false
     is_youtubehome_buff := false
     is_yotube_buff := false
 
@@ -72,6 +74,13 @@ OnTimer(*) {
         ; 各要素のチェック
         ; Twitterのチェック
         if (is_deep_night && is_twitter(title)) {
+            activateWindow("ahk_id " id)
+            close_tab()
+            continue
+        }
+
+        ; Facebook Reelsのチェック
+        if (is_deep_night && is_facebook_reel(title, id)) {
             activateWindow("ahk_id " id)
             close_tab()
             continue
@@ -159,6 +168,19 @@ OnTimer(*) {
             continue
         }
 
+        ; Facebook Reelsのチェック
+        if (is_facebook_reel(title, id)) {
+            if (facebook_reel_count <= 0) {
+                activateWindow("ahk_id " id)
+                close_tab()
+            } else {
+                facebook_reel_count -= 0.1
+                is_facebook_reel_buff := true
+                ToolTip("facebook reel" Round(facebook_reel_count,1), , , 3)
+            }
+            continue
+        }
+
         ; システム系のチェック
         ; 深夜のタスクスケジューラチェック
         if (is_deep_night && InStr(title, "タスク スケジューラ", true)) {
@@ -205,6 +227,9 @@ OnTimer(*) {
     }
     if (!is_twitter_buff && twitter_count < const_twitter_count) {
         twitter_count += 0.005
+    }
+    if (!is_facebook_reel_buff && facebook_reel_count < const_twitter_count) {
+        facebook_reel_count += 0.005
     }
     if (!is_youtubehome_buff && !is_yotube_buff && youtubehome_count < const_youtubehome_count) {
         youtubehome_count += 0.005
