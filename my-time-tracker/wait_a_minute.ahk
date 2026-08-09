@@ -23,6 +23,10 @@ Overlay() {
     DebugLog("Overlay開始 - モニター数: " . SysGet(80))
     MonitorCount := SysGet(80) ; SM_CMONITORS
     
+    ; ★ 1. ボタンGUIを先に作成する (HWNDが必要なため)
+    CreateCenterButton()
+    DebugLog("ボタン作成完了")
+    
     ; 各モニターにオーバーレイを作成
     Loop MonitorCount
     {
@@ -34,25 +38,26 @@ Overlay() {
         MonitorWidth := MonitorRight - MonitorLeft
         MonitorHeight := MonitorBottom - MonitorTop
         
-        ; オーバーレイGUIを作成（AlwaysOnTopを削除してボタンより下に配置）
-        overlayGui := Gui("+AlwaysOnTop +ToolWindow -Caption", "Overlay" . A_Index)
+        ; ★ 2. +Owner オプションに buttonGui.Hwnd を指定する
+        overlayGui := Gui("+AlwaysOnTop +ToolWindow -Caption +Owner" . buttonGui.Hwnd, "Overlay" . A_Index)
         overlayGui.BackColor := "0x354e94"
         
         ; 透明なテキストコントロールを全面に配置してクリックイベントを捕捉
         overlayText := overlayGui.Add("Text", "x0 y0 w" . MonitorWidth . " h" . MonitorHeight . " Background" . overlayGui.BackColor)
         overlayText.OnEvent("Click", OnOverlayClick)
         
+        ; ★ 対策：右クリックを検知してボタンを再前面化する（念のため）
+        overlayText.OnEvent("Context", OnOverlayContextClick)
+
         overlayGui.Show("x" . MonitorLeft . " y" . MonitorTop . " w" . MonitorWidth . " h" . MonitorHeight)
         WinSetTransparent(200, overlayGui.Hwnd)
         
         overlayGuis.Push(overlayGui)
-
-        ; WinSetAlwaysOnTop(true, overlayGui.Hwnd) ; オーバーレイはボタンより下に配置
     }
     
-    ; オーバーレイの後にボタンを作成（確実に最前面に表示）
-    CreateCenterButton()
-    DebugLog("ボタン作成完了")
+    ; ★ ボタン作成の呼び出しは削除 (上に移動したため)
+    ; CreateCenterButton()
+    ; DebugLog("ボタン作成完了")
     
     ; デバッグ用：20秒後に自動終了
     if (DEBUG_MODE) {
@@ -275,6 +280,15 @@ ClearOverlay() {
         try {
             buttonGui.Close()
         }
+    }
+}
+
+; ★ 対策：オーバーレイが右クリックされた時の処理（関数を追加）
+OnOverlayContextClick(*) {
+    global buttonGui
+    DebugLog("オーバーレイ右クリック検知 - ボタンを最前面に")
+    if (buttonGui) {
+        WinSetAlwaysOnTop(true, buttonGui.Hwnd) ; ボタンを強制的に最前面へ
     }
 }
 
